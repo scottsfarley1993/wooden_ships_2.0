@@ -11,6 +11,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 	
       <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+      <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
+      <link href="assets/css/hovercard.css" rel="stylesheet">
    
 
 	<!--put your external stylesheet links here-->
@@ -20,10 +22,99 @@
 <body>
 	
 	<h2>Wooden Ships</h2>
-	<div id='controls' class='row'>
-		<label>Adjust Hex Size</label><div id="hexSlider"></div>
-	</div> <!-- dropdowns go here-->
-	<div id='map' class='row'></div><!-- map go here-->
+	<div class='row' id='mainContainer'>
+		<div id='controls' class='col-xs-2'>
+			<label>Adjust Hex Size</label><div id="hexSlider"></div>
+			<ul>
+				<li>
+					Control
+				</li>
+				<li>
+					Control
+				</li>
+				<li>
+					Control
+				</li>
+				<li>
+					Control
+				</li>
+				<li>
+					Control
+				</li>
+				
+			</ul>
+			<h4>Projection</h4>
+			<label>
+				<input type='radio' name='projSelect' value='Mercator' class='projSelect' checked><label>Mercator</label><br />
+				<input type='radio' name='projSelect' value="VDG" class='projSelect'><label>Van der Grinten IV</label>
+			</label>
+			<h4>Ship Logs</h4>
+			<label>All Reports</label><input name='memoSelect' value='All' type='radio' class='memoSelect' checked/><br />
+			<label>Weather Logs</label><input name='memoSelect' value='WeatherReports' type='radio' class='memoSelect'/><br />
+			<label>Travel Memos</label><input name='memoSelect' value='Travel' type='radio' class='memoSelect'/><br />
+			<label>Ship Encounters</label><input name='memoSelect' value='enc' type='radio' class='memoSelect'/><br />
+			<label>Anchor Locations</label><input name='memoSelect' value='anchor' type='radio' class='memoSelect'/><br />
+			<label>Landmarks</label><input name='memoSelect' value='landmarks' type='radio' class='memoSelect'/><br />
+			<label>Biological Observations</label><input name='memoSelect' value='Biology' type='radio' class='memoSelect'/><br />
+			<label>Conflict and Punishment</label><input name='memoSelect' value='warsAndFights' type='radio' class='memoSelect'/><br />
+			<label>Ship and Rigging Notes</label><input name='memoSelect' value='shipAndRig' type='radio' class='memoSelect'/><br />
+			<label>Cargo</label><input name='memoSelect' value='cargo' type='radio' class='memoSelect'/><br />
+			<label>Life On Board</label><input name='memoSelect' value='lifeOnBoard' type='radio' class='memoSelect'/><br />
+			<label>Other Remarks</label><input name='memoSelect' value='other' type='radio' class='memoSelect'/><br /><br />
+			<label>Weather Observations</label>
+			
+		</div> 
+		<div id='map' class='col-xs-6'>
+			<!-- map go here-->
+		</div>
+		<div id='weather-controls' class='row'>
+			<h4 id='weather-control-header'>Weather Observations</h4>
+			<button id='minimize-wx-panel'><span class='glyphicon glyphicon-minus' id='wx-panel-glyph'></span></button>
+		</div> <!-- minimize button-->
+				
+		<div id='summary-window' class='row'>
+			<div id='text-summary' class='col-xs-6'> 
+					<div id='airTempHolder' class='weather-holder row'>
+						<h5 id='airTemp' class='weather-header col-xs-4'>Air Temp: </h5>
+						<h5 id='airTempReading' class='weather-data col-xs-8'><span id='airTempText' class='weather-num'>--</span> &deg;C</h5>
+					</div>
+					<div id='pressureHolder' class='weather-holder row'>
+						<h5 id='pressure' class='weather-header col-xs-4'>Pressure: </h5>
+						<h5 id='pressureReading' class='weather-data col-xs-8'><span id='pressureText' class='weather-num'>--</span><br /> mmHg</h5>
+					</div>
+					<div id='commonHolder' class='weather-holder row'>
+						<h5 id='common' class='weather-header col-xs-4'>W<sub>X</sub>: </h5>
+						<h6 id='commonReading' class='weather-data col-xs-8'><span id='commonText' class='weather-num'>--</span> <br /><span id='numCommon' class='text-muted'></span></h6>
+					</div>
+					
+				</div>
+				<div id='wind-summary' class='col-xs-6'>
+					<div id='wsHolder' class='wind-holder row'>
+						<h5 id='ws' class='weather-header col-xs-3 col-xs-offset-1'>Mean Wind Speed: </h5>
+						<h5 id='wsReading' class='weather-data col-xs-8'><span id='wsText' class='weather-num'>--</span> <br />m/s</h5>
+					</div>
+					<div id='wdHolder' class='wind-holder row'>
+						<h5 id='wd' class='weather-header col-xs-3 col-xs-offset-1' >Mean Wind Direction: </h5>
+						<h5 id='wdReading' class='weather-data col-xs-8'><span id='wdText' class='weather-num'>--</span> &deg;</h5>
+					</div>
+						
+				</div>
+				<div id='wind-rose' class='col-xs-12'>
+				</div>
+
+			
+		</div>
+		<div id='feed-controls' class='row display-none'>
+			<h4 id='feed-control-header'>Captain's Feed</h4>
+		<button id='minimize-feed-panel'><span class='glyphicon glyphicon-minus' id='feed-panel-glyph'></span></button>
+		</div> <!-- minimize button-->
+		<div  id='feed-window' class='display-none row'>
+			<ul class='list-group row' id='feed' >
+			</ul>
+		</div>
+	</div> <!--end main row-->
+
+	
 	
 	
 	
@@ -67,8 +158,9 @@
 	<script type="text/javascript" src="assets/lib/d3.geo.projection.min.js"></script>
 	<script type="text/javascript" src="assets/lib/underscore-min.js"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
 	<script src="assets/lib/hexbin.min.js"></script>
-	
+	<script src="assets/lib/custom_hovercard.js"></script>
 
 	<!--My Script-->
 	<script type="text/javascript" src="assets/js/main.js"></script>
