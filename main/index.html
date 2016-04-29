@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Wooden Ships</title>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+	
+      <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+   
+
+	<!--put your external stylesheet links here-->
+	<link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+
+<body>
+	
+	<h2>Wooden Ships</h2>
+	<div id='controls' class='row'>
+		<label>Adjust Hex Size</label><div id="hexSlider"></div>
+	</div> <!-- dropdowns go here-->
+	<div id='map' class='row'></div><!-- map go here-->
+	
+	
+	
+		<!-- This is the splash screen, opens on window load but can be closed/opened at any time -->
+	<div id="splashModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog modal-lg">
+	
+	    <!-- content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Welcome to Wooden Ships! <span class='text-muted'>Choose your nationality.</span></h4>
+	      </div>
+	      <div class="modal-body">
+	      	<p>Click on a flag to get started.</p>
+	        <ul class='list-group' id='nation-select-list'>
+	        	<li class='list-group-item nation-select' id='Dutch_select'>Dutch</li>
+	        	<li class='list-group-item nation-select' id='British_select'>British</li>
+	        	<li class='list-group-item nation-select' id='French_select'>French</li>
+	        	<li class='list-group-item nation-select' id='Spanish'>Spanish</li>
+	        </ul>
+	        <h4 id='loading'>Loading...</h4>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	
+	  </div>
+	</div>
+	
+
+	<!--My Libraries-->
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+	<script type="text/javascript" src="assets/lib/d3.min.js"></script>
+	<script type="text/javascript" src="assets/lib/d3-queue.v2.min.js"></script>
+	<script type="text/javascript" src="assets/lib/topojson.v1.min.js"></script>
+	<script type="text/javascript" src="assets/lib/d3.geo.projection.min.js"></script>
+	<script type="text/javascript" src="assets/lib/underscore-min.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="assets/lib/hexbin.min.js"></script>
+	
+
+	<!--My Script-->
+	<script type="text/javascript" src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+.land {
+    fill: white;
+ 	stroke: #a5967e;
+    stroke-width: 0px;
+}
+
+.graticule {
+  fill: none;
+  stroke: white;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+.mapContainer{
+	fill: black;
+}
+
+#map{
+fill: black;
+background-color: black;
+
+}
+
+.dropdownProjections{
+    position: absolute;
+    top: 130px;
+    left: 20px;
+    z-index: 10;
+    font-family: baskerville;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 2px;
+    border: 1px solid #999;
+    box-shadow: 2px 2px 4px #999;
+}
+
+#controls{
+	height: 10%;
+	margin: 1%;
+}
+
+#map {
+	height: 90%;
+}
+
+#hexSlider{
+	height: 25%;
+	width: 250px;
+	margin-left: 25px;
+}
