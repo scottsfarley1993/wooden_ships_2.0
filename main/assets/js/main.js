@@ -1214,3 +1214,130 @@ function round2(num){
 }
 
 
+function filterByFog(data){
+	f = _.where(data, {fog : "True"});
+	return f;
+}
+
+function filterByGusts(data){
+	f = _.where(data, {gusts : "True"});
+	return f;
+}
+
+function filterByHail(data){
+	f = _.where(data, {hail : "True"});
+	return f;
+}
+
+function filterByRain(data){
+	f = _.where(data, {rain : "True"});
+	return f;
+}
+
+function filterBySeaIce(data){
+	f = _.where(data, {seaIce : "True"});
+	return f;
+}
+
+function filterBySnow(data){
+	f = _.where(data, {snow : "True"});
+	return f;
+}
+
+function filterByThunder(data){
+	f = _.where(data, {thunder : "True"});
+	return f;
+}
+
+
+function binWindDirection(num){
+	if (num >= 337.5 || num < 22.5) {
+		windDir = "N"
+	} else if (num >= 22.5 && num < 67.5) {
+		windDir = "NE"		
+	} else if (num >= 67.5 && num < 112.5){
+		windDir = "E"
+	} else if (num >= 112.5 && num < 157.5){
+		windDir = "SE"
+	} else if (num >= 157.5 && num < 202.5){
+		windDir = "S"
+	} else if (num >= 202.5 && num < 247.5) {
+		windDir = "SW"
+	} else if (num >= 247.5 && num < 292.5) {
+		windDir = "W"
+	} else if (num >= 292.5 && num < 337.5) {
+		windDir = "NW"
+	}
+	return windDir
+}
+//control hex bin size
+
+function filterWindSpeed(minSpeed, maxSpeed, data) {
+	f = _.filter(data, function(element){
+		if (element.windSpeed >= minSpeed && element.windSpeed <= maxSpeed) 	
+			return true;	 	
+})		
+		return f;
+}
+
+function filterYear(minYear, maxYear, data) {
+	f = _.filter(data, function(element){
+		if (element.year >= minYear && element.year <= maxYear) 	
+			return true;	 	
+})		
+		return f;
+}
+
+function filterMonth(minMonth, maxMonth, data) {
+	f = _.filter(data, function(element){
+		if (element.month >= minMonth && element.month <= maxMonth) 	
+			return true;	 	
+})		
+		return f;
+}
+
+function filterSST(data) {
+	f = _.filter(data, function(element){
+		if (element.sst > -1) 	
+			return true;	 	
+})		
+		return f;
+}
+
+//this function just returns whether AirTemp recorded
+function filterAirTemp(data) {
+	f = _.filter(data, function(element){
+		if (element.airTemp > -1) 	
+			return true;	 	
+})		
+		return f;
+}
+
+//this function takes AirTemp min and max
+function filterByAirTemp(minTemp, maxTemp, data) {
+	f = _.filter(data, function(element){
+		if (element.airTemp >= minTemp && element.airTemp <= maxTemp) 	
+			return true;	 	
+})		
+		return f;
+}
+
+//this function just returns whether Pressure recorded
+function filterPressure(data) {
+	f = _.filter(data, function(element){
+		if (element.pressure > -1) 	
+			return true;	 	
+})		
+		return f;
+}
+
+//this function takes Pressure min and max
+function filterByPressure(minPressure, maxPressure, data) {
+	f = _.filter(data, function(element){
+		if (element.pressure >= minPressure && element.pressure <= maxPressure) 	
+			return true;	 	
+})	
+		console.log(f)	
+		return f;
+}
+
