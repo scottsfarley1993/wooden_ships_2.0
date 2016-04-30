@@ -8,7 +8,7 @@ var expressed = attrArray[0]
 var months = moment.months()
 var weekdays = moment.weekdays()
 
-var attrProj = ["VDG", "Mercator", "sat"]; // list of projections
+var attrProj = ["Azimuthal", "Azimuthal", "sat"]; // list of projections
 
 globals = {}
 globals.basemap = {}
@@ -18,6 +18,8 @@ globals.map.dimensions.height = $(window).height() * 0.9; //90% of the window he
 globals.map.dimensions.width = $(window).width() //100% of the window width
 globals.map.projection;
 globals.map.path;
+
+globals.attr = 'fog'
 
 globals.mamoType = "All"
 
@@ -139,7 +141,7 @@ function setMap(){
 	            .attr("class", "land")
 	            //.style("stroke", "black").style("fill", "blue"); 
 	         
-	         changeProjection("Mercator");
+	         changeProjection("Azimuthal"); //default
 	}; //end of callback
 };//end of set map
 
@@ -152,82 +154,78 @@ function zoomed() {
 };
 	
 	
+function createColorScheme (maxDomain, colors){
 	
-	
-//function to create a dropdown menu for attribute selection
-function projDropdown(attrProj){
-    //add select element
-    var dropdownProjections = d3.select("#controls")
-        .append("select")
-        .attr("class", "dropdownProjections")
-        .on("change", function(){
-            if (this.value == "Mercator"){
-            	changeProjection("mercator")
-            }else if (this.value == "VDG"){
-            	changeProjection("VDG");
-            }else if(this.value == "sat"){
-            	changeProjection("sat")
-            }
-        });
+	var color = d3.scale.linear()
+	    .domain([0, maxDomain])
+	    .range(colors)
+	    .interpolate(d3.interpolateLab);
+	console.log(color.domain())
+	console.log(color.range())
+	return color;
 
-    //add initial option
-    var titleOption = dropdownProjections.append("option")
-        .attr("class", "titleOption")
-        .attr("disabled", "true")
-        .text("Projection");
-
-    //add attribute name options
-    var projOptions = dropdownProjections.selectAll("projOptions")
-        .data(attrProj)
-        .enter()
-        .append("option")
-        .attr("value", function(d){ return d })
-        .text(function(d){ return d });
 };
-		
-
-		 
+			 
 
 //dropdown change listener handler
 function changeProjection(projection, scale, center){
     //decide what projection to change to
-    if (projection == "VDG") {
-    	var projection = d3.geo.vanDerGrinten4()
-    		.scale(125)
-   	 		.translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
-    		.precision(.1);
-    }
-    else if (projection == "Mercator"){
-    	var projection = d3.geo.mercator()
-    		.scale((globals.map.dimensions.width + 1) / 2 / Math.PI)
-    		.translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
-    		.precision(.1);
+    if (projection == "Azimuthal") {
+    	// var projection = d3.geo.vanDerGrinten4()
+    	// 	.scale(125)
+   	 // 		.translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
+    	// 	.precision(.1);
 
-    }else if (projection == "sat"){
-		var projection = d3.geo.satellite()
-		    .distance(1.1)
-		    .scale(5500)
-		    .rotate([76.00, -34.50, 32.12])
-		    .center([-120, 37])
-		    .tilt(25)
-		    .clipAngle(Math.acos(1 / 1.1) * 180 / Math.PI - 1e-6)
+    	// var projection = d3.geo.orthographic()
+		   //  .scale(350)
+		   //  .translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
+		   //  .clipAngle(90)
+		   //  .precision(.1);
+
+		// var projection = d3.geo.azimuthalEqualArea()
+		//     .clipAngle(180 - 1e-3)
+		//     .scale(140)
+		//     .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
+		//     .precision(.1);
+		var projection = d3.geo.robinson()
+		    .scale(150)
+		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
-    }else{
-    	console.log("Projection not supported.")
-    	return
+
+		// var projection = d3.geo.cylindricalEqualArea()
+		//     .scale(200)
+		//     .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
+		//     .precision(.1);
+    }
+    else if (projection == "Cylindrical"){
+    	// var projection = d3.geo.mercator()
+    	// 	.scale((globals.map.dimensions.width + 1) / 2 / Math.PI)
+    	// 	.translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
+    	// 	.precision(.1);
+
+    	var projection = d3.geo.cylindricalEqualArea()
+		    .scale(200)
+		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
+		    .precision(.1);
+
+    }else if (projection == "Orthographic"){
+	var projection = d3.geo.orthographic()
+		    .scale(350)
+		    .translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
+		    .clipAngle(90)
+		    .precision(.1);
     }
    var path = d3.geo.path()
-    .projection(projection);
+    	.projection(projection);
    //make global
    globals.map.projection = projection;
    globals.map.path = path;
    //do the update
-   globals.land.transition().attr('d', path) //this causes an invalid path????
+   globals.land.transition().attr('d', path)
    
    //update the hexagons
    changeHexSize(globals.map.hexRadius)
 };
-
 
 function getShipData(filename, callback){
 	d3.csv(filename, function(data){
@@ -264,7 +262,6 @@ function displayShipDataHexes(datasetArray){
 	    	.attr('class', 'hexagon')
 	      .attr("d", globals.map.hexbin.hexagon())
 	      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-	      .style("fill", function(d) { return color(d3.median(d, function(d) { return d.date; })); })
 	      .style('stroke-width', 0.25)
 	      .on('click', function(d){
 	      	//memos = filterToHexBin(globals.data.memos, d)
@@ -296,10 +293,236 @@ function displayShipDataHexes(datasetArray){
       	}
       })
       
-      
+      styleHexbins(globals.data.filteredShips, globals.attr) //color the bins by attribute
       //set the stack order
       globals.land.moveToFront();
 }
+
+function styleHexbins(ships, attr){
+
+	// Beginning of boolean attributes
+	if (attr == "fog") {
+
+		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
+			return d.__data__.length});
+
+		console.log("Max domain is: " + maxDomain)
+
+		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill",function(d){return hexColor(d.length)});
+	}
+
+	// boolean
+	else if (attr == "gusts") {
+
+		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
+			return d.__data__.length});
+
+		console.log("Max domain is: " + maxDomain)
+
+		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill",function(d){return hexColor(d.length)});
+	}
+
+	// boolean
+	else if (attr == "hail") {
+
+		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
+			return d.__data__.length});
+
+		console.log("Max domain is: " + maxDomain)
+
+		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill",function(d){return hexColor(d.length)});
+	}
+
+	// boolean
+	else if (attr == "rain") {
+
+		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
+			return d.__data__.length});
+
+		console.log("Max domain is: " + maxDomain)
+
+		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill",function(d){return hexColor(d.length)});
+	}
+
+	// boolean
+	else if (attr == "seaIce") {
+
+		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
+			return d.__data__.length});
+
+		console.log("Max domain is: " + maxDomain)
+
+		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill",function(d){return hexColor(d.length)});
+	}
+
+	// boolean
+	else if (attr == "snow") {
+
+		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
+			return d.__data__.length});
+
+		console.log("Max domain is: " + maxDomain)
+
+		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill",function(d){return hexColor(d.length)});
+	}
+
+	// boolean
+	else if (attr == "thunder") {
+
+		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
+			return d.__data__.length});
+
+		console.log("Max domain is: " + maxDomain)
+
+		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill",function(d){return hexColor(d.length)});
+	}
+
+	//the beginning of numeric attributes
+	else if (attr == "airTemp"){
+
+		var maxDomain = d3.max(ships, function(d){
+			return +d["airTemp"]
+		});
+
+		console.log("Max domain is: " + maxDomain);
+
+		var hexColor = createColorScheme(maxDomain, ["yellow", "red"]);
+
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill", function(d){
+				return hexColor(d3.mean(d, function(d){
+					return +d.airTemp;
+				}))
+			});
+	}
+
+	//numeric
+	else if (attr == "pressure"){
+
+		var maxDomain = d3.max(ships, function(d){
+			return +d["pressure"]
+		});
+
+		console.log("Max domain is: " + maxDomain);
+
+		var hexColor = createColorScheme(maxDomain, ["white", "purple"]);
+
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill", function(d){
+				return hexColor(d3.mean(d, function(d){
+					return +d.pressure;
+
+				}))
+			});
+
+	}
+
+	//numeric
+	else if (attr == "sst"){
+
+		var maxDomain = d3.max(ships, function(d){
+			return +d["sst"]
+		});
+
+		console.log("Max domain is: " + maxDomain);
+
+		var hexColor = createColorScheme(maxDomain, ["yellow", "red"]);
+
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill", function(d){
+				return hexColor(d3.mean(d, function(d){
+					return +d.sst;
+				}))
+			});
+	}
+
+	//numeric
+	else if (attr == "windSpeed"){
+
+		var maxDomain = d3.max(ships, function(d){
+			return +d["windSpeed"]
+		});
+
+		console.log("Max domain is: " + maxDomain);
+
+		var hexColor = createColorScheme(maxDomain, ["white", "purple"]);
+
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill", function(d){
+				return hexColor(d3.mean(d, function(d){
+					return +d.windSpeed;
+				}))
+			});
+	}
+
+	//numeric
+	else if (attr == "winddirection"){
+
+		var maxDomain = d3.max(ships, function(d){
+			return +d["winddirection"]
+		});
+
+		console.log("Max domain is: " + maxDomain);
+
+		var hexColor = createColorScheme(maxDomain, ["white", "purple"]);
+
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill", function(d){
+				return hexColor(d3.mean(d, function(d){
+					return +d.winddirection;
+				}))
+			});
+	}
+
+	// default count data if filter has not been applied
+	else {
+
+		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
+			return d.__data__.length});
+
+		console.log("Max domain is: " + maxDomain)
+
+		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		
+		console.log(hexColor)
+		d3.selectAll(".hexagon")
+			.attr("fill",function(d){return hexColor(d.length)});
+	}
+
+} //end of styleHexbin
 
 function getPorts(){        
 	//load the port cities from a csv file on disk
@@ -358,7 +581,10 @@ function refreshStackOrder(){
 	console.log("stack order complete")
 }
 
-
+function switchAttribute(attr){
+	globals.attr = attr
+	styleHexbins(globals.data.filteredShips, attr);
+}
 
 
 function removeHexes(){
@@ -1213,131 +1439,4 @@ function round2(num){
 	return Math.round(num * 100) / 100;
 }
 
-
-function filterByFog(data){
-	f = _.where(data, {fog : "True"});
-	return f;
-}
-
-function filterByGusts(data){
-	f = _.where(data, {gusts : "True"});
-	return f;
-}
-
-function filterByHail(data){
-	f = _.where(data, {hail : "True"});
-	return f;
-}
-
-function filterByRain(data){
-	f = _.where(data, {rain : "True"});
-	return f;
-}
-
-function filterBySeaIce(data){
-	f = _.where(data, {seaIce : "True"});
-	return f;
-}
-
-function filterBySnow(data){
-	f = _.where(data, {snow : "True"});
-	return f;
-}
-
-function filterByThunder(data){
-	f = _.where(data, {thunder : "True"});
-	return f;
-}
-
-
-function binWindDirection(num){
-	if (num >= 337.5 || num < 22.5) {
-		windDir = "N"
-	} else if (num >= 22.5 && num < 67.5) {
-		windDir = "NE"		
-	} else if (num >= 67.5 && num < 112.5){
-		windDir = "E"
-	} else if (num >= 112.5 && num < 157.5){
-		windDir = "SE"
-	} else if (num >= 157.5 && num < 202.5){
-		windDir = "S"
-	} else if (num >= 202.5 && num < 247.5) {
-		windDir = "SW"
-	} else if (num >= 247.5 && num < 292.5) {
-		windDir = "W"
-	} else if (num >= 292.5 && num < 337.5) {
-		windDir = "NW"
-	}
-	return windDir
-}
-//control hex bin size
-
-function filterWindSpeed(minSpeed, maxSpeed, data) {
-	f = _.filter(data, function(element){
-		if (element.windSpeed >= minSpeed && element.windSpeed <= maxSpeed) 	
-			return true;	 	
-})		
-		return f;
-}
-
-function filterYear(minYear, maxYear, data) {
-	f = _.filter(data, function(element){
-		if (element.year >= minYear && element.year <= maxYear) 	
-			return true;	 	
-})		
-		return f;
-}
-
-function filterMonth(minMonth, maxMonth, data) {
-	f = _.filter(data, function(element){
-		if (element.month >= minMonth && element.month <= maxMonth) 	
-			return true;	 	
-})		
-		return f;
-}
-
-function filterSST(data) {
-	f = _.filter(data, function(element){
-		if (element.sst > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function just returns whether AirTemp recorded
-function filterAirTemp(data) {
-	f = _.filter(data, function(element){
-		if (element.airTemp > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function takes AirTemp min and max
-function filterByAirTemp(minTemp, maxTemp, data) {
-	f = _.filter(data, function(element){
-		if (element.airTemp >= minTemp && element.airTemp <= maxTemp) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function just returns whether Pressure recorded
-function filterPressure(data) {
-	f = _.filter(data, function(element){
-		if (element.pressure > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function takes Pressure min and max
-function filterByPressure(minPressure, maxPressure, data) {
-	f = _.filter(data, function(element){
-		if (element.pressure >= minPressure && element.pressure <= maxPressure) 	
-			return true;	 	
-})	
-		console.log(f)	
-		return f;
-}
 
