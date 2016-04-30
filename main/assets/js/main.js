@@ -96,7 +96,7 @@ $(document).ready(function(){
 function setMap(){	        
 	    //use queue.js to parallelize asynchronous data loading
 	    d3_queue.queue()
-	        .defer(d3.json, "assets/data/land.topojson") //load base map data
+	        .defer(d3.json, "assets/data/ne_50m_land.topojson") //load base map data
 	        .await(callback);
 	        
 		function callback(error, base, overlay1, overlay2, overlay3){
@@ -120,7 +120,7 @@ function setMap(){
 		    
 		    
 	        //translate europe TopoJSON
-	        var landBase = topojson.feature(base, base.objects.ne_110m_land).features
+	        var landBase = topojson.feature(base, base.objects.ne_50m_land).features
 	         
 	         
 	      //create the hexbin layout

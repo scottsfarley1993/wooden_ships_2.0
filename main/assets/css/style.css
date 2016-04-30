@@ -1,12 +1,18 @@
 .land {
-    fill:   #d7c7ad;
+    fill: white;
  	stroke: #a5967e;
-    stroke-width: 1px;
+    stroke-width: 0px;
+}
+.mapContainer{
+	fill: black;
 }
 
-.mapContainer{
-	fill: #a4bac7;
+#map{
+fill: black;
+background-color: black;
+
 }
+
 
 .dropdownProjections{
     position: absolute;
