@@ -92,8 +92,8 @@ $(document).ready(function(){
 	changeCountry("British")
 	loadShipLookup() // get metadata about ships and voyages and captains
 	d3.selectAll(".overlay").style('display', 'none')//disables zoom --> for debugging
+	updateTimeline(new Date(1750,0,1), new Date(1850,0,1))
 })
-
 
 //set up map and call data
 function setMap(){	        
@@ -1593,3 +1593,42 @@ $(".nav-item").click(function(){
 		return
 	}
 })
+
+
+//called from temporal filter function
+function updateTimeline(min, max){
+
+	$("#timeline").empty();
+
+	var height = $("#timeline").height();
+	var width = $("#timeline").width();
+
+    //create a second svg element to hold the bar chart
+    var timescale = d3.select("#timeline")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("class", "timescale");
+
+	// define the x scale (horizontal)
+   	var mindate = min,
+       	maxdate = max
+            
+    var xScale = d3.time.scale()
+        .domain([mindate, maxdate])   // date values
+		.range([0, width]);   // map these the the chart width = total width minus padding at both sides
+        
+    // define the y axis
+    var xAxis = d3.svg.axis()
+        .orient("bottom")
+        .scale(xScale);
+    
+    // draw x axis with labels and move to the bottom of the chart area
+    timescale.append("g")
+        .attr("class", "xaxis")   // give it a class so it can be used to select only xaxis labels  below
+        .attr("transform", "translate(0," + (height/2) + ")")
+        .call(xAxis);
+
+};
+
+
