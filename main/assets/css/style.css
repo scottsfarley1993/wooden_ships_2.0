@@ -5,12 +5,16 @@
 }
 .mapContainer{
 	fill: black;
+	width:100%;
 }
 
 #map{
-fill: black;
-background-color: black;
-
+	fill: black;
+	background-color: black;
+	width: calc(100% - 100px);
+	position: absolute;
+	top: 0px;
+	left: 100px;
 }
 
 
@@ -272,4 +276,137 @@ div.tooltip {
 	position: absolute;
 	top: 0;
 	right: 0px;
+}
+/*.badge {
+  background-color: #777;
+}
+
+.tabs-left { margin-top: 3rem; }
+
+.nav-tabs {
+  float: left;
+  border-bottom: 0;
+  
+
+  li {
+    float: none;
+    margin: 0;
+    
+    a {
+      margin-right: 0;
+      border: 0;
+      background-color: #333;
+      
+      &:hover {
+        background-color: #444;
+      }
+    }
+  }
+  
+  .glyphicon {
+    color: #fff;
+  }
+  
+  .active .glyphicon {
+    color: #333;
+  }
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  border:0;
+}
+
+.tab-content {
+  margin-left: 45px;
+  
+  .tab-pane {
+    display: none;
+    background-color: #fff;
+    padding: 1.6rem;
+    overflow-y: auto;
+  }
+  
+  .active { display: block; }
+}
+
+.list-group {
+  width: 100%;
+  
+  .list-group-item {
+    height: 50px;
+    
+    h4, span {
+      line-height: 11px;
+    }
+  }
+}*/
+#nav{
+	background-color: black;
+	height: 100%;
+	margin:0px;
+	min-width: 100px !important;
+	width: 100px;
+}
+#nav-list-group{
+	height:90%;
+	top: 10%;
+	position: absolute;
+	min-width: 100px !important;
+	width: 100px;
+}
+.nav-item{
+	height: 15%;
+}
+.nav-hovered{
+	background-color: #ccc;
+	cursor: pointer;
+}
+#masthead{
+	height: 1%;
+	width: 100%;
+	margin: 0px;
+	padding:0px;
+	color: #ccc;
+	font-weight: 800;
+}
+#masthead-group{
+	height: 5%;
+	margin:0px;
+	padding:0px;
+	width: 200px;
+	position: absolute;
+	z-index: 100;
+	background-color: black;
+}
+
+#intro-panel{
+	height: 100%;
+	position: absolute;
+	width: calc(100% - 100px);
+	background-color: white;
+	z-index: 10000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
+.control-panel{
+	height: 100%;
+	width: 20%;
+	position: absolute;
+	z-index:100000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
+#weather-panel{
+	background-color: red;
+}
+#wind-panel{
+	background-color: darkgreen;
+}
+#time-panel{
+	background-color: orange;
+}
+#other-panel{
+	background-color: purple;
 }
