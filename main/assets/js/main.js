@@ -92,9 +92,8 @@ $(document).ready(function(){
 	changeCountry("British")
 	loadShipLookup() // get metadata about ships and voyages and captains
 	d3.selectAll(".overlay").style('display', 'none')//disables zoom --> for debugging
-	createTimeline()
+	updateTimeline(new Date(1750,0,1), new Date(1850,0,1))
 })
-
 
 //set up map and call data
 function setMap(){	        
@@ -1596,9 +1595,10 @@ $(".nav-item").click(function(){
 })
 
 
-//create timeline
+//called from temporal filter function
+function updateTimeline(min, max){
 
-function createTimeline(){
+	$("#timeline").empty();
 
 	var height = $("#timeline").height();
 	var width = $("#timeline").width();
@@ -1611,12 +1611,12 @@ function createTimeline(){
         .attr("class", "timescale");
 
 	// define the x scale (horizontal)
-   	var mindate = new Date(1750,0,1),
-       	maxdate = new Date(1850,0,1)
+   	var mindate = min,
+       	maxdate = max
             
     var xScale = d3.time.scale()
         .domain([mindate, maxdate])   // date values
-		.range([0, 500]);   // map these the the chart width = total width minus padding at both sides
+		.range([0, width]);   // map these the the chart width = total width minus padding at both sides
         
     // define the y axis
     var xAxis = d3.svg.axis()
@@ -1628,25 +1628,7 @@ function createTimeline(){
         .attr("class", "xaxis")   // give it a class so it can be used to select only xaxis labels  below
         .attr("transform", "translate(0," + (height/2) + ")")
         .call(xAxis);
-};
-
-function updateTimeline(){
-
 
 };
-
-// //Create timeline
-// var chart = d3.timeline();
-
-// var svg = d3.select("#timeline")
-// 	.append("svg")
-// 	.attr("width", 1000)
-// 	.datum()
-// 	.call(chart);
-
-// var timeData = [
-//   {times: [
-//     {"starting_time": 1355759910000, "ending_time": 1355761900000}]}
-// ];
 
 
