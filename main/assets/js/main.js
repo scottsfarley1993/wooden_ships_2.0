@@ -1566,11 +1566,7 @@ function filterByPressure(minPressure, maxPressure, data) {
 		console.log(f)	
 		return f;
 }
-<<<<<<< HEAD
 
-
-}
-=======
 // nav tabs
 $(".nav-item").hover(function(){
 	$(this).toggleClass('nav-hovered')
@@ -1598,4 +1594,55 @@ $(".nav-item").click(function(){
 		return
 	}
 })
->>>>>>> master
+
+
+function filterToDate(date){
+	toCheck = date.toDateString()
+	o = _.filter(globals.data.ships, function(d){
+		return (toCheck == d.date.toDateString())
+	})
+	return o
+}
+
+function filterToYear(year){
+	console.log(year)
+	o = _.filter(globals.data.ships, function(d){
+		return (year == d.date.getFullYear())
+	})
+	console.log(o)
+	return o
+}
+
+function filterToMonthOfYear(month, year){
+	month = month - 1;
+	console.log(month)
+	console.log(year)
+	o  = _.filter(globals.data.ships, function(d){
+		return ((month == +d.date.getMonth()) && (year == +d.date.getFullYear()))
+	})
+	return o
+}
+
+
+
+function sequenceByDay(date){
+	//this function sequences through the map, giving a day by day view of the events as they unfold
+	removeHexes()
+	globals.data.filteredShips = filterToDate(date);
+	console.log(globals.data.filteredShips.length)
+	displayShipDataHexes(globals.data.filteredShips)
+}
+
+function sequenceByYear(year){
+	removeHexes()
+	globals.data.filteredShips = filterToYear(year)
+	console.log(globals.data.filteredShips.length)
+	displayShipDataHexes(globals.data.filteredShips)
+}
+function sequenceByMonthOfYear(month, year){
+	removeHexes()
+	globals.data.filteredShips = filterToMonthOfYear(month, year)
+	console.log(globals.data.filteredShips.length)
+	displayShipDataHexes(globals.data.filteredShips)
+}
+
