@@ -237,6 +237,7 @@ function getShipData(filename, callback){
 			d.latitude = +d.latitude;
 			d.longitude = +d.longitude;
 			d.date = new Date(d.date)
+			d.windDir = binWindDirection(d.winddirection)
 		})
 		globals.data.ships = data //so we can revert later
 		globals.data.filteredShips = data //keep track of the most recent filtered data
@@ -1506,6 +1507,17 @@ function filterWindSpeed(minSpeed, maxSpeed, data) {
 		return f;
 }
 
+function filterByWindDirection(windDirectionArray, data){
+	//takes in an array of wind directions and returns the elements of the array that have wind directions specified in that array
+	out = []
+	for (var i=0; i< windDirectionArray.length; i++){
+		dir = windDirectionArray[i]
+		l = _.where(data, {windDir: dir})
+		out = out.concat(l);
+	}
+	return out
+}
+
 function filterYear(minYear, maxYear, data) {
 	f = _.filter(data, function(element){
 		if (element.year >= minYear && element.year <= maxYear) 	
@@ -1593,3 +1605,35 @@ $(".nav-item").click(function(){
 		return
 	}
 })
+
+$(".winddir-select").change(function(){
+	//event listener for wind direction widgets
+	el = $(".winddir-select");
+	dirs = []
+	for (var i=0; i<el.length; i++){
+		_item = $(el[i])
+		if (_item.prop('checked')){
+			v = _item.val()
+			dirs.push(v)
+		}
+	}
+	globals.data.filteredShips = filterByWindDirection(dirs, globals.data.ships)
+	removeHexes()
+	displayShipDataHexes(globals.data.filteredShips)
+})
+
+//wind speed slider bar
+$(function() {
+    $( "#wind-speed-range" ).slider({
+      range: true,
+      min: 0,
+      max: 75,
+      values: [ 0, 75 ],
+      stop: function( event, ui ) {
+       //do the wind speed filtering
+       globals.data.filteredShips = filterWindSpeed(ui.values[0], ui.values[1], globals.data.ships)
+       removeHexes()
+       displayShipDataHexes(globals.data.filteredShips)
+      }
+    });
+  });

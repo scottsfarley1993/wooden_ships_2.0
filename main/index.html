@@ -181,11 +181,28 @@
 	</div>
 	
 	<div id='weather-panel' class='nav-panel control-panel'>
-		
+
 	</div>
 	
 		<div id='wind-panel' class='nav-panel control-panel'>
-		
+				<h4>Filter by Wind Direction</h4>
+		<div id='wind-direction-filter'>
+			<div class='button-grid btn-grid'>
+				<input type='checkbox' name='windir-select' value='N' class='winddir-select' checked><label>North</label> <br />
+				<input type='checkbox' name='windir-select' value='NE' class='winddir-select' checked><label>Northeast</label> <br />
+				<input type='checkbox' name='windir-select' value='E' class='winddir-select' checked><label>East</label> <br />
+				<input type='checkbox' name='windir-select' value='SE' class='winddir-select' checked><label>Souteast</label> <br />
+				<input type='checkbox' name='windir-select' value='S' class='winddir-select' checked><label>South</label> <br />
+				<input type='checkbox' name='windir-select' value='SW' class='winddir-select' checked><label>Southwest</label> <br />
+				<input type='checkbox' name='windir-select' value='W'  class='winddir-select' checked><label>West</label> <br />
+				<input type='checkbox' name='windir-select' value='NW'  class='winddir-select' checked><label>Northwest</label><br />		
+			</div>
+			
+		</div>
+		<div id='wind-speed-filter'>
+			<h4>Filter by Wind Speed</h4>
+			<div id="wind-speed-range"></div>
+		</div>
 	</div>
 	
 		<div id='time-panel' class='nav-panel control-panel'>
