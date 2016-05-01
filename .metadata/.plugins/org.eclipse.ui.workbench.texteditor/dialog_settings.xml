@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="true" key="wrap"/>
+		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="wholeword"/>
+		<item value="d3.csv" key="selection"/>
+		<list key="findhistory">
+			<item value="d3.csv"/>
+			<item value="loaded ship"/>
+			<item value="getShipData"/>
+			<item value="globals.data.ships ="/>
+			<item value="load"/>
+			<item value="var attrArray = [&quot;countries_1715&quot;, &quot;countries_1783&quot;, &quot;countries_1815&quot;];"/>
+		</list>
+	</section>
+</section>

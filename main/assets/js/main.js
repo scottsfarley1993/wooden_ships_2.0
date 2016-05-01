@@ -8,7 +8,7 @@ var expressed = attrArray[0]
 var months = moment.months()
 var weekdays = moment.weekdays()
 
-var attrProj = ["Azimuthal", "Azimuthal", "sat"]; // list of projections
+var attrProj = ["Cylndrical", "Azimuthal", "sat"]; // list of projections
 
 globals = {}
 globals.basemap = {}
@@ -227,7 +227,10 @@ function changeProjection(projection, scale, center){
 };
 
 function getShipData(filename, callback){
-	d3.csv(filename, function(data){
+	d3.csv(filename, function(error, data){
+		if (error){
+			console.log(error)
+		}
 		_.each(data, function(d){
 			d.airTemp = +d.airTemp;
 			d.pressure = +d.pressure
@@ -628,8 +631,7 @@ function processMemos(memos){
 function changeCountry(countryName){
 	//changes the map interface to reflect a new country's data.  Options are 'Dutch', 'French', 'British', 'Spanish'
 	//load in new data
-	
-	
+
 	if (countryName == "British"){
 		f = "/assets/data/british_points_updated.csv"
 		d3.csv("/assets/data/british_memos_updated.csv", function(data){
@@ -664,7 +666,6 @@ function changeCountry(countryName){
 }
 
 function refreshHexes(){
-	console.log("Loaded ship data.")
 	removeHexes()
 	displayShipDataHexes(globals.data.ships)
 	console.log("Refreshed hexes.")
@@ -1406,6 +1407,47 @@ function changeMemoSet(){
 }
 $(".memoSelect").change(changeMemoSet)
 
+function changeWeatherSelection(){
+	v = $(this)
+	weatherSelection = v.val()
+	globals.weatherSelection = weatherSelection
+	if (weatherSelection == "Snow"){		
+		globals.data.filteredShips = filterBySnow(globals.data.ships)
+		console.log("Snow")
+		switchAttribute("snow")	
+	}else if (weatherSelection == "Thunder"){
+		globals.data.filteredShips = filterByThunder(globals.data.ships)
+		switchAttribute("thunder")
+	}else if (weatherSelection == "Sea Ice"){
+		globals.data.filteredShips = filterBySeaIce(globals.data.ships)
+		console.log(globals.data.filteredShips)
+		switchAttribute("seaIce")
+	}else if (weatherSelection == "Rain"){
+		globals.data.filteredShips = filterByRain(globals.data.ships)
+		console.log(globals.data.filteredShips)
+		switchAttribute("rain")
+	}else if (weatherSelection == "Hail"){
+		globals.data.filteredShips = filterByHail(globals.data.ships)
+		console.log("hail")
+		console.log(globals.data.filteredShips)
+		switchAttribute("hail")
+	}else if (weatherSelection == "Fog"){
+		globals.data.filteredShips = filterByFog(globals.data.ships)
+		console.log("fog")
+		console.log(globals.data.filteredShips)
+		switchAttribute("fog")
+	}else if (weatherSelection == "Gusts"){
+		globals.data.filteredShips = filterByGusts(globals.data.ships)
+		console.log("fog")
+		console.log(globals.data.filteredShips)
+		switchAttribute("gusts")
+	}else if (weatherSelection == "All"){
+		globals.data.filteredShips = globals.data.ships
+	}
+	removeHexes()
+	displayShipDataHexes(globals.data.filteredShips)	
+}
+$(".WeatherSelect").change(changeWeatherSelection)
 
 
 $("#minimize-wx-panel").on('click', function(){
@@ -1442,6 +1484,7 @@ function round2(num){
 
 function filterByFog(data){
 	f = _.where(data, {fog : "True"});
+	console.log(f)
 	return f;
 }
 
@@ -1467,6 +1510,7 @@ function filterBySeaIce(data){
 
 function filterBySnow(data){
 	f = _.where(data, {snow : "True"});
+	console.log(f)
 	return f;
 }
 

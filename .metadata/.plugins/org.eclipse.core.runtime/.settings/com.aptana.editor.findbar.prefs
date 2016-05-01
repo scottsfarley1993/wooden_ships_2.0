@@ -1,0 +1,2 @@
+FIND_BAR_DECORATOR_FIND_ENTRIES=\#\n\#Sun May 01 14\:15\:32 CDT 2016\n5\=var attrArray \\\= ["countries_1715", "countries_1783", "countries_1815"];\n4\=load\n3\=globals.data.ships \\\=\n2\=getShipData\n1\=loaded ship\n0\=d3.csv\n
+eclipse.preferences.version=1
