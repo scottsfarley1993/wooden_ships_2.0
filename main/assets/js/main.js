@@ -1506,11 +1506,10 @@ function filterWindSpeed(minSpeed, maxSpeed, data) {
 		return f;
 }
 
-function filterYear(minDate, maxDate, data) {
+function filterDate(minDate, maxDate, data) {
 	f = _.filter(data, function(element){
-		if (element.date >= minDate && element.date <= maxDate) 	
-			return true;	 	
-})		
+		return ((element.date >= minDate) && (element.date <= maxDate));
+	}); 	
 		return f;
 }
 
@@ -1630,5 +1629,26 @@ function updateTimeline(min, max){
         .call(xAxis);
 
 };
+
+$(function() {
+    $( "#time-range" ).slider({
+      range: true,
+      min: 1750,
+      max: 1850,
+      values: [ 1750, 1850 ],
+      stop: function( event, ui ) {
+      	console.log(ui.values[0])
+      	console.log(ui.values[1])
+      	minDate = new Date(ui.values[0], 0, 1)
+      	maxDate = new Date(ui.values[1], 0, 1)
+      	console.log(minDate)
+      	console.log(maxDate)
+        removeHexes()
+        globals.data.filteredShips = filterDate(minDate, maxDate, globals.data.ships);
+        displayShipDataHexes(globals.data.filteredShips);
+        updateTimeline(minDate, maxDate)
+      }
+    });
+});
 
 
