@@ -1506,9 +1506,9 @@ function filterWindSpeed(minSpeed, maxSpeed, data) {
 		return f;
 }
 
-function filterYear(minYear, maxYear, data) {
+function filterYear(minDate, maxDate, data) {
 	f = _.filter(data, function(element){
-		if (element.year >= minYear && element.year <= maxYear) 	
+		if (element.date >= minDate && element.date <= maxDate) 	
 			return true;	 	
 })		
 		return f;
