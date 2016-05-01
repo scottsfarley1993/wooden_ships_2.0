@@ -12,17 +12,16 @@
 	
       <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
       <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
-      <link href="assets/css/hovercard.css" rel="stylesheet">
-   
+   		<link rel="stylesheet" href="assets/css/bootstrap.vertical-tabs.min.css">
 
 	<!--put your external stylesheet links here-->
 	<link rel="stylesheet" href="assets/css/style.css"/>
 </head>
 
 <body>
-	
-	<h2>Wooden Ships</h2>
-	<div class='row' id='mainContainer'>
+	<div id='mainContainer'>
+		
+		<!-- 
 		<div id='controls' class='col-xs-2'>
 			<label>Adjust Hex Size</label><div id="hexSlider"></div>
 			<ul>
@@ -69,7 +68,38 @@
 			<label>Weather Observations</label>
 			
 		</div> 
-		<div id='map' class='col-xs-6'>
+		-->
+		
+		<div id='nav'>
+			<ul class='list-group' id='masthead-group'>
+				<li id='masthead'  class='list-group-item'>
+					<h3>Wooden Ships</h3>
+				</li>
+			</ul>
+
+			<ul class='list-group' id='nav-list-group'>
+				<li class='list-group-item nav-item' data-panel='intro'>
+					Intro
+				</li>
+				<li class='list-group-item nav-item active' data-panel='map'>
+					Map
+				</li>
+				<li class='list-group-item nav-item' data-panel='weather'>
+					Weather Filters
+				</li>
+				<li class='list-group-item nav-item' data-panel='wind'>
+					Wind Filters
+				</li>
+				<li class='list-group-item nav-item' data-panel='time'>
+					Time Filters
+				</li>
+				<li class='list-group-item nav-item' data-panel='other'>
+					Other stuff?
+				</li>
+			</ul>
+		</div>
+		
+		<div id='map' class=''>
 			<!-- map go here-->
 		</div>
 		<div id='weather-controls' class='row'>
@@ -149,6 +179,26 @@
 	    </div>
 	
 	  </div>
+	</div>
+	
+	<div id='intro-panel' class='nav-panel'>
+		
+	</div>
+	
+	<div id='weather-panel' class='nav-panel control-panel'>
+		
+	</div>
+	
+		<div id='wind-panel' class='nav-panel control-panel'>
+		
+	</div>
+	
+		<div id='time-panel' class='nav-panel control-panel'>
+		
+	</div>
+	
+		<div id='other-panel' class='nav-panel control-panel'>
+		
 	</div>
 	
 
