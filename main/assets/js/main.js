@@ -14,10 +14,13 @@ globals = {}
 globals.basemap = {}
 globals.map = {}
 globals.map.dimensions ={};
-globals.map.dimensions.height = $(window).height() * 0.9; //90% of the window height
-globals.map.dimensions.width = $(window).width() //100% of the window width
+globals.map.dimensions.height = $('#map').height() * 0.9; //90% of the window height
+globals.map.dimensions.width = $("#map").width() * 0.9 //100% of the window width
 globals.map.projection;
 globals.map.path;
+
+
+console.log(globals.map.dimensions)
 
 globals.attr = 'fog'
 
@@ -106,15 +109,11 @@ function setMap(){
 	        .append("svg")
 	        .attr("class", "mapContainer")
 	        .attr("width", globals.map.dimensions.width)
-	        .attr("height",  globals.map.dimensions.width);
+	        .attr("height",  globals.map.dimensions.height);
 	        
 	        
 	    globals.map.features = globals.map.mapContainer.append("g"); //this facilitates the zoom overlay
 
-		// globals.map.mapContainer.append("rect")//this is the zoom overlay -->THIS IS WHERE THE PROBLEM IS --> LAYER STACK IS AN ISSUE
-		    // .attr("class", "overlay")
-		    // .attr("width", globals.map.dimensions.width)
-		    // .attr("height", globals.map.dimensions.height)
 		 globals.map.mapContainer.call(zoom).call(zoom.event)
 		    //.moveToBack(); //call the zoom on this element
 		    
@@ -1305,7 +1304,8 @@ function displayWindSpeed(hexbin){
 				.attr('x2', x1)
 				.attr('y1', (globals.wind_diagram.dimensions.height / 2))
 				.attr('y2', (globals.wind_diagram.dimensions.height / 2) + globals.wind_diagram.scale(speed))
-				.style('stroke', 'pink')
+				.style('stroke', 'steelblue')
+				.style("stroke-opacity", 0.5)
 				.style('stroke-width', 0.5)
 				.attr('transform', 'rotate(' +  (180 + dir) + ' ' + x1 + "," + y1 + ')')
 		}
@@ -1566,4 +1566,30 @@ function filterByPressure(minPressure, maxPressure, data) {
 		console.log(f)	
 		return f;
 }
-
+// nav tabs
+$(".nav-item").hover(function(){
+	$(this).toggleClass('nav-hovered')
+}, function(){
+	$(this).toggleClass('nav-hovered')
+})
+$(".nav-item").click(function(){
+	//control active tab css
+	$(".nav-item").removeClass("active")
+	$(this).addClass("active")
+	//figure out what to display
+	$(".nav-panel").css({'display': "none"})
+	_thisData = $(this).data('panel')
+	if (_thisData == 'intro'){
+		$("#intro-panel").slideToggle()
+	}else if (_thisData == "weather"){
+		$("#weather-panel").slideToggle()
+	}else if (_thisData == "wind"){
+		$("#wind-panel").slideToggle()
+	}else if (_thisData == "time"){
+		$("#time-panel").slideToggle()
+	}else if (_thisData == "other"){
+		$("#other-panel").slideToggle()
+	}else{
+		return
+	}
+})
