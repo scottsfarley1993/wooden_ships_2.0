@@ -1580,7 +1580,7 @@ $(".nav-item").click(function(){
 	$(".nav-panel").css({'display': "none"})
 	_thisData = $(this).data('panel')
 	if (_thisData == 'intro'){
-		$("#intro-panel").show()
+		$("#intro-panel").slideToggle()
 	}else if (_thisData == "weather"){
 		$("#weather-panel").slideToggle()
 	}else if (_thisData == "wind"){
