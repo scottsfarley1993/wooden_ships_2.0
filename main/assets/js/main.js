@@ -20,6 +20,7 @@ globals.map.projection;
 globals.map.path;
 
 
+
 console.log(globals.map.dimensions)
 
 globals.attr = 'fog'
@@ -1002,7 +1003,6 @@ function nth(d) {
 function loadCaptainMetadata(){
 	d3.csv("/assets/data/captain_metadata.csv", function(data){
 		globals.data.captain_metadata = data;
-		console.log('Got metadata for captains')
 	})
 }
 function lookupCaptainImage(captainName){
@@ -1011,7 +1011,7 @@ function lookupCaptainImage(captainName){
 	if (o){
 		return o.Image;
 	}else{
-		return ""
+		return "assets/img/default.jpg"
 	}
 }
 
@@ -1558,8 +1558,14 @@ function filterWindSpeed(minSpeed, maxSpeed, data) {
 
 function filterDate(minDate, maxDate, data) {
 	f = _.filter(data, function(element){
+<<<<<<< HEAD
+		if (element.year >= minDate && element.year <= minDate) 	
+			return true;	 	
+	})		
+=======
 		return ((element.date >= minDate) && (element.date <= maxDate));
 	}); 	
+>>>>>>> master
 		return f;
 }
 
@@ -1615,6 +1621,7 @@ function filterByPressure(minPressure, maxPressure, data) {
 		console.log(f)	
 		return f;
 }
+
 // nav tabs
 $(".nav-item").hover(function(){
 	$(this).toggleClass('nav-hovered')
@@ -1644,6 +1651,72 @@ $(".nav-item").click(function(){
 })
 
 
+<<<<<<< HEAD
+function filterToDate(date){
+	toCheck = date.toDateString()
+	o = _.filter(globals.data.ships, function(d){
+		return (toCheck == d.date.toDateString())
+	})
+	return o
+}
+
+function filterToYear(year){
+	console.log(year)
+	o = _.filter(globals.data.ships, function(d){
+		return (year == d.date.getFullYear())
+	})
+	console.log(o)
+	return o
+}
+
+function filterToMonthOfYear(month, year){
+	month = month - 1;
+	console.log(month)
+	console.log(year)
+	o  = _.filter(globals.data.ships, function(d){
+		return ((month == +d.date.getMonth()) && (year == +d.date.getFullYear()))
+	})
+	return o
+}
+
+
+
+function sequenceByDay(date){
+	//this function sequences through the map, giving a day by day view of the events as they unfold
+	removeHexes()
+	globals.data.filteredShips = filterToDate(date);
+	console.log(globals.data.filteredShips.length)
+	displayShipDataHexes(globals.data.filteredShips)
+}
+
+function sequenceByYear(year){
+	removeHexes()
+	globals.data.filteredShips = filterToYear(year)
+	console.log(globals.data.filteredShips.length)
+	displayShipDataHexes(globals.data.filteredShips)
+}
+function sequenceByMonthOfYear(month, year){
+	removeHexes()
+	globals.data.filteredShips = filterToMonthOfYear(month, year)
+	console.log(globals.data.filteredShips.length)
+	displayShipDataHexes(globals.data.filteredShips)
+}
+
+function playThroughDateRange(minDate, maxDate){
+	function getDates( d1, d2 ){
+	  var oneDay = 24*3600*1000;
+	  for (var d=[],ms=d1*1,last=d2*1;ms<last;ms+=oneDay){
+	    d.push( new Date(ms) );
+	  }
+	  return d;
+	}
+	dates = getDates(minDate, maxDate);
+	for (var i=0; i< dates.length; i++){
+		day = dates[i]
+		sequenceByDay(day)
+	}
+}
+=======
 //called from temporal filter function
 function updateTimeline(min, max){
 
@@ -1702,3 +1775,4 @@ $(function() {
 });
 
 
+>>>>>>> master
