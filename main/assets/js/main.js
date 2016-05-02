@@ -1443,6 +1443,18 @@ function changeWeatherSelection(){
 		switchAttribute("gusts")
 	}else if (weatherSelection == "All"){
 		globals.data.filteredShips = globals.data.ships
+	}else if (weatherSelection == "Air Temp"){
+		globals.data.filteredShips = filterAirTemp(globals.data.ships)
+		switchAttribute("airTemp")
+		console.log("Air temp")
+	}else if (weatherSelection == "Sea Surface Temp"){
+		globals.data.filteredShips = filterSST(globals.data.ships)
+		switchAttribute("sst")
+		console.log("sst")
+	}else if (weatherSelection == "Air Pressure"){
+		globals.data.filteredShips = filterPressure(globals.data.ships)
+		switchAttribute("pressure")
+		console.log("pressure")
 	}
 	removeHexes()
 	displayShipDataHexes(globals.data.filteredShips)	
