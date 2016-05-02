@@ -93,8 +93,8 @@
 				<li class='list-group-item nav-item' data-panel='time'>
 					Time Filters
 				</li>
-				<li class='list-group-item nav-item' data-panel='other'>
-					Other stuff?
+				<li class='list-group-item nav-item' data-panel='feed'>
+					Captain's Feed
 				</li>
 			</ul>
 		</div>
@@ -138,14 +138,6 @@
 				</div>
 
 			
-		</div>
-		<div id='feed-controls' class='row display-none'>
-			<h4 id='feed-control-header'>Captain's Feed</h4>
-		<button id='minimize-feed-panel'><span class='glyphicon glyphicon-minus' id='feed-panel-glyph'></span></button>
-		</div> <!-- minimize button-->
-		<div  id='feed-window' class='display-none row'>
-			<ul class='list-group row' id='feed' >
-			</ul>
 		</div>
 	</div> <!--end main row-->
 
@@ -197,8 +189,15 @@
 		
 	</div>
 	
-		<div id='other-panel' class='nav-panel control-panel'>
-		<div id="time-range"></div>
+		<div id='feed-panel' class='nav-panel control-panel'>
+			<!-- <div id='feed-controls'>
+				<h4 id='feed-control-header'>Captain's Feed</h4>
+			<button id='minimize-feed-panel'><span class='glyphicon glyphicon-minus' id='feed-panel-glyph'></span></button>
+			</div>  -->
+			<div  id='feed-window' class='display-none row'>
+				<ul class='list-group row' id='feed' >
+				</ul>
+			</div>
 	</div>
 
 	<div id='timeline'> </div>

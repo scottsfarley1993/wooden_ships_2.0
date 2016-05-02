@@ -73,14 +73,16 @@ html, body{
 }
 
 #feed-window{
-	overflow-y: scroll !important;
-	right: 0px;
+	overflow-y: auto !important;
+	left: 0px;
+	margin:0px;
+	padding:0px;
 	position: absolute;
-	top: calc(50% + 25px);
+	top: 0px;
 	width: 300px;
 	height: 100%!important;
-	max-height: 50%!important;
-	min-height: 50%!important;
+	max-height: 100%!important;
+	min-height: 100%!important;
 	background-color: rgba(255, 255, 255, 0.5)
 	z-index: 1000001;
 }
@@ -88,7 +90,7 @@ html, body{
 	font-family: 'Shadows Into Light', cursive !important;
 }
 .log{
-	width: 100%;
+	width: 250px!important;
 	cursor:default;
 }
 .captain-thumb{
@@ -331,7 +333,7 @@ div.tooltip {
 }
 .control-panel{
 	height: 90%;
-	width: 20%;
+	width: 300px;
 	position: absolute;
 	z-index:100000000;
 	top: 0px;
@@ -347,7 +349,7 @@ div.tooltip {
 #time-panel{
 	background-color: orange;
 }
-#other-panel{
+#feed-panel{
 	background-color: purple;
 }
 
@@ -378,5 +380,7 @@ div.tooltip {
 	padding-bottom: 20px;
 }
 
-
+#feed{
+	width: 300px;
+}
 

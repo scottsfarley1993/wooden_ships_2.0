@@ -829,6 +829,7 @@ $(".projSelect").change(function(){
 function displayMemos(memoSet){
 	//displays the feed of observations in the right hand panel
 	$("#feed").empty()
+	$("#feed-panel").show();
 	d3.select("#feed").selectAll(".log")
 		.data(memoSet)
 		.enter()
@@ -836,7 +837,6 @@ function displayMemos(memoSet){
 			.attr('class', 'log')
 			.attr('class', 'list-group-item')
 			.html(function(d){
-				console.log(d)
 				meta = lookupVoyageID(d['voyageID'])
 				text = d.memoText;
 				latitude = d.Latitude
@@ -913,7 +913,8 @@ function displayMemos(memoSet){
 				
 				//positioning
 				pos = $(this).position();
-				divPos = pos.top + ($(this).height())
+				divPos = pos.top;
+				console.log(divPos)
 				
 				d3.select(this).style('background-color','#cccccc')	 //highlight
 					
@@ -921,7 +922,7 @@ function displayMemos(memoSet){
 	                .duration(200)		
 	                .style("opacity", .9);		
 	            globals.memoTooltip.html(html)	
-	                .style("right", "300px")		
+	                .style("left", "300px")		
 	                .style("top", divPos + "px");	
             })					
         .on("mouseout", function(d) {	
@@ -1558,14 +1559,8 @@ function filterWindSpeed(minSpeed, maxSpeed, data) {
 
 function filterDate(minDate, maxDate, data) {
 	f = _.filter(data, function(element){
-<<<<<<< HEAD
-		if (element.year >= minDate && element.year <= minDate) 	
-			return true;	 	
-	})		
-=======
 		return ((element.date >= minDate) && (element.date <= maxDate));
 	}); 	
->>>>>>> master
 		return f;
 }
 
@@ -1643,15 +1638,14 @@ $(".nav-item").click(function(){
 		$("#wind-panel").slideToggle()
 	}else if (_thisData == "time"){
 		$("#time-panel").slideToggle()
-	}else if (_thisData == "other"){
-		$("#other-panel").slideToggle()
+	}else if (_thisData == "feed"){
+		$("#feed-panel").slideToggle()
 	}else{
 		return
 	}
 })
 
 
-<<<<<<< HEAD
 function filterToDate(date){
 	toCheck = date.toDateString()
 	o = _.filter(globals.data.ships, function(d){
@@ -1716,7 +1710,8 @@ function playThroughDateRange(minDate, maxDate){
 		sequenceByDay(day)
 	}
 }
-=======
+
+
 //called from temporal filter function
 function updateTimeline(min, max){
 
@@ -1774,5 +1769,3 @@ $(function() {
     });
 });
 
-
->>>>>>> master
