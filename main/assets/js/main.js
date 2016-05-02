@@ -19,6 +19,7 @@ globals.map.dimensions.width = $("#map").width() * 0.9 //100% of the window widt
 globals.map.projection;
 globals.map.path;
 
+globals.portRankThreshold = 25;
 
 console.log(globals.map.dimensions)
 
@@ -525,13 +526,30 @@ function styleHexbins(ships, attr){
 
 function getPorts(){        
 	//load the port cities from a csv file on disk
-	  d3.csv("/assets/data/port_cities.csv", function(data){
+	  d3.csv("/assets/data/port_cities_scale_rank.csv", function(data){
 	  	globals.data.ports = data;
 	  	displayPorts(data);
 	  })
 }
 
 function displayPorts(portData){
+	globals.portScale = d3.scale.linear()
+		.range([0, 10])
+		if (globals.nationality == "British"){
+			globals.portScale.domain([0, d3.max(portData, function(d){return +d.BritishRank})])
+			}
+			else if (globals.nationality == "Spanish"){
+			globals.portScale.domain([0, d3.max(portData, function(d){return +d.SpanishRank})])
+			}else if(globals.nationality == "Dutch"){
+			globals.portScale.domain([0, d3.max(portData, function(d){return +d.DutchRank})])
+			}else if (globals.nationality == "French"){
+			globals.portScale.domain([0, d3.max(portData, function(d){return +d.FrenchRank})])
+			}else{
+			globals.portScale.domain([0, 100])
+			}
+	
+	
+	
 	globals.ports = globals.map.features.selectAll(".port")
 		.data(portData)
 		.enter().append('g')
@@ -548,24 +566,52 @@ function displayPorts(portData){
 			projy = globals.map.projection([d.Longitude, d.Latitude])[1]
 			return projy
 		})
-		.attr('r', 1)
+		.attr('r', function(d){
+			if (globals.nationality == "British"){
+				return globals.portScale(+d.BritishRank);
+			}
+			else if (globals.nationality == "Spanish"){
+				return globals.portScale(+d.SpanishRank);
+			}else if(globals.nationality == "Dutch"){
+				return globals.portScale(+d.DutchRank);
+			}else if (globals.nationality == "French"){
+				return globals.portScale(+d.FrenchRank);
+			}else{
+				return 0
+			}
+		})
 		.style('fill', 'black')
 		.style('stroke', 'black')
 		
 	globals.ports
-		.append('text')
+		.append('g')
+			.append('text')
 			.attr('class', 'port-label')
 			.attr('x', function(d){return globals.map.projection([d.Longitude, d.Latitude])[0] + 5})
 			.attr('y', function(d){return globals.map.projection([d.Longitude, d.Latitude])[1] - 5})
 			.style('font-size', '10px')
 			.text(function(d){
-				return d.OriginalName
+				if (globals.nationality == "British"){
+					t = +d.BritishRank;
+				}
+				else if (globals.nationality == "Spanish"){
+					t = +d.SpanishRank;
+				}else if(globals.nationality == "Dutch"){
+					t = +d.DutchRank;
+				}else if (globals.nationality == "French"){
+					t = +d.FrenchRank;
+				}else{
+					t = 0
+				}
+				if (t > globals.portRankThreshold){
+					return d.OriginalName
+				}
+				
 			})
 			.style('fill', 'black')
 			.on('mouseover', function(){
 				d3.select(this).style("fill", 'white').style("cursor", "crosshair")
 				d3.select(this).moveToFront();
-				
 			})
 			.on('mouseout', function(){
 				d3.select(this).style('fill', 'black').style("cursor", "auto")
@@ -635,24 +681,28 @@ function changeCountry(countryName){
 		d3.csv("/assets/data/british_memos_updated.csv", function(data){
 			processMemos(data)
 		})
+		globals.nationality = "British"
 	}
 	else if (countryName == "Dutch"){
 		f = "/assets/data/dutch_points_updated.csv"
 		d3.csv("/assets/data/dutch_memos_updated.csv", function(data){
 			processMemos(data)
 		})
+		globals.nationality = "Dutch"
 	}
 	else if (countryName == "Spanish"){
 		f = "/assets/data/spanish_points_updated.csv"
 		d3.csv("/assets/data/spanish_memos_updated.csv", function(data){
 			processMemos(data)
 		})
+		globals.nationality = "Spanish"
 	}
 	else if (countryName == "French"){
 		f = "/assets/data/french_points_updated.csv"
 		d3.csv("/assets/data/french_memos_updated.csv", function(data){
 			processMemos(data)
 		})
+		globals.nationality = "French"
 	}
 	else{
 		console.log("Invalid country name.")
