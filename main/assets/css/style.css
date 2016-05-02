@@ -1,16 +1,16 @@
 .land {
-    fill: white;
+    fill: #36384c;
  	stroke: #a5967e;
     stroke-width: 0px;
 }
 .mapContainer{
-	fill: black;
+	fill: blue;
 	width:100%;
 }
 
 #map{
-	fill: black;
-	background-color: black;
+	fill: blue;
+	background-color: steelblue;
 	width: calc(100% - 100px);
 	position: absolute;
 	top: 0px;

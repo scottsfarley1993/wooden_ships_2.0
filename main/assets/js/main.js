@@ -952,7 +952,6 @@ function nth(d) {
 function loadCaptainMetadata(){
 	d3.csv("/assets/data/captain_metadata.csv", function(data){
 		globals.data.captain_metadata = data;
-		console.log('Got metadata for captains')
 	})
 }
 function lookupCaptainImage(captainName){
@@ -961,7 +960,7 @@ function lookupCaptainImage(captainName){
 	if (o){
 		return o.Image;
 	}else{
-		return ""
+		return "assets/img/default.jpg"
 	}
 }
 
@@ -1506,11 +1505,11 @@ function filterWindSpeed(minSpeed, maxSpeed, data) {
 		return f;
 }
 
-function filterYear(minYear, maxYear, data) {
+function filterDate(minDate, maxDate, data) {
 	f = _.filter(data, function(element){
-		if (element.year >= minYear && element.year <= maxYear) 	
+		if (element.year >= minDate && element.year <= minDate) 	
 			return true;	 	
-})		
+	})		
 		return f;
 }
 
@@ -1646,3 +1645,17 @@ function sequenceByMonthOfYear(month, year){
 	displayShipDataHexes(globals.data.filteredShips)
 }
 
+function playThroughDateRange(minDate, maxDate){
+	function getDates( d1, d2 ){
+	  var oneDay = 24*3600*1000;
+	  for (var d=[],ms=d1*1,last=d2*1;ms<last;ms+=oneDay){
+	    d.push( new Date(ms) );
+	  }
+	  return d;
+	}
+	dates = getDates(minDate, maxDate);
+	for (var i=0; i< dates.length; i++){
+		day = dates[i]
+		sequenceByDay(day)
+	}
+}
