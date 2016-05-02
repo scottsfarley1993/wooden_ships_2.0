@@ -4,12 +4,12 @@
     stroke-width: 0px;
 }
 .mapContainer{
-	fill: blue;
+	fill: black;
 	width:100%;
 }
 
 #map{
-	fill: blue;
+	fill: black;
 	background-color: black;
 	width: calc(100% - 100px);
 	position: absolute;
