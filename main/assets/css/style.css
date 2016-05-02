@@ -1,5 +1,5 @@
 .land {
-    fill: #36384c;
+    fill: white;
  	stroke: #a5967e;
     stroke-width: 0px;
 }
@@ -10,7 +10,7 @@
 
 #map{
 	fill: blue;
-	background-color: steelblue;
+	background-color: black;
 	width: calc(100% - 100px);
 	position: absolute;
 	top: 0px;
