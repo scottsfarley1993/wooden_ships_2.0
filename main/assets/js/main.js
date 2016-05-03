@@ -97,19 +97,57 @@ $(document).ready(function(){
 	updateTimeline(new Date(1750,0,1), new Date(1850,0,1))
 })
 
-function onDrag(){
+function onDrag(evt){
+	//I know this causes errors, but it also causes the right thing to happen soo....
+		// d3.selectAll(".land").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	// d3.selectAll(".hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	// d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	// d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	    var rotate = globals.map.projection.rotate();
 	    globals.map.projection = globals.map.projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]); //do the projection rotation
-		//change the x/y coordinates of the hexbin
-	    globals.map.hexbin.x(function(d){
-	    	return  globals.map.projection([d.longitude, d.latitude])[0];
-	    })
-	    globals.map.hexbin.y(function(d){
-	    	return  globals.map.projection([d.longitude, d.latitude])[1];
-	    })
-	    //remove and redraw the hexagons
-	    d3.selectAll(".hexagons").remove();
-	    displayShipDataHexes(globals.data.filteredShips);
+	    	globals.data.filteredShips.forEach(function(d){
+				var p = globals.map.projection([d['longitude'], d['latitude']])
+				d['projected'] = p
+			})
+		globals.map.hexagons.remove();
+		 globals.map.hexagons = globals.map.features.append("g")
+		      .attr("class", "hexagons")
+		    .selectAll(".hexagons")
+		      .data(globals.map.hexbin(globals.data.filteredShips))
+		    .enter().append("path")
+		    	.attr('class', 'hexagon')
+		      .attr("d", globals.map.hexbin.hexagon())
+		      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+		      .style('stroke-width', 0.25)
+		      .on('mouseover', function(d){
+		      	d3.select(this).moveToFront()
+		      	d3.select(this).style({'stroke': 'orange', "stroke-width": 1})
+		      	displayWindSpeed(d)
+		      	summary = getSummaryOfHex(d)
+		      	displaySummary(summary)
+		      })
+		      .on('mouseout', function(d){
+		      	if (!globals.isolationMode){
+		      		d3.select(this).style({'stroke': 'none'})
+		      	}
+		      })
+		      .on('click', function(d){
+		      	//enter isolationMode on click
+		      	var _this = d3.select(this)
+		      	if (!_this.classed('isolated')){
+		      		//it hasnt been clicked yet, so enter isolation mode
+		      		_this.style({'stroke': 'white', "stroke-width": 1})
+		      		enterIsolationMode()
+		      		_this.classed('isolated', true)
+		      		memos = filterToHexBin(globals.filteredMemos, d)
+		      		displayMemos(memos)
+		      	}
+		      })
+	      globals.land.moveToFront();
+	      d3.selectAll(".port").moveToFront();
+	      styleHexbins(globals.data.filteredShips, globals.attr)
+
+	      
 	    //redraw the land
 	    globals.map.mapContainer.selectAll(".land").attr("d", globals.map.path);
 	    // //redraw the ports
@@ -133,11 +171,25 @@ function onDrag(){
 //set up map and call data
 function setMap(){	        
 	    //use queue.js to parallelize asynchronous data loading
+	    
+	    //default
+	    var projection = d3.geo.robinson()
+		    .scale(150)
+		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
+		    .precision(.1);
+		   var path = d3.geo.path()
+		    	.projection(projection);
+		   //make global
+		   globals.map.projection = projection;
+		   globals.map.path = path
+	    
+	    
 	    d3_queue.queue()
 	        .defer(d3.json, "assets/data/ne_50m_land.topojson") //load base map data
 	        .await(callback);
+	     
 	        
-		function callback(error, base, overlay1, overlay2, overlay3){
+		function callback(error, base, ocean){
 			//happens once the ajax have returned
 	        	    //create new svg container for the map
 	    globals.map.mapContainer = mapContainer = d3.select("#map")
@@ -148,15 +200,8 @@ function setMap(){
 	        
 	        
 	    globals.map.features = globals.map.mapContainer.append("g"); //this facilitates the zoom overlay
-
-		 globals.map.mapContainer.call(zoom).call(zoom.event)
-		 globals.map.mapContainer.call(d3.behavior.drag()
-		  .origin(function() { 
-		  	var r = globals.map.projection.rotate(); 
-		  	return {x: r[0] / sens, y: -r[1] / sens}; 
-		  })
-		  .on("drag", onDrag))
-		    
+		
+		globals.sphere = {type: "Sphere"};  
 		    
 	        //translate europe TopoJSON
 	        var landBase = topojson.feature(base, base.objects.ne_50m_land).features
@@ -180,12 +225,19 @@ function setMap(){
 	            .attr("class", "land")
 	            //.style("stroke", "black").style("fill", "blue"); 
 	         
-	         changeProjection("Azimuthal"); //default
+	     globals.map.mapContainer.call(zoom).call(zoom.event)
+		 globals.map.mapContainer.call(d3.behavior.drag()
+		  .origin(function() { 
+		  	var r = globals.map.projection.rotate(); 
+		  	return {x: r[0] / sens, y: -r[1] / sens}; 
+		  })
+		  .on("drag", onDrag))
+	         
+	  changeProjection("Orthographic"); //default       
 	}; //end of callback
 };//end of set map
 
 function zoomed() {
-	evt = d3.event
 	// d3.selectAll(".land").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	// d3.selectAll(".hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	// d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
@@ -199,8 +251,6 @@ function createColorScheme (maxDomain, colors){
 	    .domain([0, maxDomain])
 	    .range(colors)
 	    .interpolate(d3.interpolateLab);
-	console.log(color.domain())
-	console.log(color.range())
 	return color;
 
 };
@@ -260,7 +310,7 @@ function changeProjection(projection, scale, center){
    globals.map.projection = projection;
    globals.map.path = path;
    //do the update
-   globals.land.transition().attr('d', path)
+   d3.selectAll(".land").transition().attr('d', path)
    
    //update the hexagons
    changeHexSize(globals.map.hexRadius)
@@ -305,7 +355,6 @@ function displayShipDataHexes(datasetArray){
 	      .on('click', function(d){
 	      	//memos = filterToHexBin(globals.data.memos, d)
 	      	//console.log(memos)
-	      	console.log(d);
       })
       .on('mouseover', function(d){
       	d3.select(this).moveToFront()
@@ -346,11 +395,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		console.log("Max domain is: " + maxDomain)
 
 		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
-		
-		console.log(hexColor)
+
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
@@ -361,11 +408,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		console.log("Max domain is: " + maxDomain)
 
 		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
-		
-		console.log(hexColor)
+
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
@@ -376,11 +421,8 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		console.log("Max domain is: " + maxDomain)
-
 		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
-		
-		console.log(hexColor)
+
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
@@ -391,11 +433,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		console.log("Max domain is: " + maxDomain)
 
 		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
-		
-		console.log(hexColor)
+
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
@@ -406,11 +446,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		console.log("Max domain is: " + maxDomain)
 
 		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
-		
-		console.log(hexColor)
+
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
@@ -421,11 +459,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		console.log("Max domain is: " + maxDomain)
 
 		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
-		
-		console.log(hexColor)
+
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
@@ -436,11 +472,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		console.log("Max domain is: " + maxDomain)
 
 		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
-		
-		console.log(hexColor)
+
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
@@ -452,11 +486,9 @@ function styleHexbins(ships, attr){
 			return +d["airTemp"]
 		});
 
-		console.log("Max domain is: " + maxDomain);
 
 		var hexColor = createColorScheme(maxDomain, ["yellow", "red"]);
 
-		console.log(hexColor)
 		d3.selectAll(".hexagon")
 			.attr("fill", function(d){
 				return hexColor(d3.mean(d, function(d){
@@ -472,11 +504,9 @@ function styleHexbins(ships, attr){
 			return +d["pressure"]
 		});
 
-		console.log("Max domain is: " + maxDomain);
 
 		var hexColor = createColorScheme(maxDomain, ["white", "purple"]);
 
-		console.log(hexColor)
 		d3.selectAll(".hexagon")
 			.attr("fill", function(d){
 				return hexColor(d3.mean(d, function(d){
@@ -494,11 +524,8 @@ function styleHexbins(ships, attr){
 			return +d["sst"]
 		});
 
-		console.log("Max domain is: " + maxDomain);
-
 		var hexColor = createColorScheme(maxDomain, ["yellow", "red"]);
 
-		console.log(hexColor)
 		d3.selectAll(".hexagon")
 			.attr("fill", function(d){
 				return hexColor(d3.mean(d, function(d){
@@ -514,11 +541,9 @@ function styleHexbins(ships, attr){
 			return +d["windSpeed"]
 		});
 
-		console.log("Max domain is: " + maxDomain);
 
 		var hexColor = createColorScheme(maxDomain, ["white", "purple"]);
 
-		console.log(hexColor)
 		d3.selectAll(".hexagon")
 			.attr("fill", function(d){
 				return hexColor(d3.mean(d, function(d){
@@ -534,11 +559,9 @@ function styleHexbins(ships, attr){
 			return +d["winddirection"]
 		});
 
-		console.log("Max domain is: " + maxDomain);
 
 		var hexColor = createColorScheme(maxDomain, ["white", "purple"]);
 
-		console.log(hexColor)
 		d3.selectAll(".hexagon")
 			.attr("fill", function(d){
 				return hexColor(d3.mean(d, function(d){
@@ -553,11 +576,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		console.log("Max domain is: " + maxDomain)
 
 		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
-		
-		console.log(hexColor)
+
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
@@ -926,7 +947,6 @@ function displayMemos(memoSet){
 
 				return html;
 			}).on("mouseover", function(d) {
-				console.log(d)
 				//make the html
 				html = "<div class='row'>"
 				html += "<div class='col-xs-4'>"
@@ -950,7 +970,6 @@ function displayMemos(memoSet){
 				//positioning
 				pos = $(this).position();
 				divPos = pos.top;
-				console.log(divPos)
 				
 				d3.select(this).style('background-color','#cccccc')	 //highlight
 					
@@ -1489,7 +1508,6 @@ function changeMemoSet(){
 	}else if(memoType == "landmarks"){
 		globals.filteredMemos = filterToLandmarks(globals.data.memos)
 	}
-	console.log(globals.filteredMemos)
 }
 $(".memoSelect").change(changeMemoSet)
 
