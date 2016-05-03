@@ -103,12 +103,63 @@ function onDrag(evt){
 	// d3.selectAll(".hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	// d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	// d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	    var rotate = globals.map.projection.rotate();
-	    globals.map.projection = globals.map.projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]); //do the projection rotation
-	    	globals.data.filteredShips.forEach(function(d){
-				var p = globals.map.projection([d['longitude'], d['latitude']])
+		rotX = d3.event.x * 0.25
+		if (rotX > 360){
+			rotX - 360
+		}else if (rotX < -360){
+			rotX = rotX + 360
+		}
+		rotY = -d3.event.y * 0.25
+		if (rotY > 360 ){
+			rotY = rotX - -360
+		}else if (rotY < -360){
+			rotY = rotY + 360
+		}
+		
+		rotation = [rotX,  rotY, 0]
+		globals.map.projection = globals.map.projection.rotate(rotation); //do the projection rotation
+		
+
+		lonRot = -1 * rotation[0] //get the value and correct for hemisphere
+		latRot = -1 * rotation[1]
+		
+		ang = globals.map.projection.clipAngle()
+		
+		if (lonRot > 0){
+			//eastern hemisphere
+			bnd1 = lonRot - ang
+			bnd2 = lonRot + ang
+			// console.log(bnd2)
+			if (bnd2 > 180){
+				bnd2 = -1 * (bnd2 - 180)
+			}
+		}else{
+			bnd1 = lonRot - ang
+			bnd2 = lonRot + ang
+			// console.log(bnd2)
+			if (bnd1 > 180){
+				bnd1 = -1 * (bnd1 - 180)
+			}
+		}
+		console.log([bnd1, bnd2])
+		lonBounds = [bnd1, bnd2]
+		
+		
+		latBounds = [latRot - ang, latRot + ang]
+		
+		
+		//fix everything that needs fixing
+		globals.data.filteredShips.forEach(function(d){
+			var p = globals.map.projection([d['longitude'], d['latitude']])
+			if ((p[0] > lonBounds[0]) && (p[1] < lonBounds[1])){
 				d['projected'] = p
-			})
+			}else{
+				d['projected'] = [200, 200]
+			}
+			
+		})
+		
+		
 		globals.map.hexagons.remove();
 		 globals.map.hexagons = globals.map.features.append("g")
 		      .attr("class", "hexagons")
@@ -146,7 +197,7 @@ function onDrag(evt){
 	      globals.land.moveToFront();
 	      d3.selectAll(".port").moveToFront();
 	      styleHexbins(globals.data.filteredShips, globals.attr)
-
+		
 	      
 	    //redraw the land
 	    globals.map.mapContainer.selectAll(".land").attr("d", globals.map.path);
@@ -166,7 +217,8 @@ function onDrag(evt){
 	    	.attr('y', function(d){
 	    		return globals.map.projection([d.Longitude, d.Latitude])[1] - 5;
 	    })		    
-}
+} //enddrag function
+
 
 //set up map and call data
 function setMap(){	        
@@ -201,7 +253,6 @@ function setMap(){
 	        
 	    globals.map.features = globals.map.mapContainer.append("g"); //this facilitates the zoom overlay
 		
-		globals.sphere = {type: "Sphere"};  
 		    
 	        //translate europe TopoJSON
 	        var landBase = topojson.feature(base, base.objects.ne_50m_land).features
@@ -217,6 +268,13 @@ function setMap(){
 	    	.y(function(d){
 	    		return d.projected[1]
 	    	})
+	         
+	         
+	       globals.ocean =    globals.map.features.append("path")
+				  .datum({type: "Sphere"})
+				  .attr("class", "water")
+				  .attr("d", globals.map.path)
+				  .attr('fill', 'yellow')
 	         
 	         globals.land = globals.map.features.selectAll(".land")
 	            .data(landBase)
@@ -311,6 +369,7 @@ function changeProjection(projection, scale, center){
    globals.map.path = path;
    //do the update
    d3.selectAll(".land").transition().attr('d', path)
+   d3.selectAll(".water").transition().attr("d", path)
    
    //update the hexagons
    changeHexSize(globals.map.hexRadius)
@@ -780,7 +839,7 @@ function refreshHexes(){
 
 function loadShipLookup(){
 	//laods metadata about ships and voyages from the disk
-	d3.csv("/assets/data/ship_lookup_original.csv",function(data){
+	d3.csv("/assets/data/ship_lookup_fixed.csv",function(data){
 		globals.data.shipLookup = data;
 	});
 
