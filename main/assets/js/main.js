@@ -1127,6 +1127,7 @@ function enterIsolationMode(){
 function exitIsolationMode(){
 	d3.selectAll(".overlay")
 		.remove()
+	$(".control-panel").slideToggle();
 	d3.selectAll('.isolated').style('stroke', 'none').classed('isolated', false)
 	globals.isolationMode = false;
 	console.log("Exited isolation mode.")
@@ -1628,6 +1629,7 @@ $(".nav-item").click(function(){
 	//control active tab css
 	$(".nav-item").removeClass("active")
 	$(this).addClass("active")
+	enterIsolationMode();
 	//figure out what to display
 	$(".nav-panel").css({'display': "none"})
 	_thisData = $(this).data('panel')
