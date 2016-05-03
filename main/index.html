@@ -21,55 +21,6 @@
 <body>
 	<div id='mainContainer'>
 		
-		<!-- 
-		<div id='controls' class='col-xs-2'>
-			<label>Adjust Hex Size</label><div id="hexSlider"></div>
-			<ul>
-				<li>
-					Control
-				</li>
-				<li>
-					Control
-				</li>
-				<li>
-					Control
-				</li>
-				<li>
-					Control
-				</li>
-				<li>
-					Control
-				</li>
-				
-			</ul>
-
-			<h4>Time Slider</h4>
-
-			<div id="slider-range"></div>
-
-			<h4>Projection</h4>
-			<label>
-				<input type='radio' name='projSelect' value='Mercator' class='projSelect' checked><label>Mercator</label><br />
-				<input type='radio' name='projSelect' value="VDG" class='projSelect'><label>Van der Grinten IV</label>
-			</label>
-			<h4>Ship Logs</h4>
-			<label>All Reports</label><input name='memoSelect' value='All' type='radio' class='memoSelect' checked/><br />
-			<label>Weather Logs</label><input name='memoSelect' value='WeatherReports' type='radio' class='memoSelect'/><br />
-			<label>Travel Memos</label><input name='memoSelect' value='Travel' type='radio' class='memoSelect'/><br />
-			<label>Ship Encounters</label><input name='memoSelect' value='enc' type='radio' class='memoSelect'/><br />
-			<label>Anchor Locations</label><input name='memoSelect' value='anchor' type='radio' class='memoSelect'/><br />
-			<label>Landmarks</label><input name='memoSelect' value='landmarks' type='radio' class='memoSelect'/><br />
-			<label>Biological Observations</label><input name='memoSelect' value='Biology' type='radio' class='memoSelect'/><br />
-			<label>Conflict and Punishment</label><input name='memoSelect' value='warsAndFights' type='radio' class='memoSelect'/><br />
-			<label>Ship and Rigging Notes</label><input name='memoSelect' value='shipAndRig' type='radio' class='memoSelect'/><br />
-			<label>Cargo</label><input name='memoSelect' value='cargo' type='radio' class='memoSelect'/><br />
-			<label>Life On Board</label><input name='memoSelect' value='lifeOnBoard' type='radio' class='memoSelect'/><br />
-			<label>Other Remarks</label><input name='memoSelect' value='other' type='radio' class='memoSelect'/><br /><br />
-			<label>Weather Observations</label>
-			
-		</div> 
-		-->
-		
 		<div id='nav'>
 			<ul class='list-group' id='masthead-group'>
 				<li id='masthead'  class='list-group-item'>
@@ -142,35 +93,13 @@
 	</div> <!--end main row-->
 
 	
-	
-	
-	
-		<!-- This is the splash screen, opens on window load but can be closed/opened at any time -->
-	<div id="splashModal" class="modal fade" role="dialog">
-	  <div class="modal-dialog modal-lg">
-	
-	    <!-- content-->
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title">Welcome to Wooden Ships! <span class='text-muted'>Choose your nationality.</span></h4>
-	      </div>
-	      <div class="modal-body">
-	      	<p>Click on a flag to get started.</p>
-	        <ul class='list-group' id='nation-select-list'>
-	        	<li class='list-group-item nation-select' id='Dutch_select'>Dutch</li>
-	        	<li class='list-group-item nation-select' id='British_select'>British</li>
-	        	<li class='list-group-item nation-select' id='French_select'>French</li>
-	        	<li class='list-group-item nation-select' id='Spanish'>Spanish</li>
-	        </ul>
-	        <h4 id='loading'>Loading...</h4>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	
-	  </div>
+	<div id='reproject-holder'>
+		<label>Change Map projection</label>
+		<select id='proj-select'>
+			<option value='cylindrical'>Cylindrical</option>
+			<option value='robinson'>Robinson</option>
+			<option value='globe'>Globe</option>
+		</select>
 	</div>
 	
 	<div id='intro-panel' class='nav-panel'>

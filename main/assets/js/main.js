@@ -1877,3 +1877,17 @@ $(function() {
     });
 });
 
+$('#proj-select option[value=globe]').attr('selected', 'selected'); //default
+$("#proj-select").change(function(){
+	var val = $("#proj-select option:selected").val()
+	if (val == 'robinson'){
+		changeProjection("Azimuthal")
+	}else if (val == 'globe'){
+		changeProjection("Orthographic")
+	}else if (val == "cylindrical"){
+		changeProjection("Cylindrical")
+	}else{
+		return
+	}
+})
+
