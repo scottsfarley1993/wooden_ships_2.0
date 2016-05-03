@@ -1131,6 +1131,7 @@ function exitIsolationMode(){
 	d3.selectAll('.isolated').style('stroke', 'none').classed('isolated', false)
 	globals.isolationMode = false;
 	console.log("Exited isolation mode.")
+	$(".nav-item").removeClass("active")
 	$("#feed").empty();
 	$("#feed-window").addClass('display-none')
 	$("#feed-controls").addClass('display-none')
