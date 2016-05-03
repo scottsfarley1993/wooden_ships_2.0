@@ -40,7 +40,7 @@ globals.memoTooltip = d3.select("body").append("div")
     .attr("class", "tooltip")				
     .style("opacity", 0);
 
-globals.portRankThreshold = 50;
+globals.portRankThreshold = 25;
 
 var radius = d3.scale.sqrt()
     .domain([0, 12])
@@ -341,7 +341,7 @@ function changeProjection(projection, scale, center){
 
     }else if (projection == "Orthographic"){
 	var projection = d3.geo.orthographic()
-		    .scale(600)
+		    .scale(500)
 		    .translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
 		    .clipAngle(90)
 		    .precision(.1);
@@ -658,8 +658,9 @@ function getPorts(){
 }
 
 function displayPorts(portData){
+	d3.selectAll(".port").remove()
 	globals.portScale = d3.scale.linear()
-		.range([0, 10])
+		.range([2, 8])
 		if (globals.nationality == "British"){
 			globals.portScale.domain([0, d3.max(portData, function(d){return +d.BritishRank})])
 			}
@@ -704,6 +705,9 @@ function displayPorts(portData){
 		})
 		.style('fill', 'red')
 		.style('stroke', 'black')
+		.on('click', function(d){
+			console.log(d)
+		})
 		
 	globals.ports
 		.append('g')
@@ -711,7 +715,30 @@ function displayPorts(portData){
 			.attr('class', 'port-label')
 			.attr('x', function(d){return globals.map.projection([d.Longitude, d.Latitude])[0] + 5})
 			.attr('y', function(d){return globals.map.projection([d.Longitude, d.Latitude])[1] - 5})
-			.style('font-size', '10px')
+			.style('font-size', function(d){
+				if (globals.nationality == "British"){
+					t = +d.BritishRank;
+				}
+				else if (globals.nationality == "Spanish"){
+					t = +d.SpanishRank;
+				}else if(globals.nationality == "Dutch"){
+					t = +d.DutchRank;
+				}else if (globals.nationality == "French"){
+					t = +d.FrenchRank;
+				}else{
+					t = 0
+				}
+				if (t > 25){
+					return '10px';
+				}else if (t > 100){
+					return '12px';
+				}else if (t > 200){
+					return '14px';
+				}else{
+					return '0px'
+				}
+				
+			})
 			.text(function(d){
 				if (globals.nationality == "British"){
 					t = +d.BritishRank;
@@ -833,6 +860,7 @@ function changeCountry(countryName){
 	d3_queue.queue()
 		.defer(getShipData, f)
 		.await(refreshHexes)
+	
 }
 
 function refreshHexes(){
@@ -840,6 +868,7 @@ function refreshHexes(){
 	removeHexes()
 	displayShipDataHexes(globals.data.ships)
 	console.log("Refreshed hexes.")
+	displayPorts(globals.data.ports)
 }
 
 function loadShipLookup(){
@@ -971,7 +1000,7 @@ function displayMemos(memoSet){
 				shipName = meta['shipName']
 				shipType = meta['shipType']
 				nationality = meta['nationality']
-				voyageStart = moment(meta['voyageStart'])
+				voyageStart = meta['voyageStart']
 				var duration = moment.duration(date.diff(voyageStart));
 				var daysSinceStart = Math.abs(Math.round(duration.asDays()));
 				
@@ -1019,12 +1048,12 @@ function displayMemos(memoSet){
 				if (d.imgSrc != ""){
 					html += "<img class='captain-thumb img-rounded hover-img col-xs-12' src='" + d.imgSrc + "'>"
 				}
-				
+				console.log(d.voyageStart)
 				html += "</div><div class='col-xs-8'>"
 				html += "<h4>" + d.captainRank + " " + d.captainName + "</h4>"
 				html += "<i><b class='large'>" + d.shipName + "</b></i><br />"
 				html += "<i>" + d.shipType + "</i>"
-				html += "<p>Voyage Started: " + new Date(d.voyageStart).toDateString() + "</p>"
+				//html += "<p>Voyage Started: " + new Date(d.voyageStart).toDateString() + "</p>"
 				html += "<p>Sailing From: " + d.fromPlace + "</p>"
 				html += "<p>Sailing To: " + d.toPlace + "</p>"
 				html += "<p>Days at sea: " + d.voyageDaysSinceStart + "</p>"
@@ -1046,7 +1075,7 @@ function displayMemos(memoSet){
 	                .duration(200)		
 	                .style("opacity", .9);		
 	            globals.memoTooltip.html(html)	
-	                .style("left", "100px")		
+	                .style("left", "400px")		
 	                .style("top", divPos + "px");	
             })					
         .on("mouseout", function(d) {	
@@ -1256,6 +1285,7 @@ function exitIsolationMode(){
 	$("#feed").empty();
 	$("#feed-window").addClass('display-none')
 	$("#feed-controls").addClass('display-none')
+	$('.control-panel').hide();
 	
 }
 
@@ -1703,6 +1733,7 @@ $(".nav-item").hover(function(){
 $(".nav-item").click(function(){
 	//control active tab css
 	$(".nav-item").removeClass("active")
+	enterIsolationMode();
 	$(this).addClass("active")
 	//figure out what to display
 	$(".nav-panel").css({'display': "none"})
