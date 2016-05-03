@@ -19,7 +19,7 @@ globals.map.dimensions.width = $("#map").width() * 0.9 //100% of the window widt
 globals.map.projection;
 globals.map.path;
 
-
+sens = 0.25;
 
 console.log(globals.map.dimensions)
 
@@ -97,6 +97,39 @@ $(document).ready(function(){
 	updateTimeline(new Date(1750,0,1), new Date(1850,0,1))
 })
 
+function onDrag(){
+	    var rotate = globals.map.projection.rotate();
+	    globals.map.projection = globals.map.projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]); //do the projection rotation
+		//change the x/y coordinates of the hexbin
+	    globals.map.hexbin.x(function(d){
+	    	return  globals.map.projection([d.longitude, d.latitude])[0];
+	    })
+	    globals.map.hexbin.y(function(d){
+	    	return  globals.map.projection([d.longitude, d.latitude])[1];
+	    })
+	    //remove and redraw the hexagons
+	    d3.selectAll(".hexagons").remove();
+	    displayShipDataHexes(globals.data.filteredShips);
+	    //redraw the land
+	    globals.map.mapContainer.selectAll(".land").attr("d", globals.map.path);
+	    // //redraw the ports
+	    d3.selectAll(".port-marker")
+	    	.attr('cx', function(d){
+	    	return globals.map.projection([d.Longitude, d.Latitude])[0];
+	    })
+	    	.attr('cy', function(d){
+	    		return globals.map.projection([d.Longitude, d.Latitude])[1];
+	    	})
+	  //port labels 
+	  d3.selectAll(".port-label")
+	    	.attr('x', function(d){
+	    	return globals.map.projection([d.Longitude, d.Latitude])[0] + 5;
+	    })
+	    	.attr('y', function(d){
+	    		return globals.map.projection([d.Longitude, d.Latitude])[1] - 5;
+	    })		    
+}
+
 //set up map and call data
 function setMap(){	        
 	    //use queue.js to parallelize asynchronous data loading
@@ -117,7 +150,12 @@ function setMap(){
 	    globals.map.features = globals.map.mapContainer.append("g"); //this facilitates the zoom overlay
 
 		 globals.map.mapContainer.call(zoom).call(zoom.event)
-		    //.moveToBack(); //call the zoom on this element
+		 globals.map.mapContainer.call(d3.behavior.drag()
+		  .origin(function() { 
+		  	var r = globals.map.projection.rotate(); 
+		  	return {x: r[0] / sens, y: -r[1] / sens}; 
+		  })
+		  .on("drag", onDrag))
 		    
 		    
 	        //translate europe TopoJSON
@@ -148,10 +186,10 @@ function setMap(){
 
 function zoomed() {
 	evt = d3.event
-	d3.selectAll(".land").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	d3.selectAll(".hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	// d3.selectAll(".land").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	// d3.selectAll(".hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	// d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	// d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 };
 	
 	
@@ -549,9 +587,6 @@ function displayPorts(portData){
 			}else{
 			globals.portScale.domain([0, 100])
 			}
-	
-	
-	
 	globals.ports = globals.map.features.selectAll(".port")
 		.data(portData)
 		.enter().append('g')
@@ -582,7 +617,7 @@ function displayPorts(portData){
 				return 0
 			}
 		})
-		.style('fill', 'black')
+		.style('fill', 'red')
 		.style('stroke', 'black')
 		
 	globals.ports
@@ -610,7 +645,7 @@ function displayPorts(portData){
 				}
 				
 			})
-			.style('fill', 'black')
+			.style('fill', 'red')
 			.on('mouseover', function(){
 				d3.select(this).style("fill", 'white').style("cursor", "crosshair")
 				d3.select(this).moveToFront();

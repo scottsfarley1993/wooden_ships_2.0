@@ -10,7 +10,7 @@
 
 #map{
 	fill: black;
-	background-color: black;
+	background-color: steelblue;
 	width: calc(100% - 100px);
 	position: absolute;
 	top: 0px;
@@ -141,6 +141,9 @@ div.tooltip {
     border-color: black;		
     pointer-events: none;			
     z-index: 1000;
+}
+.water{
+	fill: steelblue;
 }
 
 .bar {
