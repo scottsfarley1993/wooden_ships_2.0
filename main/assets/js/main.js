@@ -1461,6 +1461,18 @@ function changeWeatherSelection(){
 }
 $(".WeatherSelect").change(changeWeatherSelection)
 
+// globals.filter = {
+	// globals.snow: false
+	// globals.thunder: false
+	// globals.seaIce: false
+	// globals.rain: false
+	// globals.hail: false
+	// globals.fog: false
+	// globals.gusts: false
+	// globals.airTemp: false
+	// globals.sst: false
+	// global.pressure: false
+// }
 
 $("#minimize-wx-panel").on('click', function(){
 	if ($("#wx-panel-glyph").hasClass("glyphicon-plus")){
@@ -1649,3 +1661,21 @@ $(".nav-item").click(function(){
 		return
 	}
 })
+
+function changeCountrySelection(){
+	v = $(this)
+	CountrySelection = v.val()
+	globals.CountrySelection = CountrySelection
+	if (CountrySelection == "British"){		
+		changeCountry("British")	
+	}else if (CountrySelection == "Spanish"){
+		changeCountry("Spanish")
+	}else if (CountrySelection == "Dutch"){
+		changeCountry("Dutch")
+	}else if (CountrySelection == "France"){
+		changeCountry("French")
+	}
+		
+}
+$(".CountrySelect").change(changeCountrySelection)
+
