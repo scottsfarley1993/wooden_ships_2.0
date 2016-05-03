@@ -1773,3 +1773,74 @@ $(function() {
     });
 });
 
+
+function changeCountrySelection(){
+	v = $(this)
+	CountrySelection = v.val()
+	globals.CountrySelection = CountrySelection
+	if (CountrySelection == "British"){		
+		changeCountry("British")	
+	}else if (CountrySelection == "Spanish"){
+		changeCountry("Spanish")
+	}else if (CountrySelection == "Dutch"){
+		changeCountry("Dutch")
+	}else if (CountrySelection == "France"){
+		changeCountry("French")
+	}
+		
+}
+$(".CountrySelect").change(changeCountrySelection)
+
+function changeWeatherSelection(){
+	v = $(this)
+	weatherSelection = v.val()
+	globals.weatherSelection = weatherSelection
+	if (weatherSelection == "Snow"){		
+		globals.data.filteredShips = filterBySnow(globals.data.ships)
+		console.log("Snow")
+		switchAttribute("snow")	
+	}else if (weatherSelection == "Thunder"){
+		globals.data.filteredShips = filterByThunder(globals.data.ships)
+		switchAttribute("thunder")
+	}else if (weatherSelection == "Sea Ice"){
+		globals.data.filteredShips = filterBySeaIce(globals.data.ships)
+		console.log(globals.data.filteredShips)
+		switchAttribute("seaIce")
+	}else if (weatherSelection == "Rain"){
+		globals.data.filteredShips = filterByRain(globals.data.ships)
+		console.log(globals.data.filteredShips)
+		switchAttribute("rain")
+	}else if (weatherSelection == "Hail"){
+		globals.data.filteredShips = filterByHail(globals.data.ships)
+		console.log("hail")
+		console.log(globals.data.filteredShips)
+		switchAttribute("hail")
+	}else if (weatherSelection == "Fog"){
+		globals.data.filteredShips = filterByFog(globals.data.ships)
+		console.log("fog")
+		console.log(globals.data.filteredShips)
+		switchAttribute("fog")
+	}else if (weatherSelection == "Gusts"){
+		globals.data.filteredShips = filterByGusts(globals.data.ships)
+		console.log("fog")
+		console.log(globals.data.filteredShips)
+		switchAttribute("gusts")
+	}else if (weatherSelection == "All"){
+		globals.data.filteredShips = globals.data.ships
+	}else if (weatherSelection == "Air Temp"){
+		globals.data.filteredShips = filterAirTemp(globals.data.ships)
+		switchAttribute("airTemp")
+		console.log("Air temp")
+	}else if (weatherSelection == "Sea Surface Temp"){
+		globals.data.filteredShips = filterSST(globals.data.ships)
+		switchAttribute("sst")
+		console.log("sst")
+	}else if (weatherSelection == "Air Pressure"){
+		globals.data.filteredShips = filterPressure(globals.data.ships)
+		switchAttribute("pressure")
+		console.log("pressure")
+	}
+	removeHexes()
+	displayShipDataHexes(globals.data.filteredShips)	
+}
+$(".WeatherSelect").change(changeWeatherSelection)
