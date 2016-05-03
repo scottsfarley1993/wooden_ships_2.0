@@ -1,11 +1,25 @@
+h {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   	font-weight: 300;
+   	color: black;
+    padding-left: 5%;
+}
+
+p {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   	font-weight: 300;
+   	color: black;
+    padding-left: 5%;
+}
+
 .land {
-	fill: url("assets/img/Paper.jpg");
+	fill: white;
  	stroke: #a5967e;
-    stroke-width: 1px;
+ 	border-style: double;
+    stroke-width: 0px;
 }
 
 .mapContainer{
-	background-image: url("assets/img/Paper.jpg");
 	fill: black;
 	width:100%;
 }

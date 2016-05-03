@@ -111,13 +111,7 @@ function setMap(){
 	        .append("svg")
 	        .attr("class", "mapContainer")
 	        .attr("width", globals.map.dimensions.width)
-	        .attr("height",  globals.map.dimensions.height)
-	        .append('svg:image')
-            .attr('xlink:href', '"img/paper.jpg"')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', globals.map.dimensions.width)
-            .attr('height', globals.map.dimensions.height);
+	        .attr("height",  globals.map.dimensions.height);
 
 	        
 	        
