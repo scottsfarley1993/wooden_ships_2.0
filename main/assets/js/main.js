@@ -150,13 +150,13 @@ function onDrag(evt){
 		
 		//fix everything that needs fixing
 		globals.data.filteredShips.forEach(function(d){
-			var p = globals.map.projection([d['longitude'], d['latitude']])
-			if ((p[0] > lonBounds[0]) && (p[1] < lonBounds[1])){
+			if ((d['longitude'] > lonBounds[0]) && (d['longitude'] < lonBounds[1])){
+				var p = globals.map.projection([d['longitude'], d['latitude']])
 				d['projected'] = p
 			}else{
-				d['projected'] = [200, 200]
+				d['projected'] = [NaN, NaN]
 			}
-			
+
 		})
 		
 		
@@ -242,57 +242,54 @@ function setMap(){
 	     
 	        
 		function callback(error, base, ocean){
-			//happens once the ajax have returned
-	        	    //create new svg container for the map
-	    globals.map.mapContainer = mapContainer = d3.select("#map")
-	        .append("svg")
-	        .attr("class", "mapContainer")
-	        .attr("width", globals.map.dimensions.width)
-	        .attr("height",  globals.map.dimensions.height);
-	        
-	        
-	    globals.map.features = globals.map.mapContainer.append("g"); //this facilitates the zoom overlay
-		
-		    
-	        //translate europe TopoJSON
-	        var landBase = topojson.feature(base, base.objects.ne_50m_land).features
-	         
-	         
-	      //create the hexbin layout
-	      globals.map.hexbin = d3.hexbin()
-	    	.size([globals.map.dimensions.width, globals.map.dimensions.height])
-	    	.radius(2.5)
-	    	.x(function(d){
-	    		return d.projected[0]
-	    	})
-	    	.y(function(d){
-	    		return d.projected[1]
-	    	})
-	         
-	         
-	       globals.ocean =    globals.map.features.append("path")
-				  .datum({type: "Sphere"})
-				  .attr("class", "water")
-				  .attr("d", globals.map.path)
-				  .attr('fill', 'yellow')
-	         
-	         globals.land = globals.map.features.selectAll(".land")
-	            .data(landBase)
-	            .enter()
-	            .append("path")
-	            .attr("class", "land")
-	            //.style("stroke", "black").style("fill", "blue"); 
-	         
-	     globals.map.mapContainer.call(zoom).call(zoom.event)
-		 globals.map.mapContainer.call(d3.behavior.drag()
-		  .origin(function() { 
-		  	var r = globals.map.projection.rotate(); 
-		  	return {x: r[0] / sens, y: -r[1] / sens}; 
-		  })
-		  .on("drag", onDrag))
-	         
-	  changeProjection("Orthographic"); //default       
-	}; //end of callback
+				//happens once the ajax have returned
+		        	    //create new svg container for the map
+		    globals.map.mapContainer = mapContainer = d3.select("#map")
+		        .append("svg")
+		        .attr("class", "mapContainer")
+		        .attr("width", globals.map.dimensions.width)
+		        .attr("height",  globals.map.dimensions.height);
+		        
+		        
+		    globals.map.features = globals.map.mapContainer.append("g"); //this facilitates the zoom overlay
+			
+			    
+		        //translate europe TopoJSON
+		        var landBase = topojson.feature(base, base.objects.ne_50m_land).features
+		         
+		         
+		      //create the hexbin layout
+		      globals.map.hexbin = d3.hexbin()
+		    	.size([globals.map.dimensions.width, globals.map.dimensions.height])
+		    	.radius(2.5)
+		    	.x(function(d){
+		    		return d.projected[0]
+		    	})
+		    	.y(function(d){
+		    		return d.projected[1]
+		    	})
+		         
+		         
+		       globals.ocean =    globals.map.features.append("path")
+					  .datum({type: "Sphere"})
+					  .attr("class", "water")
+					  .attr("d", globals.map.path)
+					  .attr('fill', 'yellow')
+		         
+		         globals.land = globals.map.features.selectAll(".land")
+		            .data(landBase)
+		            .enter()
+		            .append("path")
+		            .attr("class", "land")
+		            //.style("stroke", "black").style("fill", "blue"); 
+		         
+		     globals.map.mapContainer.call(zoom).call(zoom.event)
+			 globals.map.mapContainer.call(d3.behavior.drag()
+			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
+			  .on("drag", onDrag))
+		         
+		  	changeProjection("Orthographic"); //default       
+		}; //end of callback
 };//end of set map
 
 function zoomed() {
@@ -318,38 +315,13 @@ function createColorScheme (maxDomain, colors){
 function changeProjection(projection, scale, center){
     //decide what projection to change to
     if (projection == "Azimuthal") {
-    	// var projection = d3.geo.vanDerGrinten4()
-    	// 	.scale(125)
-   	 // 		.translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
-    	// 	.precision(.1);
-
-    	// var projection = d3.geo.orthographic()
-		   //  .scale(350)
-		   //  .translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
-		   //  .clipAngle(90)
-		   //  .precision(.1);
-
-		// var projection = d3.geo.azimuthalEqualArea()
-		//     .clipAngle(180 - 1e-3)
-		//     .scale(140)
-		//     .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
-		//     .precision(.1);
 		var projection = d3.geo.robinson()
 		    .scale(150)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
 
-		// var projection = d3.geo.cylindricalEqualArea()
-		//     .scale(200)
-		//     .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
-		//     .precision(.1);
     }
     else if (projection == "Cylindrical"){
-    	// var projection = d3.geo.mercator()
-    	// 	.scale((globals.map.dimensions.width + 1) / 2 / Math.PI)
-    	// 	.translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
-    	// 	.precision(.1);
-
     	var projection = d3.geo.cylindricalEqualArea()
 		    .scale(200)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
