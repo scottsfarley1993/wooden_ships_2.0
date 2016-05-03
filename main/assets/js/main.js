@@ -111,7 +111,14 @@ function setMap(){
 	        .append("svg")
 	        .attr("class", "mapContainer")
 	        .attr("width", globals.map.dimensions.width)
-	        .attr("height",  globals.map.dimensions.height);
+	        .attr("height",  globals.map.dimensions.height)
+	        .append('svg:image')
+            .attr('xlink:href', '"img/paper.jpg"')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', globals.map.dimensions.width)
+            .attr('height', globals.map.dimensions.height);
+
 	        
 	        
 	    globals.map.features = globals.map.mapContainer.append("g"); //this facilitates the zoom overlay

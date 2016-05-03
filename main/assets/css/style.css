@@ -1,15 +1,16 @@
 .land {
-    fill: white;
+	fill: url("assets/img/Paper.jpg");
  	stroke: #a5967e;
-    stroke-width: 0px;
+    stroke-width: 1px;
 }
+
 .mapContainer{
+	background-image: url("assets/img/Paper.jpg");
 	fill: black;
 	width:100%;
 }
 
 #map{
-	fill: black;
 	background-color: black;
 	width: calc(100% - 100px);
 	position: absolute;
@@ -396,7 +397,6 @@ div.tooltip {
 .nav-image{
 	height: 20px;
 	width: 20px;
-
 }
 
 .nav-item{
