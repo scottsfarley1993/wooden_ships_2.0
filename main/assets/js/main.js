@@ -40,7 +40,7 @@ globals.memoTooltip = d3.select("body").append("div")
     .attr("class", "tooltip")				
     .style("opacity", 0);
 
-globals.portRankThreshold = 25;
+globals.portRankThreshold = 0;
 
 var radius = d3.scale.sqrt()
     .domain([0, 12])
@@ -209,6 +209,13 @@ function onDrag(evt){
 	    	.attr('cy', function(d){
 	    		return globals.map.projection([d.Longitude, d.Latitude])[1];
 	    	})
+	    	.style('fill', function(d){
+	    	if ((d.Longitude > lonBounds[0]) && (d.Longitude < lonBounds[1])){
+	    			return "black"
+	    		}else{
+	    			return 'none'
+	    		}
+	    	})
 	  //port labels 
 	  d3.selectAll(".port-label")
 	    	.attr('x', function(d){
@@ -216,7 +223,13 @@ function onDrag(evt){
 	    })
 	    	.attr('y', function(d){
 	    		return globals.map.projection([d.Longitude, d.Latitude])[1] - 5;
-	    })		    
+	    }).style('fill', function(d){
+	    	if ((d.Longitude > lonBounds[0]) && (d.Longitude < lonBounds[1])){
+	    			return "black"
+	    		}else{
+	    			return 'none'
+	    		}
+	    	})	    
 } //enddrag function
 
 
@@ -660,7 +673,7 @@ function getPorts(){
 function displayPorts(portData){
 	d3.selectAll(".port").remove()
 	globals.portScale = d3.scale.linear()
-		.range([2, 8])
+		.range([0, 8])
 		if (globals.nationality == "British"){
 			globals.portScale.domain([0, d3.max(portData, function(d){return +d.BritishRank})])
 			}
