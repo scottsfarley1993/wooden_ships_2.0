@@ -149,14 +149,14 @@ function onDrag(evt){
 		
 		
 		//fix everything that needs fixing
-		globals.data.filteredShips.forEach(function(d){
-			if ((d['longitude'] > lonBounds[0]) && (d['longitude'] < lonBounds[1])){
+		//project them
+		globals.data.displayShips= _.map(globals.data.filteredShips, function(d){ //wont work with filters
 				var p = globals.map.projection([d['longitude'], d['latitude']])
 				d['projected'] = p
-			}else{
-				d['projected'] = [NaN, NaN]
-			}
-
+				return d
+		})
+		globals.data.displayShips = _.filter(globals.data.displayShips, function(d){
+			return ((d['longitude'] > lonBounds[0]) && (d['longitude'] < lonBounds[1]))
 		})
 		
 		
@@ -164,7 +164,7 @@ function onDrag(evt){
 		 globals.map.hexagons = globals.map.features.append("g")
 		      .attr("class", "hexagons")
 		    .selectAll(".hexagons")
-		      .data(globals.map.hexbin(globals.data.filteredShips))
+		      .data(globals.map.hexbin(globals.data.displayShips))
 		    .enter().append("path")
 		    	.attr('class', 'hexagon')
 		      .attr("d", globals.map.hexbin.hexagon())
@@ -196,7 +196,7 @@ function onDrag(evt){
 		      })
 	      globals.land.moveToFront();
 	      d3.selectAll(".port").moveToFront();
-	      styleHexbins(globals.data.filteredShips, globals.attr)
+	      styleHexbins(globals.data.displayShips, globals.attr)
 		
 	      
 	    //redraw the land
@@ -252,6 +252,9 @@ function setMap(){
 		        
 		        
 		    globals.map.features = globals.map.mapContainer.append("g"); //this facilitates the zoom overlay
+		    
+		    globals.map.mapContainer.call(d3.behavior.drag()
+			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; }));
 			
 			    
 		        //translate europe TopoJSON
@@ -284,19 +287,17 @@ function setMap(){
 		            //.style("stroke", "black").style("fill", "blue"); 
 		         
 		     globals.map.mapContainer.call(zoom).call(zoom.event)
-			 globals.map.mapContainer.call(d3.behavior.drag()
-			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
-			  .on("drag", onDrag))
 		         
 		  	changeProjection("Orthographic"); //default       
 		}; //end of callback
 };//end of set map
 
 function zoomed() {
-	// d3.selectAll(".land").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	// d3.selectAll(".hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	// d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	// d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	d3.selectAll(".land").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	d3.selectAll(".hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	d3.selectAll(".water").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 };
 	
 	
@@ -319,6 +320,12 @@ function changeProjection(projection, scale, center){
 		    .scale(150)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
+	
+	globals.map.mapContainer.call(d3.behavior.drag()
+			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
+			  .on('drag', null));
+	zoom.on('zoom', zoomed)
+	globals.map.mapContainer.call(zoom).call(zoom.event)
 
     }
     else if (projection == "Cylindrical"){
@@ -326,13 +333,23 @@ function changeProjection(projection, scale, center){
 		    .scale(200)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
+	globals.map.mapContainer.call(d3.behavior.drag()
+			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
+			  .on('drag', null));
+		zoom.on('zoom', zoomed)
+	globals.map.mapContainer.call(zoom).call(zoom.event)
 
     }else if (projection == "Orthographic"){
 	var projection = d3.geo.orthographic()
-		    .scale(350)
+		    .scale(600)
 		    .translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
 		    .clipAngle(90)
 		    .precision(.1);
+	globals.map.mapContainer.call(d3.behavior.drag()
+			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
+			  .on('drag', onDrag));
+		zoom.on('zoom', null)
+	globals.map.mapContainer.call(zoom).call(zoom.event)
     }
    var path = d3.geo.path()
     	.projection(projection);
@@ -342,6 +359,21 @@ function changeProjection(projection, scale, center){
    //do the update
    d3.selectAll(".land").transition().attr('d', path)
    d3.selectAll(".water").transition().attr("d", path)
+   	    d3.selectAll(".port-marker").transition()
+	    	.attr('cx', function(d){
+	    	return globals.map.projection([d.Longitude, d.Latitude])[0];
+	    })
+	    	.attr('cy', function(d){
+	    		return globals.map.projection([d.Longitude, d.Latitude])[1];
+	    	})
+	  //port labels 
+	  d3.selectAll(".port-label").transition()
+	    	.attr('x', function(d){
+	    	return globals.map.projection([d.Longitude, d.Latitude])[0] + 5;
+	    })
+	    	.attr('y', function(d){
+	    		return globals.map.projection([d.Longitude, d.Latitude])[1] - 5;
+	    })
    
    //update the hexagons
    changeHexSize(globals.map.hexRadius)
@@ -613,6 +645,7 @@ function styleHexbins(ships, attr){
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
+	d3.selectAll(".hexagon").attr('stroke', function(d){return hexColor(d.length)})
 
 } //end of styleHexbin
 
