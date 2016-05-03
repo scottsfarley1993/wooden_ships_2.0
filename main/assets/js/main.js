@@ -297,6 +297,7 @@ function displayShipDataHexes(datasetArray){
       styleHexbins(globals.data.filteredShips, globals.attr) //color the bins by attribute
       //set the stack order
       globals.land.moveToFront();
+      d3.selectAll(".port").moveToFront();
 }
 
 function styleHexbins(ships, attr){
@@ -723,7 +724,7 @@ function refreshHexes(){
 
 function loadShipLookup(){
 	//laods metadata about ships and voyages from the disk
-	d3.csv("/assets/data/ship_lookup.csv",function(data){
+	d3.csv("/assets/data/ship_lookup_original.csv",function(data){
 		globals.data.shipLookup = data;
 	});
 
@@ -873,7 +874,8 @@ function displayMemos(memoSet){
 				}
 				
 
-				img = lookupCaptainImage(captain);
+				//img = lookupCaptainImage(captain);
+				img = ""
 				d.imgSrc = img
 				formatDate = moment.weekdays()[date.weekday()] + ", " + date.date() + nth(date.date()) + " " + moment.months()[date.month() - 1] + ", " + date.year()
 				//this is the feed entry
@@ -892,14 +894,13 @@ function displayMemos(memoSet){
 				console.log(d)
 				//make the html
 				html = "<div class='row'>"
-				html += "<div class='col-xs-6'>"
+				html += "<div class='col-xs-4'>"
 				html += "<img class='captain-thumb img-rounded hover-img col-xs-12' src='" + d.imgSrc + "'>"
-				html += "</div><div class='col-xs-6'>"
-				html += "<h5>" + d.shipName + "</h5>"
-				html += "<h6>" + d.shipType + "</h5>"
-				html += "<i>" + d.captainRank + " " + d.captainName + "<i>"
-				html += "<p>Nationality: " + d.nationality + "</p>"
-				html += "<p>Voyage Started: " + d.voyageStart.toLocaleString() + "</p>"
+				html += "</div><div class='col-xs-8'>"
+				html += "<h4>" + d.captainRank + " " + d.captainName + "</h4>"
+				html += "<i><b class='large'>" + d.shipName + "</b></i><br />"
+				html += "<i>" + d.shipType + "</i>"
+				html += "<p>Voyage Started: " + d.voyageStart + "</p>"
 				html += "<p>Sailing From: " + d.fromPlace + "</p>"
 				html += "<p>Sailing To: " + d.toPlace + "</p>"
 				html += "<p>Days at sea: " + d.voyageDaysSinceStart + "</p>"
@@ -922,7 +923,7 @@ function displayMemos(memoSet){
 	                .duration(200)		
 	                .style("opacity", .9);		
 	            globals.memoTooltip.html(html)	
-	                .style("left", "300px")		
+	                .style("left", "400px")		
 	                .style("top", divPos + "px");	
             })					
         .on("mouseout", function(d) {	

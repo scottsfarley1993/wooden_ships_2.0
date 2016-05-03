@@ -128,7 +128,7 @@ html, body{
 	margin-left: 25px;
 }
 div.tooltip {	
-	text-align: right;
+	text-align: left;
     position: absolute;				
     width: 350px;					
     height: 250px;					
@@ -246,7 +246,8 @@ div.tooltip {
 	z-index: 100;
 	width:300px;
 	padding-right: 20px;
-	background-color: white;
+	background-color: black;
+	color: white;
 }
 .display-none{
 	display: none;
@@ -254,6 +255,7 @@ div.tooltip {
 #minimize-wx-panel{
 	display: inline;
 	float:right;
+	color:white;
 }
 #weather-control-header{
 	display: inline;
