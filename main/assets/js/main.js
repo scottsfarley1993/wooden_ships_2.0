@@ -1127,7 +1127,7 @@ function enterIsolationMode(){
 function exitIsolationMode(){
 	d3.selectAll(".overlay")
 		.remove()
-	$(".control-panel").slideToggle();
+	$(".control-panel").slideUp();
 	d3.selectAll('.isolated').style('stroke', 'none').classed('isolated', false)
 	globals.isolationMode = false;
 	console.log("Exited isolation mode.")
