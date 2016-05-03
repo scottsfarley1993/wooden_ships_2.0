@@ -1662,6 +1662,7 @@ $(".nav-item").click(function(){
 	}
 })
 
+<<<<<<< HEAD
 function changeCountrySelection(){
 	v = $(this)
 	CountrySelection = v.val()
@@ -1679,3 +1680,38 @@ function changeCountrySelection(){
 }
 $(".CountrySelect").change(changeCountrySelection)
 
+=======
+
+// globals.filter = {
+	// snow: false,
+	// rain: false,
+	// fog: false
+// }
+// 
+// $(".WeatherSelect").change(function(){
+	// if ($(this).val() == "fog"){
+		// globals.filter.fog = true
+	// }
+		// if ($(this).val() == "rain"){
+		// globals.filter.rain = true
+	// }	if ($(this).val() == "snow"){
+		// globals.filter.snow = true
+	// }
+	// applyFilter(filter, globals.data.ships)
+// })
+// 
+// function applyFilter(filter, data){
+	// d = globals.data.ships
+	// if (filter.fog){
+		// d = filterByFog(d);
+	// }
+	// if (filter.snow){
+		// d = filterBySnow(d);
+	// }
+	// ....
+	// ....
+	// glboals.data.filteredShips = d;
+	// dispalyjsdjsdjs
+// 	
+// }
+>>>>>>> origin/WeatherWidgets
