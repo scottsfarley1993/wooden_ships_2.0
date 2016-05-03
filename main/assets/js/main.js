@@ -1644,6 +1644,8 @@ $(".nav-item").click(function(){
 		$("#time-panel").slideToggle()
 	}else if (_thisData == "feed"){
 		$("#feed-panel").slideToggle()
+	}else if (_thisData == "country"){
+		$("#country-panel").slideToggle()
 	}else{
 		return
 	}
