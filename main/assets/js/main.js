@@ -947,6 +947,9 @@ function displayMemos(memoSet){
 				d['captainRank'] = captainRank
 				d['observer'] = meta['captainName2']
 				d['observerRank'] = meta['captainRank2']
+				d['boatStart'] = meta['CareerStart']
+				d['boatEnd'] = meta['CareerEnd']
+				d['guns'] = meta['Guns']
 				d['fromPlace'] = fromPlace
 				d['toPlace'] = toPlace
 				d['shipName'] = shipName
@@ -961,8 +964,7 @@ function displayMemos(memoSet){
 				}
 				
 
-				//img = lookupCaptainImage(captain);
-				img = ""
+				img = lookupCaptainImage(captain);
 				d.imgSrc = img
 				formatDate = moment.weekdays()[date.weekday()] + ", " + date.date() + nth(date.date()) + " " + moment.months()[date.month() - 1] + ", " + date.year()
 				//this is the feed entry
@@ -981,12 +983,15 @@ function displayMemos(memoSet){
 				//make the html
 				html = "<div class='row'>"
 				html += "<div class='col-xs-4'>"
-				html += "<img class='captain-thumb img-rounded hover-img col-xs-12' src='" + d.imgSrc + "'>"
+				if (d.imgSrc != ""){
+					html += "<img class='captain-thumb img-rounded hover-img col-xs-12' src='" + d.imgSrc + "'>"
+				}
+				
 				html += "</div><div class='col-xs-8'>"
 				html += "<h4>" + d.captainRank + " " + d.captainName + "</h4>"
 				html += "<i><b class='large'>" + d.shipName + "</b></i><br />"
 				html += "<i>" + d.shipType + "</i>"
-				html += "<p>Voyage Started: " + d.voyageStart + "</p>"
+				html += "<p>Voyage Started: " + new Date(d.voyageStart).toDateString() + "</p>"
 				html += "<p>Sailing From: " + d.fromPlace + "</p>"
 				html += "<p>Sailing To: " + d.toPlace + "</p>"
 				html += "<p>Days at sea: " + d.voyageDaysSinceStart + "</p>"
@@ -1008,7 +1013,7 @@ function displayMemos(memoSet){
 	                .duration(200)		
 	                .style("opacity", .9);		
 	            globals.memoTooltip.html(html)	
-	                .style("left", "400px")		
+	                .style("left", "100px")		
 	                .style("top", divPos + "px");	
             })					
         .on("mouseout", function(d) {	
@@ -1347,52 +1352,6 @@ function createSummaryBarchart(){
 				.style("text-anchor", 'middle')
     			//.attr("transform", function(i) { return i < 270 && i > 90 ? "rotate(180 " + ((globals.wind_diagram.dimensions.height / 2) + globals.wind_diagram.scale(12) + 6) + ",0)" : null; })
    	}
-   		
-   	
-   	// //polar plot type axes
-   	// var gr = globals.wind_diagram.diagram.append("g")
-   	// .attr('transform', 'translate(' + globals.wind_diagram.dimensions.width/2 + "," + globals.wind_diagram.dimensions.height/2 + ')')
-	    // .attr("class", "r axis")
-	  // .selectAll("g")
-	    // .data(globals.wind_diagram.scale.ticks(5).slice(1))
-	  // .enter().append("g");
-// 	
-	// gr.append("circle")
-	    // .attr("r", globals.wind_diagram.scale);
-// 
-// 	
-	// gr.append("text")
-	    // .attr("y", function(d) { return -globals.wind_diagram.scale(d)-4; })
-	    // .attr("transform", "rotate(45)")
-	    // .style("text-anchor", "middle")
-	    // .text(function(d) { return d; });
-// // 
-	// var ga = globals.wind_diagram.diagram.append("g")
-		// .attr('transform', 'translate(' + globals.wind_diagram.dimensions.width/2 + ',' + globals.wind_diagram.dimensions.height/2 + ')')
-	    // .attr("class", "a axis")
-	  // .selectAll("g")
-	    // .data(d3.range(0, 360, 90))
-	  // .enter().append("g")
-	    // .attr("transform", function(d) { return "rotate(" + -d + ")"; });
-// // 	
-	// ga.append("line")
-	    // .attr("x2", globals.wind_diagram.dimensions.radius);
-// 	
-	// ga.append("text")
-	    // .attr("x", globals.wind_diagram.dimensions.radius + 6)
-	    // .attr("dy", ".35em")
-	  	// .style("text-anchor", function(d) { return d < 270 && d > 90 ? "end" : null; })
-	    // .attr("transform", function(d) { return d < 270 && d > 90 ? "rotate(180 " + (globals.wind_diagram.dimensions.radius + 6) + ",0)" : null; })
-	    // .text(function(d) { //hacky hacky hacky
-	    	// if (d == 0){
-	    		// return "E";
-	    	// }else if (d == 90){
-	    		// return "N";
-	    	// }else if (d == 180){
-	    		// return "W";
-	    	// }else if (d == 270){
-	    		// return "S"
-	    	// }});// 
 	    	
 	globals.wind_diagram.windPaths = globals.wind_diagram.diagram.append('g')
 
