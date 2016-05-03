@@ -336,11 +336,16 @@ div.tooltip {
 .control-panel{
 	height: 90%;
 	width: 300px;
+	background-color: black;
 	position: absolute;
 	z-index:100000000;
 	top: 0px;
 	left: 100px;
 	display: none;
+}
+
+#country-panel{
+	background-color: darkgreen;
 }
 #weather-panel{
 	background-color: red;
