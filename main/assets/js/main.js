@@ -1752,6 +1752,8 @@ function updateTimeline(min, max){
         .attr("transform", "translate(0," + (height/2) + ")")
         .call(xAxis);
 
+    createRect() 
+
 };
 
 $(function() {
@@ -1846,3 +1848,82 @@ function changeWeatherSelection(){
 	displayShipDataHexes(globals.data.filteredShips)	
 }
 $(".WeatherSelect").change(changeWeatherSelection)
+
+
+createRect()
+
+function createRect(){
+
+	var height = 10;
+	var width = $("#timeline").width()/2;
+
+	//create a second svg element to hold the bar chart
+    var rect = d3.selectAll(".timescale")
+        .append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("class", "rectangle")
+        .attr("x", 0)
+        .attr("y", 40)
+        .style('fill', 'white');
+
+    function dragMove(){
+    	firstPos = +rect.attr("x" )
+
+    	change = +d3.event.dx
+
+    	secondPos = firstPos + change
+
+		console.log(secondPos)    
+
+		finalPos = rect.attr("x", secondPos)
+	}
+
+    var drag = d3.behavior.drag()
+	    //.origin(function(d) { return d; })
+	    .on("drag", dragMove);
+
+    rect
+    	.call(drag);
+
+ 
+ var rightLine = d3.selectAll(".timescale") 
+ 	.append("line") 
+ 	.attr("x1", width) 
+ 	.attr("x2", width)	
+ 	.attr("y1", 0)
+ 	.attr("y2", 40)
+ 	.style('stroke', 'white')
+ 	.style('stroke-width', 10)
+
+function moveLine(){
+	firstPos = +rightLine.attr("x1")
+
+	change = +d3.event.dx
+
+	secondPos = firstPos + change
+
+	finalPos = rightLine.attr("x1", secondPos)
+
+	finalPos2 = rightLine.attr("x2", secondPos)
+
+	oldWidth = +rect.attr("width")
+
+	newWidth = oldWidth + change
+
+	finalWidth = rect.attr("width", newWidth)
+
+
+
+
+
+}
+
+var dragRightLine = d3.behavior.drag()
+	    //.origin(function(d) { return d; })
+	    .on("drag", moveLine);
+
+    rightLine
+    	.call(dragRightLine);
+
+}
