@@ -146,11 +146,15 @@ function onDrag(evt){
 		
 		
 		latBounds = [latRot - ang, latRot + ang]
-		
-		
-		//fix everything that needs fixing
-		//project them
-		globals.data.displayShips= _.map(globals.data.filteredShips, function(d){ //wont work with filters
+		     
+	    //redraw the land
+	    globals.map.mapContainer.selectAll(".land").attr("d", globals.map.path);	    
+	    drawInBounds(latBounds, lonBounds, globals.data.filteredShips)
+} //enddrag function
+
+function drawInBounds(latBounds, lonBounds, ships){
+	/// draw only the things currently in the globe's field of view
+		globals.data.displayShips= _.map(ships, function(d){ //wont work with filters
 				var p = globals.map.projection([d['longitude'], d['latitude']])
 				d['projected'] = p
 				return d
@@ -158,49 +162,13 @@ function onDrag(evt){
 		globals.data.displayShips = _.filter(globals.data.displayShips, function(d){
 			return ((d['longitude'] > lonBounds[0]) && (d['longitude'] < lonBounds[1]))
 		})
-		
-		
+		//draw the hexes
 		globals.map.hexagons.remove();
-		 globals.map.hexagons = globals.map.features.append("g")
-		      .attr("class", "hexagons")
-		    .selectAll(".hexagons")
-		      .data(globals.map.hexbin(globals.data.displayShips))
-		    .enter().append("path")
-		    	.attr('class', 'hexagon')
-		      .attr("d", globals.map.hexbin.hexagon())
-		      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-		      .style('stroke-width', 0.25)
-		      .on('mouseover', function(d){
-		      	d3.select(this).moveToFront()
-		      	d3.select(this).style({'stroke': 'orange', "stroke-width": 1})
-		      	displayWindSpeed(d)
-		      	summary = getSummaryOfHex(d)
-		      	displaySummary(summary)
-		      })
-		      .on('mouseout', function(d){
-		      	if (!globals.isolationMode){
-		      		d3.select(this).style({'stroke': 'none'})
-		      	}
-		      })
-		      .on('click', function(d){
-		      	//enter isolationMode on click
-		      	var _this = d3.select(this)
-		      	if (!_this.classed('isolated')){
-		      		//it hasnt been clicked yet, so enter isolation mode
-		      		_this.style({'stroke': 'white', "stroke-width": 1})
-		      		enterIsolationMode()
-		      		_this.classed('isolated', true)
-		      		memos = filterToHexBin(globals.filteredMemos, d)
-		      		displayMemos(memos)
-		      	}
-		      })
+		displayShipDataHexes(ships);
 	      globals.land.moveToFront();
 	      d3.selectAll(".port").moveToFront();
-	      styleHexbins(globals.data.displayShips, globals.attr)
-		
+	      styleHexbins(globals.data.filteredShips, globals.attr)
 	      
-	    //redraw the land
-	    globals.map.mapContainer.selectAll(".land").attr("d", globals.map.path);
 	    // //redraw the ports
 	    d3.selectAll(".port-marker")
 	    	.attr('cx', function(d){
@@ -229,8 +197,29 @@ function onDrag(evt){
 	    		}else{
 	    			return 'none'
 	    		}
-	    	})	    
-} //enddrag function
+	    	})
+}
+
+
+function resetGlobe(){
+	globals.map.projection = globals.map.projection.rotate([0, 0, 0]) //reset the projection
+	
+	//redraw the land
+	 globals.map.mapContainer.selectAll(".land").attr("d", globals.map.path);
+	 
+	 //redraw everything else focused on 0, 0
+	latBounds = [-90, 90]
+	lngBounds = [-90, 90]
+	
+	drawInBounds(latBounds, lngBounds, globals.data.filteredShips)
+	
+}
+
+$("#resetMap").click(function(){
+	resetGlobe();
+})
+
+
 
 
 //set up map and call data
@@ -803,7 +792,7 @@ function changeHexSize(radius){
 	console.log("changed hex size")
 	removeHexes();
 	globals.map.hexbin.radius(radius);
-	displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
+	//displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
 }
 
 
