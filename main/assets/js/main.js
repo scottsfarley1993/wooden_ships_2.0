@@ -25,7 +25,10 @@ console.log(globals.map.dimensions)
 
 globals.attr = 'fog'
 
-globals.mamoType = "All"
+globals.memoType = "All"
+
+globals.map.projectionType = "Robinson" //text name of projection
+
 
 globals.data = {};
 globals.data.filteredShips = []; //keep track of the currently applied filter
@@ -214,9 +217,21 @@ function resetGlobe(){
 	drawInBounds(latBounds, lngBounds, globals.data.filteredShips)
 	
 }
+function resetZoom(){
+	d3.selectAll(".land").attr("transform", "translate(0,0)scale(1)");
+	d3.selectAll(".hexagons").attr("transform", "translate(0,0)scale(1)");
+	d3.selectAll(".port").attr("transform", "translate(0,0)scale(1)");
+	d3.selectAll(".overlay").attr("transform", "translate(0,0)scale(1)");
+	d3.selectAll(".water").attr("transform", "translate(0,0)scale(1)");
+}
 
 $("#resetMap").click(function(){
-	resetGlobe();
+	if (globals.map.projectionType == "Orthographic"){ //this is resetting the projection parameters, only appropriate for globe
+		resetGlobe();
+	}else{//this is resetting zoom/position 
+		resetZoom()
+	}
+	
 })
 
 
@@ -318,40 +333,45 @@ function createColorScheme (maxDomain, colors){
 function changeProjection(projection, scale, center){
     //decide what projection to change to
     if (projection == "Azimuthal") {
+    	//set params
 		var projection = d3.geo.robinson()
 		    .scale(150)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
 	
-	globals.map.mapContainer.call(d3.behavior.drag()
+		globals.map.mapContainer.call(d3.behavior.drag() //disable dragging/projection rotation
 			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
 			  .on('drag', null));
-	zoom.on('zoom', zoomed)
-	globals.map.mapContainer.call(zoom).call(zoom.event)
-
+		zoom.on('zoom', zoomed)  //enable zoom
+		globals.map.mapContainer.call(zoom).call(zoom.event)
+		resetZoom(); //fix any previous zooming
     }
     else if (projection == "Cylindrical"){
+    	//set params
     	var projection = d3.geo.cylindricalEqualArea()
 		    .scale(200)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
-	globals.map.mapContainer.call(d3.behavior.drag()
+		//disable drag
+		globals.map.mapContainer.call(d3.behavior.drag()
 			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
 			  .on('drag', null));
+		//enable zoom
 		zoom.on('zoom', zoomed)
-	globals.map.mapContainer.call(zoom).call(zoom.event)
-
+		globals.map.mapContainer.call(zoom).call(zoom.event)
+		resetZoom(); //reset prvious zooms
     }else if (projection == "Orthographic"){
-	var projection = d3.geo.orthographic()
+    	//this is globe
+		var projection = d3.geo.orthographic()
 		    .scale(500)
 		    .translate([globals.map.dimensions.width  / 2, globals.map.dimensions.height / 2])
 		    .clipAngle(90)
 		    .precision(.1);
-	globals.map.mapContainer.call(d3.behavior.drag()
+		globals.map.mapContainer.call(d3.behavior.drag() //rotate projection on drag 
 			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
 			  .on('drag', onDrag));
 		zoom.on('zoom', null)
-	globals.map.mapContainer.call(zoom).call(zoom.event)
+		globals.map.mapContainer.call(zoom).call(zoom.event) //disable zoom
     }
    var path = d3.geo.path()
     	.projection(projection);
@@ -379,6 +399,7 @@ function changeProjection(projection, scale, center){
    
    //update the hexagons
    changeHexSize(globals.map.hexRadius)
+   globals.map.projectionType = projection
 };
 
 function getShipData(filename, callback){
@@ -792,7 +813,7 @@ function changeHexSize(radius){
 	console.log("changed hex size")
 	removeHexes();
 	globals.map.hexbin.radius(radius);
-	//displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
+	displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
 }
 
 

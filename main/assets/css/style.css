@@ -210,8 +210,7 @@ div.tooltip {
 	height:60%;
 }
 .weather-holder{
-	height: 30%
-	border:#ffffff dashed;
+	height: 30%	
 }
 .weather-header{
 	text-align: left;
@@ -399,4 +398,5 @@ div.tooltip {
 	background-color: white;
 	width:100px;
 	padding:10px;
+	margin: 0px;
 }
