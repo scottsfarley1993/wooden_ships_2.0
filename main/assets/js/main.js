@@ -1863,7 +1863,7 @@ function createRect(){
         .attr("width", width)
         .attr("height", height)
         .attr("class", "rectangle")
-        .attr("x", 0)
+        .attr("x", 120)
         .attr("y", 40)
         .style('fill', 'white');
 
@@ -1894,7 +1894,7 @@ function createRect(){
  	.attr("y1", 0)
  	.attr("y2", 40)
  	.style('stroke', 'white')
- 	.style('stroke-width', 10)
+ 	.style('stroke-width', 10);
 
 function moveLine(){
 	firstPos = +rightLine.attr("x1")
@@ -1913,10 +1913,6 @@ function moveLine(){
 
 	finalWidth = rect.attr("width", newWidth)
 
-
-
-
-
 }
 
 var dragRightLine = d3.behavior.drag()
@@ -1925,5 +1921,42 @@ var dragRightLine = d3.behavior.drag()
 
     rightLine
     	.call(dragRightLine);
+
+
+ var leftLine = d3.selectAll(".timescale") 
+ 	.append("line") 
+ 	.attr("x1", 120) 
+ 	.attr("x2", 120)	
+ 	.attr("y1", 0)
+ 	.attr("y2", 40)
+ 	.style('stroke', 'white')
+ 	.style('stroke-width', 10);
+
+
+ function moveLine2(){
+	firstPos = +leftLine.attr("x1")
+
+	change = +d3.event.dx
+
+	secondPos = firstPos + change
+
+	finalPos = leftLine.attr("x1", secondPos)
+
+	finalPos2 = leftLine.attr("x2", secondPos)
+
+	oldWidth = +rect.attr("x")
+
+	newWidth = oldWidth + change
+
+	finalWidth = rect.attr("x", newWidth)
+
+}
+
+var dragLeftLine = d3.behavior.drag()
+	    //.origin(function(d) { return d; })
+	    .on("drag", moveLine2);
+
+    leftLine
+    	.call(dragLeftLine);
 
 }
