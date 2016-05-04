@@ -1855,7 +1855,7 @@ createRect()
 function createRect(){
 
 	var height = 10;
-	var width = $("#timeline").width()/2;
+	var width = 300;
 
 	//create a second svg element to hold the bar chart
     var rect = d3.selectAll(".timescale")
@@ -1863,7 +1863,7 @@ function createRect(){
         .attr("width", width)
         .attr("height", height)
         .attr("class", "rectangle")
-        .attr("x", 120)
+        .attr("x", 0)
         .attr("y", 40)
         .style('fill', 'white');
 
@@ -1877,6 +1877,10 @@ function createRect(){
 		console.log(secondPos)    
 
 		finalPos = rect.attr("x", secondPos)
+
+		// if (rect.attr("width") > rightLine.attr("x1")){
+		// 	return console.log("this doesn't work")
+		// }
 	}
 
     var drag = d3.behavior.drag()
@@ -1903,9 +1907,9 @@ function moveLine(){
 
 	secondPos = firstPos + change
 
-	finalPos = rightLine.attr("x1", secondPos)
+	RightfinalPos = rightLine.attr("x1", secondPos)
 
-	finalPos2 = rightLine.attr("x2", secondPos)
+	RightfinalPos2 = rightLine.attr("x2", secondPos)
 
 	oldWidth = +rect.attr("width")
 
@@ -1925,8 +1929,8 @@ var dragRightLine = d3.behavior.drag()
 
  var leftLine = d3.selectAll(".timescale") 
  	.append("line") 
- 	.attr("x1", 120) 
- 	.attr("x2", 120)	
+ 	.attr("x1", 0) 
+ 	.attr("x2", 0)	
  	.attr("y1", 0)
  	.attr("y2", 40)
  	.style('stroke', 'white')
@@ -1949,6 +1953,13 @@ var dragRightLine = d3.behavior.drag()
 	newWidth = oldWidth + change
 
 	finalWidth = rect.attr("x", newWidth)
+
+	length = finalWidth - RightfinalPos2
+
+	// if (finalWidth > rightLine.attr("x1")){
+
+	// 	return
+	// }
 
 }
 

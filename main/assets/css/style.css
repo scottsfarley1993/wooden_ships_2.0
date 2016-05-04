@@ -286,14 +286,14 @@ div.tooltip {
 }
 #nav{
 	background-color: black;
-	height: 80%;
+	height: 100%;
 	margin:0px;
 	min-width: 100px !important;
 	width: 100px;
 	z-index:2932939239293923;
 }
 #nav-list-group{
-	height:80%;
+	height:60%;
 	top: 10%;
 	position: absolute;
 	min-width: 100px !important;
