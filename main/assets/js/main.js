@@ -1778,7 +1778,6 @@ $(function() {
 });
 
 
-<<<<<<< HEAD
 function createRect(){
 
 	var height = $("#rectangle").height();
@@ -1878,7 +1877,6 @@ function createRect(){
 
 
 
-=======
 function changeCountrySelection(){
 	v = $(this)
 	CountrySelection = v.val()
@@ -1949,4 +1947,4 @@ function changeWeatherSelection(){
 	displayShipDataHexes(globals.data.filteredShips)	
 }
 $(".WeatherSelect").change(changeWeatherSelection)
->>>>>>> master
+
