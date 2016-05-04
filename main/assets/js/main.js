@@ -25,7 +25,7 @@ console.log(globals.map.dimensions)
 
 globals.attr = 'fog'
 
-globals.memoType = "All"
+globals.memoType = ["Weather", "Travel", "Encounter", "Conflict", "LifeOnBoard"]
 
 globals.map.projectionType = "Robinson" //text name of projection
 
@@ -50,6 +50,8 @@ var radius = d3.scale.sqrt()
     .range([0, 8]);
 
 var expressedProj = attrProj[0];
+
+globals.hexbinLocs = [];
 
 
 //this should be replaced with a better coloring func
@@ -438,10 +440,6 @@ function displayShipDataHexes(datasetArray){
 	      .attr("d", globals.map.hexbin.hexagon())
 	      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 	      .style('stroke-width', 0.25)
-	      .on('click', function(d){
-	      	//memos = filterToHexBin(globals.data.memos, d)
-	      	//console.log(memos)
-      })
       .on('mouseover', function(d){
       	d3.select(this).moveToFront()
       	d3.select(this).style({'stroke': 'orange', "stroke-width": 1})
@@ -462,8 +460,9 @@ function displayShipDataHexes(datasetArray){
       		_this.style({'stroke': 'white', "stroke-width": 1})
       		enterIsolationMode()
       		_this.classed('isolated', true)
-      		memos = filterToHexBin(globals.filteredMemos, d)
-      		displayMemos(memos)
+      		these_memos = filterToHexBin(globals.filteredMemos, d)
+      		console.log(these_memos.length)
+      		displayMemos(these_memos)
       	}
       })
       
@@ -837,6 +836,18 @@ function processMemos(memos){
 		d['Longitude'] = Number(d['Longitude'])
 		q = d['obsDate']
 		d['date'] = new Date(q)
+		//get the newly classified type for labeling
+		if ((d.memoType == 'Biology') || (d.memoType == 'Landmark') || (d.memoType == "Encounter")){
+			d.label = "Encounter"
+		}else if ((d.memoType == 'LifeOnBoard') || (d.memoType == 'ShipAndRig') || (d.memoType == "Cargo") || (d.memoType == "OtherRem")){
+			d.label = "LifeOnBoard";
+		}else if (d.memoType == "warsAndFights"){
+			d.label = "Conflict"	
+		}else if ((d.memoType == "travelReport") || (d.memoType == "Anchor")){
+			d.label = "travelReport";
+		}else if (d.memoType == "weatherReport"){
+			d.label = "weatherReport"
+		}
 	})
 	globals.data.memos = memos
 	globals.filteredMemos = memos
@@ -904,64 +915,36 @@ function loadShipLookup(){
 
 
 ///memo filtering functions
-function filterToBiology(memoSet){
-	//returns a an array of memos with only memos reporting biology included
-	o = _.where(memoSet, {memoType: "Biology"})
-	return o
-}
-function filterToShipAndRig(memoSet){
-	//returns an array of memos with only those reportingon the ship's condition included
-	o= _.where(memoSet, {memoType: "ShipAndRig"})
-	return o
-}
-function filterToWeatherReports(memoSet){
-	//returns an array of memos with only those reporting daily weather reports
-	o = _.where(memoSet, {memoType: "weatherReport"})
-	return o
-}
-function filterToOther(memoSet){
-	//returns an array of memos with only those reporting other remarks included
-	o = _.where(memoSet, {memoType: "OtherRem"})
-	return o
-}
-function filterToAnchored(memoSet){
-	//returns an array of memos with only those that note that the ships is anchored included
-	o = _.where(memoSet, {memoType: "Anchor"})
-	return o
-}
-function filterToEncounter(memoSet){
-	o = _.where(memoSet, {memoType: "Encounter"})
-	return o
-}
-function filterToTravel(memoSet){
-	o = _.where(memoSet, {memoType: 'travelReport'})
+function filterToEncounters(memoSet){
+	o = _.where(memoSet, {label: "Encounter"})
+	console.log("Found: " + o.length + " encounters.")
 	return o
 }
 
-function filterToLandmarks(memoSet){
-	o = _.where(memoSet, {memoType: "Landmark"})
-	return o
-}
-function filterToCargo(memoSet){
-	//returns an array of memos with only those that report on the ships cargo included
-	o = _.where(memoSet, {memoType: "Cargo"})
-	return o
-}
-function filterToWarsAndFights(memoSet){
-	//returns an array of memos with only those that report on the conflicts on board included
-	o = _.where(memoSet, {memoType: "WarsAndFights"});
-	return o
-}
 function filterToLifeOnBoard(memoSet){
-	///returns an array of memos with only those that report on life on board included
-	o= _.where(memoSet, {memoType: "LifeOnBoard"})
+	o = _.where(memoSet, {label: "LifeOnBoard"})
+	console.log("Found: " + o.length + " LOB Entries.")
 	return o
 }
-function filterToVoyageID(memoSet, voyageID){
-	//returns an array of memos all belonging to the same voyage
-	o= _.where(memoSet, {voyageID: String(voyageID)});
+
+function filterToWeatherReports(memoSet){
+	//returns an array of memos with only those reporting daily weather reports
+	o = _.where(memoSet, {label: "weatherReport"})
+	console.log("Found: " + o.length + " weather memos.")
 	return o
 }
+
+function filterToTravel(memoSet){
+	o = _.where(memoSet, {label: "travelReport"})
+	console.log("Found: " + o.length + " travel memos.")
+	return o
+}
+function filterToConflict(memoSet){
+	o = _.where(memoSet, {label: "Conflict"})
+	console.log("Found: " + o.length + " conflict memos.")
+	return o
+}
+
 function filterToLocationID(memoSet, locationID){
 	//returns an array of memos all belonging to the same location
 	o= _.where(memoSet, {locationID: String(locationID)})
@@ -974,6 +957,7 @@ function filterToTimeRange(memoText, temporalFilter){
 		return (d.date > temporalFilter.minDate && d.date < temporalFilter.maxDate)
 	})
 }
+
 
 function filterToHexBin(memoSet, hexbin){
 	//returns an array of memos for a hex bin
@@ -997,18 +981,45 @@ $(".projSelect").change(function(){
 	changeProjection(proj)
 })
 
+function filterMemos(memoSet){
+	out = []
+	for (var i=0; i<globals.memoType.length; i++){
+		type = globals.memoType[i];
+		//filter the memoSets
+		if (type == "weatherReport"){
+			out = out.concat(filterToWeatherReports(globals.data.memos))
+			console.log("Filted to weather ")
+		}else if (type == "travelReport"){
+			out = out.concat(filterToTravel(globals.data.memos))
+			console.log("Filted to travel ")
+		}else if (type == "Encounter"){
+			out = out.concat(filterToEncounters(globals.data.memos))
+			console.log("Filted to encounter ")
+		}else if (type == "LifeOnBoard"){
+			out = out.concat(filterToLifeOnBoard(globals.data.memos))
+			console.log("Filted to LOB ")
+		}else if (type == "Conflict"){
+			out = out.concat(filterToConflict(globals.data.memos))
+			console.log("Filted to Conflict ")
+		}
+	}
+	return out
+}
 
 
 function displayMemos(memoSet){
 	//displays the feed of observations in the right hand panel
 	$("#feed").empty()
 	$("#feed-panel").show();
+	if (memoSet.length == 0){
+		noHtml = "<li class='log'>No ship's logs were found for this place.  Try another place, or refine your filters.</li>"
+		$("#feed").append(noHtml)
+	}
 	d3.select("#feed").selectAll(".log")
 		.data(memoSet)
 		.enter()
 		.append("li")
-			.attr('class', 'log')
-			.attr('class', 'list-group-item')
+			.attr('class', 'log list-group-item')
 			.html(function(d){
 				meta = lookupVoyageID(d['voyageID'])
 				text = d.memoText;
@@ -1556,34 +1567,34 @@ function displaySummary(props){
 
 
 function changeMemoSet(){
-	v = $(this)
-	memoType = v.val()
-	globals.memoType = memoType
-	if (memoType == "All"){
-		globals.filteredMemos = globals.data.memos
-	}else if (memoType == "Biology"){
-		globals.filteredMemos = filterToBiology(globals.data.memos)
-	}else if (memoType == "WeatherReports"){
-		globals.filteredMemos=filterToWeatherReports(globals.data.memos)
-	}else if (memoType == "cargo"){
-		globals.filteredMemos = filterToCargo(globals.data.memos)
-	}else if (memoType == "warsAndFights"){
-		globals.filteredMemos = filterToWarsAndFights(globals.data.memos)
-	}else if (memoType == "shipAndRig"){
-		globals.filteredMemos = filterToShipAndRig(globals.data.memos)
-	}else if(memoType == "other"){
-		globals.filteredMemos = filterToOther(globals.data.memos)
-	}else if(memoType == "lifeOnBoard"){
-		globals.filteredMemos = filterToLifeOnBoard(globals.data.memos)
-	}else if (memoType == "Travel"){
-		globals.filteredMemos = filterToTravel(globals.data.memos)
-	}else if (memoType == "enc"){
-		globals.filteredMemos = filterToEncounter(globals.data.memos)
-	}else if (memoType == 'anchor'){
-		globals.filteredMemos = filterToAnchored(globals.data.memos)
-	}else if(memoType == "landmarks"){
-		globals.filteredMemos = filterToLandmarks(globals.data.memos)
+	//change the type of memos to be dispalyed
+	
+	//get which types we should display
+	globals.memoType = []
+	els = $(".memoSelect")
+	for (var i =0;  i< els.length; i++){
+		$item = $(els[i]);
+		if ($item.prop('checked')){
+			globals.memoType.push($item.val())
+		}
 	}
+	globals.filteredMemos = filterMemos(globals.data.memos) //this is the newly filtered list
+	
+	//now update the current panel
+	logs = d3.select("#feed").selectAll(".log")[0]
+	for (var i=0; i< logs.length; i++){
+		el = d3.select(logs[i])[0][0]
+		d = el.__data__
+		lab = d.label
+		el = d3.select(el)
+		//set to invisible
+		if (globals.memoType.indexOf(lab) == -1){
+			el.style('display', 'none')
+		}else{
+			el.style('display', 'block')
+		}
+	}
+		
 }
 $(".memoSelect").change(changeMemoSet)
 
