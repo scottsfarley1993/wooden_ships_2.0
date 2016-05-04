@@ -95,6 +95,7 @@ $(document).ready(function(){
 	loadShipLookup() // get metadata about ships and voyages and captains
 	d3.selectAll(".overlay").style('display', 'none')//disables zoom --> for debugging
 	updateTimeline(new Date(1750,0,1), new Date(1850,0,1))
+	createRect()
 })
 
 //set up map and call data
@@ -1773,4 +1774,104 @@ $(function() {
       }
     });
 });
+
+
+function createRect(){
+
+	var height = $("#rectangle").height();
+	var width = $("#rectangle").width();
+
+    var drag = d3.behavior.drag()
+	    .origin(function(d) { return d; })
+	    .on("drag", dragmove);
+
+	var dragright = d3.behavior.drag()
+	    .origin(Object)
+	    .on("drag", rdragresize);
+
+	var dragleft = d3.behavior.drag()
+	    .origin(Object)
+	    .on("drag", ldragresize);
+
+	//create a second svg element to hold the bar chart
+    var rect = d3.select("#rectangle")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("class", "rectangle")
+    	.attr("cx", function(d) { return d.x; })
+    	.attr("cy", function(d) { return d.y; })
+        .call(drag);
+
+    function dragmove(d) {
+	  	d3.select(this)
+	    .attr("cx", d.x = Math.max(radius, Math.min(width - radius, d3.event.x)))
+	    .attr("cy", d.y = Math.max(radius, Math.min(height - radius, d3.event.y)));
+	}
+
+	var dragbarleft = newg.append("#rectangle")
+		.attr("x", function(d) { return d.x - (dragbarw/2); })
+		.attr("y", function(d) { return d.y + (dragbarw/2); })
+		.attr("height", height - dragbarw)
+		.attr("id", "dragleft")
+		.attr("width", dragbarw)
+		.attr("fill", "lightblue")
+		.attr("fill-opacity", .5)
+		.attr("cursor", "ew-resize")
+		.call(dragleft);
+
+	var dragbarright = newg.append("#rectangle")
+		.attr("x", function(d) { return d.x + width - (dragbarw/2); })
+		.attr("y", function(d) { return d.y + (dragbarw/2); })
+		.attr("id", "dragright")
+		.attr("height", height - dragbarw)
+		.attr("width", dragbarw)
+		.attr("fill", "lightblue")
+		.attr("fill-opacity", .5)
+		.attr("cursor", "ew-resize")
+		.call(dragright);
+
+}
+
+// function click(){
+//   // Ignore the click event if it was suppressed
+//   if (d3.event.defaultPrevented) return;
+
+//   // Extract the click location\    
+//   var point = d3.mouse(this)
+//   , p = {x: point[0], y: point[1] };
+
+//   // Append a new point
+//   svg.append("circle")
+//       .attr("transform", "translate(" + p.x + "," + p.y + ")")
+//       .attr("r", "5")
+//       .attr("class", "dot")
+//       .style("cursor", "pointer")
+//       .call(drag);
+// }
+
+// // Create the SVG
+// var svg = d3.select("body").append("svg")
+//   .attr("width", 700)
+//   .attr("height", 400)
+//   .on("click", click);
+
+// // Add a background
+// svg.append("rect")
+//   .attr("width", 700)
+//   .attr("height", 400)
+//   .style("stroke", "#999999")
+//   .style("fill", "#F6F6F6")
+
+// // Define drag beavior
+// var drag = d3.behavior.drag()
+//     .on("drag", dragmove);
+
+// function dragmove(d) {
+//   var x = d3.event.x;
+//   var y = d3.event.y;
+//   d3.select(this).attr("transform", "translate(" + x + "," + y + ")");
+// }
+
+
 
