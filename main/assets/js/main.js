@@ -2136,10 +2136,11 @@ function createRect(){
  	.append("line") 
  	.attr("x1", width) 
  	.attr("x2", width)	
- 	.attr("y1", 0)
+ 	.attr("y1", 20)
  	.attr("y2", 40)
  	.style('stroke', 'white')
- 	.style('stroke-width', 10);
+ 	.style('stroke-width', 5);
+
 
 function moveLine(){
 	firstPos = +rightLine.attr("x1")
@@ -2172,10 +2173,10 @@ var dragRightLine = d3.behavior.drag()
  	.append("line") 
  	.attr("x1", 0) 
  	.attr("x2", 0)	
- 	.attr("y1", 0)
+ 	.attr("y1", 20)
  	.attr("y2", 40)
  	.style('stroke', 'white')
- 	.style('stroke-width', 10);
+ 	.style('stroke-width', 5);
 
 
  function moveLine2(){
