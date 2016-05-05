@@ -299,7 +299,7 @@ function setMap(){
 					  .datum({type: "Sphere"})
 					  .attr("class", "water")
 					  .attr("d", globals.map.path)
-					  .attr('fill', 'yellow')
+					  .attr('fill', 'white')
 		         
 		         globals.land = globals.map.features.selectAll(".land")
 		            .data(landBase)
@@ -491,7 +491,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -504,7 +504,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -516,7 +516,7 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -529,7 +529,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -542,7 +542,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -555,7 +555,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -568,7 +568,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -600,7 +600,7 @@ function styleHexbins(ships, attr){
 		});
 
 
-		var hexColor = createColorScheme(maxDomain, ["white", "purple"]);
+		var hexColor = createColorScheme(maxDomain, ["#fcf6fb", "#2b0e25"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill", function(d){
@@ -735,8 +735,8 @@ function displayPorts(portData){
 				return 0
 			}
 		})
-		.style('fill', 'red')
-		.style('stroke', 'black')
+		.style('fill', 'gray')
+		.style('stroke', 'gray')
 		.on('click', function(d){
 			console.log(d)
 		})
@@ -789,7 +789,7 @@ function displayPorts(portData){
 				}
 				
 			})
-			.style('fill', 'red')
+			.style('fill', 'darkgray')
 			.on('mouseover', function(){
 				d3.select(this).style("fill", 'white').style("cursor", "crosshair")
 				d3.select(this).moveToFront();
@@ -2093,12 +2093,13 @@ function changeWeatherSelection(){
 }
 $(".WeatherSelect").change(changeWeatherSelection)
 
+
 createRect()
 
 function createRect(){
 
 	var height = 10;
-	var width = 300;
+	var width = $("#timeline").width()/2;
 
 	//create a second svg element to hold the bar chart
     var rect = d3.selectAll(".timescale")
@@ -2106,7 +2107,7 @@ function createRect(){
         .attr("width", width)
         .attr("height", height)
         .attr("class", "rectangle")
-        .attr("x", 0)
+        .attr("x", 120)
         .attr("y", 40)
         .style('fill', 'white');
 
@@ -2120,10 +2121,6 @@ function createRect(){
 		console.log(secondPos)    
 
 		finalPos = rect.attr("x", secondPos)
-
-		// if (rect.attr("width") > rightLine.attr("x1")){
-		// 	return console.log("this doesn't work")
-		// }
 	}
 
     var drag = d3.behavior.drag()
@@ -2134,85 +2131,77 @@ function createRect(){
     	.call(drag);
 
  
- var rightLine = d3.selectAll(".timescale") 
- 	.append("line") 
- 	.attr("x1", width) 
- 	.attr("x2", width)	
- 	.attr("y1", 20)
- 	.attr("y2", 40)
- 	.style('stroke', 'white')
- 	.style('stroke-width', 5);
+//  var rightLine = d3.selectAll(".timescale") 
+//  	.append("line") 
+//  	.attr("x1", width) 
+//  	.attr("x2", width)	
+//  	.attr("y1", 0)
+//  	.attr("y2", 40)
+//  	.style('stroke', 'white')
+//  	.style('stroke-width', 10);
+
+// function moveLine(){
+// 	firstPos = +rightLine.attr("x1")
+
+// 	change = +d3.event.dx
+
+// 	secondPos = firstPos + change
+
+// 	finalPos = rightLine.attr("x1", secondPos)
+
+// 	finalPos2 = rightLine.attr("x2", secondPos)
+
+// 	oldWidth = +rect.attr("width")
+
+// 	newWidth = oldWidth + change
+
+// 	finalWidth = rect.attr("width", newWidth)
+
+// }
+
+// var dragRightLine = d3.behavior.drag()
+// 	    //.origin(function(d) { return d; })
+// 	    .on("drag", moveLine);
+
+//     rightLine
+//     	.call(dragRightLine);
 
 
-function moveLine(){
-	firstPos = +rightLine.attr("x1")
-
-	change = +d3.event.dx
-
-	secondPos = firstPos + change
-
-	RightfinalPos = rightLine.attr("x1", secondPos)
-
-	RightfinalPos2 = rightLine.attr("x2", secondPos)
-
-	oldWidth = +rect.attr("width")
-
-	newWidth = oldWidth + change
-
-	finalWidth = rect.attr("width", newWidth)
-
-}
-
-var dragRightLine = d3.behavior.drag()
-	    //.origin(function(d) { return d; })
-	    .on("drag", moveLine);
-
-    rightLine
-    	.call(dragRightLine);
+//  var leftLine = d3.selectAll(".timescale") 
+//  	.append("line") 
+//  	.attr("x1", 120) 
+//  	.attr("x2", 120)	
+//  	.attr("y1", 0)
+//  	.attr("y2", 40)
+//  	.style('stroke', 'white')
+//  	.style('stroke-width', 10);
 
 
- var leftLine = d3.selectAll(".timescale") 
- 	.append("line") 
- 	.attr("x1", 0) 
- 	.attr("x2", 0)	
- 	.attr("y1", 20)
- 	.attr("y2", 40)
- 	.style('stroke', 'white')
- 	.style('stroke-width', 5);
+//  function moveLine2(){
+// 	firstPos = +leftLine.attr("x1")
 
+// 	change = +d3.event.dx
 
- function moveLine2(){
-	firstPos = +leftLine.attr("x1")
+// 	secondPos = firstPos + change
 
-	change = +d3.event.dx
+// 	finalPos = leftLine.attr("x1", secondPos)
 
-	secondPos = firstPos + change
+// 	finalPos2 = leftLine.attr("x2", secondPos)
 
-	finalPos = leftLine.attr("x1", secondPos)
+// 	oldWidth = +rect.attr("x")
 
-	finalPos2 = leftLine.attr("x2", secondPos)
+// 	newWidth = oldWidth + change
 
-	oldWidth = +rect.attr("x")
+// 	finalWidth = rect.attr("x", newWidth)
 
-	newWidth = oldWidth + change
+// }
 
-	finalWidth = rect.attr("x", newWidth)
+// var dragLeftLine = d3.behavior.drag()
+// 	    //.origin(function(d) { return d; })
+// 	    .on("drag", moveLine2);
 
-	length = finalWidth - RightfinalPos2
-
-	// if (finalWidth > rightLine.attr("x1")){
-
-	// 	return
-	// }
-
-}
-
-var dragLeftLine = d3.behavior.drag()
-	    //.origin(function(d) { return d; })
-	    .on("drag", moveLine2);
-
-    leftLine
-    	.call(dragLeftLine);
+//     leftLine
+//     	.call(dragLeftLine);
 
 }
 
