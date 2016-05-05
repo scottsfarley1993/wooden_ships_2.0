@@ -462,7 +462,7 @@ function displayShipDataHexes(datasetArray){
       		d3.select(this).style({'stroke': 'none'})
       	}
       })
-      .on('click', function(d){
+.on('click', function(d){
       	//enter isolationMode on click
       	var _this = d3.select(this)
       	if (!_this.classed('isolated')){
@@ -998,19 +998,14 @@ function filterMemos(memoSet){
 		//filter the memoSets
 		if (type == "weatherReport"){
 			out = out.concat(filterToWeatherReports(globals.data.memos))
-			console.log("Filted to weather ")
 		}else if (type == "travelReport"){
 			out = out.concat(filterToTravel(globals.data.memos))
-			console.log("Filted to travel ")
 		}else if (type == "Encounter"){
 			out = out.concat(filterToEncounters(globals.data.memos))
-			console.log("Filted to encounter ")
 		}else if (type == "LifeOnBoard"){
 			out = out.concat(filterToLifeOnBoard(globals.data.memos))
-			console.log("Filted to LOB ")
 		}else if (type == "Conflict"){
 			out = out.concat(filterToConflict(globals.data.memos))
-			console.log("Filted to Conflict ")
 		}
 	}
 	return out
@@ -1020,127 +1015,11 @@ function displayMemos(memoSet){
 	//displays the feed of observations in the right hand panel
 	$("#feed").empty()
 	$("#feed-panel").show();
-	if (memoSet.length == 0){
-		noHtml = "<li class='log'>No ship's logs were found for this place.  Try another place, or refine your filters.</li>"
-		$("#feed").append(noHtml)
-	}
 	d3.select("#feed").selectAll(".log")
 		.data(memoSet)
 		.enter()
 		.append("li")
 			.attr('class', 'log list-group-item')
-			.html(function(d){
-				meta = lookupVoyageID(d['voyageID'])
-				text = d.memoText;
-				latitude = d.Latitude
-				longitude = d.Longitude
-				date = moment(d.date)
-				meta = lookupVoyageID(d['voyageID'])
-				captain = meta['captainName']
-				captainRank = meta['rank']
-				fromPlace = meta['fromPlace']
-				toPlace = meta['toPlace']
-				shipName = meta['shipName']
-				shipType = meta['shipType']
-				nationality = meta['nationality']
-				voyageStart = meta['voyageStart']
-				var duration = moment.duration(date.diff(voyageStart));
-				var daysSinceStart = Math.abs(Math.round(duration.asDays()));
-				
-				//add this properties so we can access them on mouseover
-				d['captainName'] = captain
-				d['captainRank'] = captainRank
-				d['observer'] = meta['captainName2']
-				d['observerRank'] = meta['captainRank2']
-				d['boatStart'] = meta['CareerStart']
-				d['boatEnd'] = meta['CareerEnd']
-				d['guns'] = meta['Guns']
-				d['fromPlace'] = fromPlace
-				d['toPlace'] = toPlace
-				d['shipName'] = shipName
-				d['shipType'] = shipType
-				d['nationality'] = nationality
-				d['voyageStart'] = voyageStart
-				d['company'] = meta['company']
-				d['voyageDaysSinceStart'] = daysSinceStart
-
-				if (!captain || captain ==""){
-					captain = "Unknown"
-				}
-				
-
-				img = lookupCaptainImage(captain);
-				d.imgSrc = img
-				formatDate = moment.weekdays()[date.weekday()] + ", " + date.date() + nth(date.date()) + " " + moment.months()[date.month() - 1] + ", " + date.year()
-				//this is the feed entry
-				html = "<div class='row log-row basic-hovercard' id='log_" + d.locationID + "'>"
-				html += "<img src='" + img + "' class='captain-thumb col-xs-3'/>"
-				html += "<div class='col-xs-9 log-header' id='header_" + d.locationID + "'>"
-				html += "<h6 class='captain-heading' class='col-xs-12'>" + captainRank + " " + captain + "</h6>"
-				html += "<small class='log-shipname col-xs-12 text-muted'>" + shipName + "</small>"
-				html += "<i class='log-date col-xs-12 text-muted'>" + formatDate + "</i>"
-				html += "<p class='log-entry'>" + text + "</p>"
-				html += "</div>"
-				html += "</div>"
-
-				return html;
-			}).on("mouseover", function(d) {
-				//make the html
-				html = "<div class='row'>"
-				html += "<div class='col-xs-4'>"
-				if (d.imgSrc != ""){
-					html += "<img class='captain-thumb img-rounded hover-img col-xs-12' src='" + d.imgSrc + "'>"
-				}
-				console.log(d.voyageStart)
-				html += "</div><div class='col-xs-8'>"
-				html += "<h4>" + d.captainRank + " " + d.captainName + "</h4>"
-				html += "<i><b class='large'>" + d.shipName + "</b></i><br />"
-				html += "<i>" + d.shipType + "</i>"
-				//html += "<p>Voyage Started: " + new Date(d.voyageStart).toDateString() + "</p>"
-				html += "<p>Sailing From: " + d.fromPlace + "</p>"
-				html += "<p>Sailing To: " + d.toPlace + "</p>"
-				html += "<p>Days at sea: " + d.voyageDaysSinceStart + "</p>"
-				html += "<p>Sailing for: " + d.company + "</p>"
-				if (d.captainName2){
-					html += "<p>Second Observer: " + d.captainRank2 + " " + d.captainName2 + "</p>"
-				}
-				html += "</div>"
-				
-
-				
-				//positioning
-				pos = $(this).position();
-				divPos = pos.top;
-				
-				d3.select(this).style('background-color','#cccccc')	 //highlight
-					
-	            globals.memoTooltip.transition()		
-	                .duration(200)		
-	                .style("opacity", .9);		
-	            globals.memoTooltip.html(html)	
-	                .style("left", "400px")		
-	                .style("top", divPos + "px");	
-            })					
-        .on("mouseout", function(d) {	
-        	d3.select(this).style('background-color','white')	//de highlight	
-            globals.memoTooltip.transition()		 //remove
-                .duration(500)		
-                .style("opacity", 0);	
-        });
-			
-}
-
-
-function displayMemos(memoSet){
-	//displays the feed of observations in the right hand panel
-	$("#feed").empty()
-	$("#feed-panel").show();
-	d3.select("#feed").selectAll(".log")
-		.data(memoSet)
-		.enter()
-		.append("li")
-			.attr('class', 'log')
-			.attr('class', 'list-group-item')
 			.html(function(d){
 				meta = lookupVoyageID(d['voyageID'])
 				text = d.memoText;
@@ -1705,10 +1584,12 @@ function changeMemoSet(){
 		el = d3.select(logs[i])[0][0]
 		d = el.__data__
 		lab = d.label
+		console.log(lab)
 		el = d3.select(el)
 		//set to invisible
 		if (globals.memoType.indexOf(lab) == -1){
 			el.style('display', 'none')
+			console.log("setting to zero")
 		}else{
 			el.style('display', 'block')
 		}
