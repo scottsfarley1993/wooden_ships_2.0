@@ -1,15 +1,30 @@
+h {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   	font-weight: 300;
+   	color: black;
+    padding-left: 5%;
+}
+
+p {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   	font-weight: 300;
+   	color: gray;
+    padding-left: 5%;
+}
+
 .land {
-    fill: white;
+	fill: #A8B0BF;
  	stroke: #a5967e;
+ 	border-style: double;
     stroke-width: 0px;
 }
+
 .mapContainer{
-	fill: black;
+	fill: #4971A6;
 	width:100%;
 }
 
 #map{
-	fill: black;
 	background-color: black;
 	width: calc(100% - 100px);
 	position: absolute;
@@ -48,6 +63,7 @@
 #mainContainer{
 	height: 100%;
 }
+
 html, body{
 	height: 100%;
 	overflow: hidden;
@@ -293,8 +309,13 @@ div.tooltip {
 	z-index:2932939239293923;
 }
 #nav-list-group{
+<<<<<<< HEAD
+	height:80%;
+	top: 5%;
+=======
 	height:60%;
 	top: 10%;
+>>>>>>> master
 	position: absolute;
 	min-width: 100px !important;
 	width: 100px;
@@ -319,7 +340,7 @@ div.tooltip {
 	height: 5%;
 	margin:0px;
 	padding:0px;
-	width: 200px;
+	width: 100px;
 	position: absolute;
 	z-index: 100;
 	background-color: black;
@@ -347,19 +368,19 @@ div.tooltip {
 }
 
 #country-panel{
-	background-color: darkgreen;
+	background-color: white;
 }
 #weather-panel{
-	background-color: red;
+	background-color: white;
 }
 #wind-panel{
-	background-color: darkgreen;
+	background-color: white;
 }
 #time-panel{
-	background-color: orange;
+	background-color: white;
 }
 #feed-panel{
-	background-color: purple;
+	background-color: white;
 }
 
 #timeline{
@@ -393,9 +414,36 @@ div.tooltip {
 	width: 300px;
 }
 
+<<<<<<< HEAD
+.nav-image{
+	height: 20px;
+	width: 20px;
+}
+
+.nav-item{
+	height: 70px;
+	width: 70px;
+
+}
+
+.title{
+	padding-left: 25px;
+}
+
+#rectangle{
+	width: 50%;
+	height: 10px;
+	position: absolute;
+	left: 0;
+	bottom: 0px;
+	background-color: blue;
+	z-index: 1000;
+	padding-bottom: 50px;
+=======
 .rectangle{
 	fill: orange;
 	z-index: 50000022222222;
 
+>>>>>>> master
 }
 
