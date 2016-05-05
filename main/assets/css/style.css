@@ -104,10 +104,9 @@ html, body{
 }
 .log-entry{
 	font-family: 'Shadows Into Light', cursive !important;
-	cursor: default;
 }
 .log{
-	width: 300px!important;
+	width: 250px!important;
 	cursor:default;
 }
 .captain-thumb{
@@ -157,7 +156,7 @@ div.tooltip {
     border-width: 1;
     border-color: black;		
     pointer-events: none;			
-    z-index: 10002939293293;
+    z-index: 1000;
 }
 
 .bar {
@@ -310,10 +309,8 @@ div.tooltip {
 	z-index:2932939239293923;
 }
 #nav-list-group{
-	height:80%;
-	top: 5%;
-	height:60%;
-	top: 10%;
+	height:10%;
+	top: 0%;
 	position: absolute;
 	min-width: 100px !important;
 	width: 100px;
@@ -354,6 +351,16 @@ div.tooltip {
 	left: 100px;
 	display: none;
 }
+#help-panel{
+	height: 100%;
+	position: absolute;
+	width: calc(100% - 100px);
+	background-color: white;
+	z-index: 10000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
 .control-panel{
 	height: 90%;
 	width: 300px;
@@ -361,7 +368,7 @@ div.tooltip {
 	position: absolute;
 	z-index:1000000002383823;
 	top: 0px;
-	left: 70px;
+	left: 100px;
 	display: none;
 }
 
@@ -385,7 +392,7 @@ div.tooltip {
 	width: 100%;
 	height: 100px;
 	position: absolute;
-	left: 0;
+	left: 0px;
 	bottom: 0px;
 	background-color: none;
 	z-index: 105;
@@ -413,19 +420,32 @@ div.tooltip {
 }
 
 .nav-image{
-	height: 20px;
-	width: 20px;
+	height: 40px;
+	width: 40px;
 }
 
 .nav-item{
-	height: 70px;
-	width: 70px;
+	height: 75px;
+	width: 75px;
 
 }
 
-.title{
+#title{
 	padding-left: 25px;
 }
+
+#weather-panel{
+	padding-left: 25px;
+}
+
+#country-panel{
+	padding-left: 25px;
+}
+
+#memoSelectControls{
+	padding-left: 25px;
+}
+
 
 #rectangle{
 	width: 50%;
@@ -436,10 +456,6 @@ div.tooltip {
 	background-color: blue;
 	z-index: 1000;
 	padding-bottom: 50px;
-}
-.rectangle{
-	fill: orange;
-	z-index: 50000022222222;
 }
 
 #reproject-holder{
