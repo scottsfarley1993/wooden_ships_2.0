@@ -8,7 +8,7 @@ p {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    	font-weight: 300;
    	color: gray;
-    padding-left: 5%;
+    padding-left: 3%;
 }
 
 .land {
@@ -474,10 +474,9 @@ div.tooltip {
     text-shadow: 0 -1px 0 #286090;
     /*background-image: -webkit-linear-gradient(top,yellow 0,red 100%); 
     background-image: -o-linear-gradient(top,yellow 0,red 100%);
-    background-image: -webkit-gradient(linear,left top,left bottom,from(yellow),to(red)); */
-    background-image: linear-gradient(to bottom,yellow 0,red 100%) !important; 
+    background-image: -webkit-gradient(linear,left top,left bottom,from(yellow),to(red)); */    
     /*background-image: none !important;*/
-   background-color: red !important;
+   	background-color: red !important;
     background-repeat: repeat-x; 
     /* border-color: #2b669a; */
 }

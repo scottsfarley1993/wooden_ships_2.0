@@ -789,13 +789,13 @@ function displayPorts(portData){
 				}
 				
 			})
-			.style('fill', 'darkgray')
+			.style('fill', 'gray')
 			.on('mouseover', function(){
-				d3.select(this).style("fill", 'white').style("cursor", "crosshair")
+				d3.select(this).style("fill", 'black').style("cursor", "crosshair")
 				d3.select(this).moveToFront();
 			})
 			.on('mouseout', function(){
-				d3.select(this).style('fill', 'black').style("cursor", "auto")
+				d3.select(this).style('fill', 'gray').style("cursor", "auto")
 			})
 }
 
@@ -1770,8 +1770,6 @@ $(".nav-item").hover(function(){
 }, function(){
 	$(this).toggleClass('nav-hovered')
 })
-
-
 $(".nav-item").click(function(){
 	//control active tab css
 	$(".nav-item").removeClass("active")
