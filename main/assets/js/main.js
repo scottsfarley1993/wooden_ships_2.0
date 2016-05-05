@@ -207,6 +207,7 @@ function drawInBounds(latBounds, lonBounds, ships){
 
 
 function resetGlobe(){
+	console.log("Reset globe")
 	globals.map.projection = globals.map.projection.rotate([0, 0, 0]) //reset the projection
 	
 	//redraw the land
@@ -333,6 +334,7 @@ function createColorScheme (maxDomain, colors){
 
 //dropdown change listener handler
 function changeProjection(projection, scale, center){
+	globals.map.projectionType = projection
     //decide what projection to change to
     if (projection == "Azimuthal") {
     	//set params
@@ -372,7 +374,7 @@ function changeProjection(projection, scale, center){
 		globals.map.mapContainer.call(d3.behavior.drag() //rotate projection on drag 
 			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
 			  .on('drag', onDrag));
-		zoom.on('zoom', null)
+		zoom.on('zoom', zoomed)
 		globals.map.mapContainer.call(zoom).call(zoom.event) //disable zoom
     }
    var path = d3.geo.path()
@@ -401,7 +403,6 @@ function changeProjection(projection, scale, center){
    
    //update the hexagons
    changeHexSize(globals.map.hexRadius)
-   globals.map.projectionType = projection
 };
 
 function getShipData(filename, callback){
@@ -902,7 +903,7 @@ function refreshHexes(){
 	removeHexes()
 	displayShipDataHexes(globals.data.ships)
 	console.log("Refreshed hexes.")
-	displayPorts(globals.data.ports)
+	//displayPorts(globals.data.ports)
 }
 
 function loadShipLookup(){
