@@ -104,9 +104,10 @@ html, body{
 }
 .log-entry{
 	font-family: 'Shadows Into Light', cursive !important;
+	cursor: default;
 }
 .log{
-	width: 250px!important;
+	width: 300px!important;
 	cursor:default;
 }
 .captain-thumb{
@@ -156,7 +157,7 @@ div.tooltip {
     border-width: 1;
     border-color: black;		
     pointer-events: none;			
-    z-index: 1000;
+    z-index: 10002939293293;
 }
 
 .bar {
@@ -309,13 +310,10 @@ div.tooltip {
 	z-index:2932939239293923;
 }
 #nav-list-group{
-<<<<<<< HEAD
 	height:80%;
 	top: 5%;
-=======
 	height:60%;
 	top: 10%;
->>>>>>> master
 	position: absolute;
 	min-width: 100px !important;
 	width: 100px;
@@ -363,7 +361,7 @@ div.tooltip {
 	position: absolute;
 	z-index:1000000002383823;
 	top: 0px;
-	left: 100px;
+	left: 70px;
 	display: none;
 }
 
@@ -414,7 +412,6 @@ div.tooltip {
 	width: 300px;
 }
 
-<<<<<<< HEAD
 .nav-image{
 	height: 20px;
 	width: 20px;
@@ -439,11 +436,29 @@ div.tooltip {
 	background-color: blue;
 	z-index: 1000;
 	padding-bottom: 50px;
-=======
 .rectangle{
 	fill: orange;
 	z-index: 50000022222222;
-
->>>>>>> master
 }
 
+#reproject-holder{
+	position: absolute;
+	right: 300px;
+	top: 0px;
+	z-index: 2191921812912;
+	background-color: white;
+	width:100px;
+	padding:10px;
+	margin: 0px;
+}
+.active{
+    text-shadow: 0 -1px 0 #286090;
+    /*background-image: -webkit-linear-gradient(top,yellow 0,red 100%); 
+    background-image: -o-linear-gradient(top,yellow 0,red 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(yellow),to(red)); */
+    background-image: linear-gradient(to bottom,yellow 0,red 100%) !important; 
+    /*background-image: none !important;*/
+   background-color: red !important;
+    background-repeat: repeat-x; 
+    /* border-color: #2b669a; */
+}

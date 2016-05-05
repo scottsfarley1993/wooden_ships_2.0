@@ -1015,6 +1015,9 @@ function displayMemos(memoSet){
 	//displays the feed of observations in the right hand panel
 	$("#feed").empty()
 	$("#feed-panel").show();
+	if (memoSet.length == 0){
+		$("#feed").append("<li class='log list-group-item'>Select fewer filters or a different hexagon to see the captain's logs.</li>")
+	}
 	d3.select("#feed").selectAll(".log")
 		.data(memoSet)
 		.enter()
@@ -1593,6 +1596,9 @@ function changeMemoSet(){
 		}else{
 			el.style('display', 'block')
 		}
+	}
+	if (logs.length == 0){
+		$("#feed").append("<li class='log list-group-item'>Select fewer filters or a different hexagon to see the captain's logs.</li>")
 	}
 		
 }
