@@ -1770,6 +1770,8 @@ $(".nav-item").hover(function(){
 }, function(){
 	$(this).toggleClass('nav-hovered')
 })
+
+
 $(".nav-item").click(function(){
 	//control active tab css
 	$(".nav-item").removeClass("active")

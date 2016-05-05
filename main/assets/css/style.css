@@ -436,6 +436,7 @@ div.tooltip {
 	background-color: blue;
 	z-index: 1000;
 	padding-bottom: 50px;
+}
 .rectangle{
 	fill: orange;
 	z-index: 50000022222222;
@@ -445,12 +446,15 @@ div.tooltip {
 	position: absolute;
 	right: 300px;
 	top: 0px;
-	z-index: 2191921812912;
+	z-index: 10000;
 	background-color: white;
 	width:100px;
 	padding:10px;
 	margin: 0px;
 }
+
+
+
 .active{
     text-shadow: 0 -1px 0 #286090;
     /*background-image: -webkit-linear-gradient(top,yellow 0,red 100%); 
