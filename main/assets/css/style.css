@@ -309,8 +309,13 @@ div.tooltip {
 	z-index:2932939239293923;
 }
 #nav-list-group{
+<<<<<<< HEAD
 	height:80%;
 	top: 5%;
+=======
+	height:60%;
+	top: 10%;
+>>>>>>> master
 	position: absolute;
 	min-width: 100px !important;
 	width: 100px;
@@ -409,6 +414,7 @@ div.tooltip {
 	width: 300px;
 }
 
+<<<<<<< HEAD
 .nav-image{
 	height: 20px;
 	width: 20px;
@@ -433,5 +439,11 @@ div.tooltip {
 	background-color: blue;
 	z-index: 1000;
 	padding-bottom: 50px;
+=======
+.rectangle{
+	fill: orange;
+	z-index: 50000022222222;
+
+>>>>>>> master
 }
 
