@@ -101,7 +101,6 @@ $(document).ready(function(){
 	loadShipLookup() // get metadata about ships and voyages and captains
 	d3.selectAll(".overlay").style('display', 'none')//disables zoom --> for debugging
 	updateTimeline(new Date(1750,0,1), new Date(1850,0,1))
-	createRect()
 })
 
 
@@ -1871,12 +1870,15 @@ function updateTimeline(min, max){
 	var height = $("#timeline").height();
 	var width = $("#timeline").width();
 
+	var margins = {top: 25, left: 25, right: 25, bottom: 25}
+
     //create a second svg element to hold the bar chart
     var timescale = d3.select("#timeline")
         .append("svg")
-        .attr("width", width)
+        .attr("width", width )
         .attr("height", height)
-        .attr("class", "timescale");
+        .attr("class", "timescale").append('g')
+         .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
 
 	// define the x scale (horizontal)
    	var mindate = min,
@@ -1884,7 +1886,7 @@ function updateTimeline(min, max){
             
     var xScale = d3.time.scale()
         .domain([mindate, maxdate])   // date values
-		.range([0, width]);   // map these the the chart width = total width minus padding at both sides
+		.range([margins.left, (width-margins.right)]);   // map these the the chart width = total width minus padding at both sides
         
     // define the y axis
     var xAxis = d3.svg.axis()
@@ -2127,77 +2129,85 @@ function createRect(){
     	.call(drag);
 
  
-//  var rightLine = d3.selectAll(".timescale") 
-//  	.append("line") 
-//  	.attr("x1", width) 
-//  	.attr("x2", width)	
-//  	.attr("y1", 0)
-//  	.attr("y2", 40)
-//  	.style('stroke', 'white')
-//  	.style('stroke-width', 10);
+ var rightLine = d3.selectAll(".timescale") 
+ 	.append("line") 
+ 	.attr("x1", width) 
+ 	.attr("x2", width)	
+ 	.attr("y1", 0)
+ 	.attr("y2", 40)
+ 	.style('stroke', 'green')
+ 	.style('stroke-width', 10);
 
-// function moveLine(){
-// 	firstPos = +rightLine.attr("x1")
+function moveLine(){
+	firstPos = +rightLine.attr("x1")
 
-// 	change = +d3.event.dx
+	change = +d3.event.dx
 
-// 	secondPos = firstPos + change
+	secondPos = firstPos + change
 
-// 	finalPos = rightLine.attr("x1", secondPos)
+	finalPos = rightLine.attr("x1", secondPos)
 
-// 	finalPos2 = rightLine.attr("x2", secondPos)
+	finalPos2 = rightLine.attr("x2", secondPos)
 
-// 	oldWidth = +rect.attr("width")
+	oldWidth = +rect.attr("width")
 
-// 	newWidth = oldWidth + change
+	newWidth = oldWidth + change
 
-// 	finalWidth = rect.attr("width", newWidth)
+	finalWidth = rect.attr("width", newWidth)
 
-// }
+}
 
-// var dragRightLine = d3.behavior.drag()
-// 	    //.origin(function(d) { return d; })
-// 	    .on("drag", moveLine);
+var dragRightLine = d3.behavior.drag()
+	    //.origin(function(d) { return d; })
+	    .on("drag", moveLine);
 
-//     rightLine
-//     	.call(dragRightLine);
-
-
-//  var leftLine = d3.selectAll(".timescale") 
-//  	.append("line") 
-//  	.attr("x1", 120) 
-//  	.attr("x2", 120)	
-//  	.attr("y1", 0)
-//  	.attr("y2", 40)
-//  	.style('stroke', 'white')
-//  	.style('stroke-width', 10);
+    rightLine
+    	.call(dragRightLine);
 
 
-//  function moveLine2(){
-// 	firstPos = +leftLine.attr("x1")
+ var leftLine = d3.selectAll(".timescale") 
+ 	.append("line") 
+ 	.attr("x1", 120) 
+ 	.attr("x2", 120)	
+ 	.attr("y1", 0)
+ 	.attr("y2", 40)
+ 	.style('stroke', 'red')
+ 	.style('stroke-width', 10);
 
-// 	change = +d3.event.dx
 
-// 	secondPos = firstPos + change
+ function moveLine2(){
+	firstPos = +leftLine.attr("x1")
 
-// 	finalPos = leftLine.attr("x1", secondPos)
+	change = +d3.event.dx
 
-// 	finalPos2 = leftLine.attr("x2", secondPos)
+	secondPos = firstPos + change
 
-// 	oldWidth = +rect.attr("x")
+	finalPos = leftLine.attr("x1", secondPos)
 
-// 	newWidth = oldWidth + change
+	finalPos2 = leftLine.attr("x2", secondPos)
 
-// 	finalWidth = rect.attr("x", newWidth)
+	oldX = +rect.attr("x")
 
-// }
+	newX = oldX + change
 
-// var dragLeftLine = d3.behavior.drag()
-// 	    //.origin(function(d) { return d; })
-// 	    .on("drag", moveLine2);
+	finalX = rect.attr("x", newX)
 
-//     leftLine
-//     	.call(dragLeftLine);
+	originalWidth = rect.attr("width")
+
+	newWidth = originalWidth - change
+
+	finalWidth = rect.attr("width", newWidth)
+
+	console.log(newWidth)
+
+}
+
+var dragLeftLine = d3.behavior.drag()
+	    //.origin(function(d) { return d; })
+	    .on("drag", moveLine2);
+
+    leftLine
+    	.call(dragLeftLine);
 
 }
 
