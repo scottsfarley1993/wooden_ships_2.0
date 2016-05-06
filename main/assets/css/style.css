@@ -480,3 +480,82 @@ div.tooltip {
     background-repeat: repeat-x; 
     /* border-color: #2b669a; */
 }
+
+#intro-panel-info{
+	height: 25%;
+	position: absolute;
+	width: calc(100% - 100px);
+	background-color: white;
+	z-index: 10000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
+
+#weather-panel-info{
+	height: 25%;
+	position: absolute;
+	width: calc(100% - 100px);
+	background-color: white;
+	z-index: 10000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
+
+#wind-panel-info{
+	height: 25%;
+	position: absolute;
+	width: calc(100% - 100px);
+	background-color: white;
+	z-index: 10000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
+
+#time-panel-info{
+	height: 25%;
+	position: absolute;
+	width: calc(100% - 100px);
+	background-color: white;
+	z-index: 10000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
+
+#feed-panel-info{
+	height: 25%;
+	position: absolute;
+	width: calc(100% - 100px);
+	background-color: white;
+	z-index: 10000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
+
+#country-panel-info{
+	height: 25%;
+	position: absolute;
+	width: calc(100% - 100px);
+	background-color: white;
+	z-index: 10000000;
+	top: 0px;
+	left: 100px;
+	display: none;
+}
+
+.intro-infolabel {
+    font-family: Baskerville; 
+    position: absolute;
+    text-align: center;
+    min-height: 70px;
+    min-width: 100px;
+    color: #fff;
+    background-color: rgba(51,51,51,.85);
+    border: solid thin black;
+    padding: 5px 10px 10px 5px;
+    top: -75px;
+}

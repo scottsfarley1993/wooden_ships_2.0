@@ -1764,9 +1764,43 @@ function filterByPressure(minPressure, maxPressure, data) {
 		return f;
 }
 
+//function to create label
+function setLabel(){
+	console.log("setlabel")
+    //label content
+   var infolabelAttribute = "<h3>" + "hi" +
+        "</h3><b>" + "sdf" + " " + "expressed" + "</b>" + "<br>" 
+    //create info label div
+    var infolabel = d3.select("body")
+        .append("div")
+        .attr({
+            "class": "infolabel",
+            "id": "intro-infolabel"
+        })
+        .html(infolabelAttribute);
+      
+};
+
 // nav tabs
 $(".nav-item").hover(function(){
 	$(this).toggleClass('nav-hovered')
+	_thisData = $(this).data('panel')
+	if (_thisData == 'intro'){
+		console.log("intro")
+		setLabel()
+	}else if (_thisData == "weather"){
+		$("#weather-panel-info").slideToggle()	
+	}else if (_thisData == "wind"){
+		$("#wind-panel-info").slideToggle()
+	}else if (_thisData == "time"){
+		$("#time-panel-info").slideToggle()
+	}else if (_thisData == "feed"){
+		$("#feed-panel-info").slideToggle()
+	}else if (_thisData == "country"){
+		$("#country-panel-info").slideToggle()
+	}else{
+		return
+	}
 }, function(){
 	$(this).toggleClass('nav-hovered')
 })
@@ -2216,3 +2250,6 @@ $("#proj-select").change(function(){
 		return
 	}
 })
+
+var options = {};
+$('a.popup').popup(options);
