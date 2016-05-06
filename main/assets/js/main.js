@@ -2091,9 +2091,6 @@ function changeWeatherSelection(){
 }
 $(".WeatherSelect").change(changeWeatherSelection)
 
-
-createRect()
-
 function createRect(){
 
 	var height = 10;
