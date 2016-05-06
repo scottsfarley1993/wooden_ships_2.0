@@ -383,7 +383,7 @@ function changeProjection(projection){
 		globals.map.mapContainer.call(d3.behavior.drag() //rotate projection on drag 
 			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
 			  .on('drag', onDrag));
-		zoom.on('zoom', zoomed)
+		zoom.on('zoom', null)
 		globals.map.mapContainer.call(zoom).call(zoom.event) //disable zoom
     }
    var path = d3.geo.path()
@@ -914,6 +914,7 @@ function refreshHexes(){
 	removeHexes()
 	displayShipDataHexes(globals.data.ships)
 	console.log("Refreshed hexes.")
+	displayPorts(globals.data.ports);
 }
 
 function loadShipLookup(){
@@ -2124,9 +2125,6 @@ function changeWeatherSelection(){
 	displayShipDataHexes(globals.data.filteredShips)	
 }
 $(".WeatherSelect").change(changeWeatherSelection)
-
-
-createRect()
 
 function createRect(){
 

@@ -341,13 +341,13 @@ div.tooltip {
 }
 
 #intro-panel{
-	height: 100%;
+	height: 90%;
 	position: absolute;
 	width: calc(100% - 100px);
 	background-color: white;
 	z-index: 10000000;
 	top: 0px;
-	left: 100px;
+	left: 70px;
 	display: none;
 }
 #help-panel{
@@ -367,7 +367,7 @@ div.tooltip {
 	position: absolute;
 	z-index:1000000002383823;
 	top: 0px;
-	left: 100px;
+	left: 70px;
 	display: none;
 }
 
@@ -478,7 +478,7 @@ div.tooltip {
     /*background-image: none !important;*/
    	background-color: red !important;
     background-repeat: repeat-x; 
-    /* border-color: #2b669a; */
+    /* border-color: #2b669a; */l
 }
 
 #intro-panel-info{
