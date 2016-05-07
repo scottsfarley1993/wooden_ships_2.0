@@ -55,11 +55,6 @@
 
 				</li>
 
-				<li class='list-group-item nav-item' data-panel='help'>
-					
-					<img src="assets/img/Icon_help.png" class='img-responsive li-img' alt="ship logo" />
-
-				</li>
 
 			</ul>
 		</div>
@@ -121,10 +116,16 @@
 
 	<h2 id="title"> Wooden Ships Overview </h2>
 
-	<p><strong>Wooden Ships</strong> explores European Shipping activity and observations from 1750 to 1850. The data is made up of logbook entries written by each ships captain. The captain recorded climatic information before there were standardized tools to do so. These data include: air temperature, wind speed and direction, air pressure, sea surface temperature, the presence or absence of fog, sea ice, hail, and rain. Take a look at these climatic variations using the weather filters in the left panel of the application!</p>
+	<p><strong>Wooden Ships</strong> explores European Shipping activity and observations from 1750 to 1850. The data is made up of logbook entries written by each ships captain. 
+		The captain recorded climatic information before there were standardized tools to do so. These data include: air temperature, wind speed and direction, air pressure, 
+		sea surface temperature, the presence or absence of fog, sea ice, hail, and rain. Take a look at these climatic variations using the weather filters in the left
+		 panel of the application!</p>
 
 
-	<p>In addition to the weather and climatic recordings, the captains recorded observations from the ship as well as candid happenings on the ship as well. More specifically, these observations include nearby landmarks, biological information and encounters with warring ships. These logbook entries, provide insight into the everyday happenings on board bringing big data to local observations. Take a look at these observations in the logbook tab of the application! </p>
+	<p>In addition to the weather and climatic recordings, the captains recorded observations from the ship as well as candid happenings on the ship as well. 
+		More specifically, these observations include nearby landmarks, biological information and encounters with warring ships. 
+		These logbook entries, provide insight into the everyday happenings on board bringing big data to local observations. 
+		Take a look at these observations in the logbook tab of the application! </p>
 
 		
 	</div>
@@ -132,35 +133,55 @@
 	<div id='country-panel' class='nav-panel control-panel'>
 
 
-		<h3 class="title">Wooden Ships</h3>
-
-				<label>British</label><input name='CountrySelect' value='British' type='radio' class='CountrySelect' checked/><br />
-		<label>Spanish</label><input name='CountrySelect' value='Spanish' type='radio' class='CountrySelect' /><br />
-		<label>Dutch</label><input name='CountrySelect' value='Dutch' type='radio' class='CountrySelect' /><br />
-		<label>France</label><input name='CountrySelect' value='France' type='radio' class='CountrySelect' /><br />
+		<h3 class="title">Nationality</h3>
+		<ul class='control-list list-group' id='nationality-select-list'>
+			<li id='british-nation-select' class='nation-select list-group-item select-item'>British</li>
+			<li id='dutch-nation-select' class='nation-select list-group-item select-item'>Dutch</li>
+			<li id='french-nation-select' class='nation-select list-group-item select-item'>French</li>
+			<li id='spanish-nation-select' class='nation-select list-group-item select-item'>Spanish</li>
+		</ul>
 
 	</div>
 	
 	<div id='weather-panel' class='nav-panel control-panel'>
+			<h3 class="title">Weather Type</h3>
+			<ul class='control-list list-group' id='weather-select-list'>
+				<li id='all-weather-select' class='weather-select list-group-item select-item'>All Weather Types</li>
+				<li id='snow-weather-select' class='weather-select list-group-item select-item'>Snow</li>
+				<li id='thunder-weather-select' class='weather-select list-group-item select-item'>Thunder & Lightning</li>
+				<li id='rain-weather-select' class='weather-select list-group-item select-item'>Rain</li>
+				<li id='sea-ice-weather-select' class='weather-select list-group-item select-item'>Sea Ice</li>
+				<li id='hail-weather-select' class='weather-select list-group-item select-item'>Hail</li>
+				<li id='gusts-weather-select' class='weather-select list-group-item select-item'>Gusty winds</li>
+				<li id='fog-weather-select' class='weather-select list-group-item select-item'>Fog</li>
+			</ul>
 
-			<h3 class="title">Wooden Ships</h3>
-
-		<label>All</label><input name='WeatherSelect' value='All' type='radio' class='WeatherSelect' /><br />
-		<label>Snow</label><input name='WeatherSelect' value='Snow' type='radio' class='WeatherSelect' /><br />
-		<label>Thunder</label><input name='WeatherSelect' value='Thunder' type='radio' class='WeatherSelect' /><br />
-		<label>Sea Ice</label><input name='WeatherSelect' value='Sea Ice' type='radio' class='WeatherSelect' /><br />
-		<label>Rain</label><input name='WeatherSelect' value='Rain' type='radio' class='WeatherSelect' /><br />
-		<label>Hail</label><input name='WeatherSelect' value='Hail' type='radio' class='WeatherSelect' /><br />
-		<label>Fog</label><input name='WeatherSelect' value='Fog' type='radio' class='WeatherSelect' /><br />
-		<label>Gusts</label><input name='WeatherSelect' value='Gusts' type='radio' class='WeatherSelect' /><br />
-		<label>Air Temp</label><input name='WeatherSelect' value='Air Temp' type='radio' class='WeatherSelect' /><br />
-		<label>Sea Surface Temp</label><input name='WeatherSelect' value='Sea Surface Temp' type='radio' class='WeatherSelect' /><br />
-		<label>Air Pressure</label><input name='WeatherSelect' value='Air Pressure' type='radio' class='WeatherSelect' /><br />
 	</div>
 
 	
 	<div id='wind-panel' class='nav-panel control-panel'>
-		<h3 id="title">Wooden Ships</h3>
+		<h3 id="title">Winds</h3>
+		<label>Wind Direction</label>
+		<ul class='control-list list-group' id='wind-direction-select-list'>
+			<li id='north-wd-select' class='wd-select list-group-item select-item'>North</li>
+			<li id='northeast-wd-select' class='wd-select list-group-item select-item'>Northeast</li>
+			<li id='east-wd-select' class='wd-select list-group-item select-item'>East</li>
+			<li id='southeast-wd-select' class='wd-select list-group-item select-item'>Southeast</li>
+			<li id='south-wd-select' class='wd-select list-group-item select-item'>South</li>
+			<li id='southwest-wd-select' class='wd-select list-group-item select-item'>Southwest</li>
+			<li id='west-wd-select' class='wd-select list-group-item select-item'>West</li>
+			<li id='northwest-wd-select' class='wd-select list-group-item select-item'>Northwest</li>
+		</ul>
+		<div id='wind-speed-select-holder'>
+			<label>Wind speed</label><br />
+			<ul class='list-group control-list' id='wind-speed-select-list'>
+				<li id='none-ws-select' class='ws-select list-group-item select-item'>No Wind</li>
+				<li id='calm-ws-select' class='ws-select list-group-item select-item'>Calm (1-5 m/s.)</li>
+				<li id='moderate-ws-select' class='ws-select list-group-item select-item'>Moderate (5-15 m/s)</li>
+				<li id='high-ws-select' class='ws-select list-group-item select-item'>High (15-25 m/s)</li>
+				<li id='hurricane-ws-select' class='ws-select list-group-item select-item'>Hurricane (25+ m/s)</li>
+			</ul>
+		</div>
 		
 	</div>
 	
@@ -184,16 +205,6 @@
 					<li class='log list-group-item'>Select a hexagon to see the captain's logs for that place.</li>
 				</ul>
 			</div>
-	</div>
-
-	<div id='help-panel' class='nav-panel control-panel'>
-
-		<h2 id="title"> test </h2>
-
-		<p><strong>Wooden Ships</strong> explores European Shipping activity and observations from 1750 to 1850. The data is made up of logbook entries written by each ships captain. The captain recorded climatic information before there were standardized tools to do so. These data include: air temperature, wind speed and direction, air pressure, sea surface temperature, the presence or absence of fog, sea ice, hail, and rain. Take a look at these climatic variations using the weather filters in the left panel of the application!</p>
-
-		<p>In addition to the weather and climatic recordings, the captains recorded observations from the ship as well as candid happenings on the ship as well. More specifically, these observations include nearby landmarks, biological information and encounters with warring ships. These logbook entries, provide insight into the everyday happenings on board bringing big data to local observations. Take a look at these observations in the logbook tab of the application! </p>
-			
 	</div>
 
 	<div id='timeline'> </div>

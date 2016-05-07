@@ -1,6 +1,9 @@
 ///this is Wooden Ships Main Javascript File
 //All functions are here
 
+//show the panel on start
+$("#intro-panel").show(); //splash screen
+
 var attrArray = ["countries_1715", "countries_1783", "countries_1815"];
 
 var expressed = attrArray[0]
@@ -1771,6 +1774,8 @@ $(".nav-item").hover(function(){
 }, function(){
 	$(this).toggleClass('nav-hovered')
 })
+
+
 $(".nav-item").click(function(){
 	//control active tab css
 	$(".nav-item").removeClass("active")
@@ -2213,4 +2218,11 @@ $("#proj-select").change(function(){
 	}else{
 		return
 	}
+})
+
+//left panel controls
+$(".select-item").hover(function(){
+	$(this).toggleClass('nav-hovered')
+}, function(){
+	$(this).toggleClass('nav-hovered')
 })
