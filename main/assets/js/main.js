@@ -188,7 +188,7 @@ function drawInBounds(latBounds, lonBounds, ships){
 	    	})
 	    	.style('fill', function(d){
 	    	if ((d.Longitude > lonBounds[0]) && (d.Longitude < lonBounds[1])){
-	    			return "black"
+	    			return "gray"
 	    		}else{
 	    			return 'none'
 	    		}
@@ -202,11 +202,12 @@ function drawInBounds(latBounds, lonBounds, ships){
 	    		return globals.map.projection([d.Longitude, d.Latitude])[1] - 5;
 	    }).style('fill', function(d){
 	    	if ((d.Longitude > lonBounds[0]) && (d.Longitude < lonBounds[1])){
-	    			return "black"
+	    			return "gray"
 	    		}else{
 	    			return 'none'
 	    		}
 	    	})
+	    	
 }
 
 
@@ -742,7 +743,7 @@ function displayPorts(portData){
 			}
 		})
 		.style('fill', 'gray')
-		.style('stroke', 'gray')
+		.style('stroke', 'none')
 		.on('click', function(d){
 			console.log(d)
 		})
@@ -797,7 +798,7 @@ function displayPorts(portData){
 			})
 			.style('fill', 'gray')
 			.on('mouseover', function(){
-				d3.select(this).style("fill", 'black').style("cursor", "crosshair")
+				d3.select(this).style("fill", 'white').style("cursor", "crosshair")
 				d3.select(this).moveToFront();
 			})
 			.on('mouseout', function(){
