@@ -317,6 +317,9 @@ function setMap(){
 		  	
 		  	//show the panel on start
 		enterIsolationMode();//so you can click off the splash screen on start  
+		$(".nav-item").removeClass("active")
+		$("#nav-item-intro").addClass('active')
+		
   
 		}; //end of callback
 };//end of set map
@@ -686,7 +689,7 @@ function styleHexbins(ships, attr){
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
 	d3.selectAll(".hexagon").attr('stroke', function(d){return hexColor(d.length)})
-
+	d3.selectAll(".loading").remove()
 } //end of styleHexbin
 
 function getPorts(){        
@@ -901,16 +904,17 @@ function changeCountry(countryName){
 		globals.nationality = "Spanish"
 	}
 	else if (countryName == "French"){
-		f = "/assets/data/french_points_updated.csv"
-		d3.csv("/assets/data/french_memos_updated.csv", function(data){
-			processMemos(data)
-		})
+		// f = "/assets/data/french_points_updated.csv"
+		// d3.csv("/assets/data/french_memos_updated.csv", function(data){
+			// processMemos(data)
+		// })
 		globals.nationality = "French"
 	}
 	else{
 		console.log("Invalid country name.")
 		return
 	}
+	console.log("Nationality: " + globals.nationality)
 	d3_queue.queue()
 		.defer(getShipData, f)
 		.await(refreshHexes)
@@ -923,6 +927,7 @@ function refreshHexes(){
 	displayShipDataHexes(globals.data.ships)
 	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
+	d3.selectAll(".loading").remove()
 }
 
 function loadShipLookup(){
@@ -2039,16 +2044,22 @@ function createRect(){
 
 
 function changeCountrySelection(){
+	//changes the country based on widget selection.  Delegates to chagne country function and changes the flag icon in the gui.  Also adjusts nav items to give a 'fresh' UI
 	v = $(this)
 	CountrySelection = v.text()
 	console.log(CountrySelection)
-	if (CountrySelection == "British"){		
+	if (CountrySelection == "British"){	
+		$("#nat-flag-img").attr('src', "assets/img/Icon_BritishFlag.png")	
 		changeCountry("British")	
+		
 	}else if (CountrySelection == "Spanish"){
+		$("#nat-flag-img").attr('src', "assets/img/spanish_flag.png")
 		changeCountry("Spanish")
 	}else if (CountrySelection == "Dutch"){
+		$("#nat-flag-img").attr('src',"assets/img/dutch_flag.png")
 		changeCountry("Dutch")
 	}else if (CountrySelection == "France"){
+		("#nat-flag-img").attr('src', "assets/img/french_flag.png")
 		changeCountry("French")
 	}
 	$(".nation-select").removeClass('active')
@@ -2060,7 +2071,7 @@ function changeCountrySelection(){
 		.style('fill', 'rgba(255, 255, 255, 0.5)')
 		.attr('class', 'loading')
 	
-	//deal with other nav components
+	//de highlight other nav comps
 	
 }
 $(".nation-select").click(changeCountrySelection)
@@ -2096,15 +2107,10 @@ function changeWeatherSelection(){
 	}else if (weatherSelection == "Air Temperature Readings"){
 		globals.data.filteredShips = filterAirTemp(globals.data.ships)
 		switchAttribute("airTemp")
-	}//else if (weatherSelection == "Sea Surface Temp"){
-		// globals.data.filteredShips = filterSST(globals.data.ships)
-		// switchAttribute("sst")
-		// console.log("sst")
-	// }else if (weatherSelection == "Air Pressure"){
-		// globals.data.filteredShips = filterPressure(globals.data.ships)
-		// switchAttribute("pressure")
-		// console.log("pressure")
-	// }
+	}else if (weatherSelection == "All Weather Types"){
+		globals.data.filteredShips = globals.data.ships
+		switchAttribute("")
+	}
 	removeHexes()
 	displayShipDataHexes(globals.data.filteredShips)	
 }
