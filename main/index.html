@@ -29,7 +29,7 @@
 					<img src="assets/img/Icon_captain.png" class='img-responsive li-img' alt="ship logo" />
 
 				</li>
-				<li class='list-group-item nav-item ' data-panel='map'>
+				<li class='list-group-item nav-item ' id='nav-item-map' data-panel='map'>
 	
 					<img src="assets/img/Icon_map.png" class='img-responsive li-img' alt="ship logo" />
 
@@ -147,7 +147,7 @@
 	<div id='weather-panel' class='nav-panel control-panel'>
 			<h3 class="title">Weather Type</h3>
 			<ul class='control-list list-group' id='weather-select-list'>
-				<li id='all-weather-select' class='weather-select list-group-item select-item'>All Weather Types</li>
+				<li id='all-weather-select active'  class='weather-select list-group-item select-item active'>All Weather Types</li>
 				<li id='snow-weather-select' class='weather-select list-group-item select-item'>Snow</li>
 				<li id='thunder-weather-select' class='weather-select list-group-item select-item'>Thunder & Lightning</li>
 				<li id='rain-weather-select' class='weather-select list-group-item select-item'>Rain</li>
@@ -155,6 +155,7 @@
 				<li id='hail-weather-select' class='weather-select list-group-item select-item'>Hail</li>
 				<li id='gusts-weather-select' class='weather-select list-group-item select-item'>Gusty winds</li>
 				<li id='fog-weather-select' class='weather-select list-group-item select-item'>Fog</li>
+				<li id='fog-weather-select' class='weather-select list-group-item select-item'>Air Temperature Readings</li>
 			</ul>
 
 	</div>
@@ -163,24 +164,24 @@
 	<div id='wind-panel' class='nav-panel control-panel'>
 		<h3 id="title">Winds</h3>
 		<label>Wind Direction</label>
-		<ul class='control-list list-group' id='wind-direction-select-list'>
-			<li id='north-wd-select' class='wd-select list-group-item select-item'>North</li>
-			<li id='northeast-wd-select' class='wd-select list-group-item select-item'>Northeast</li>
-			<li id='east-wd-select' class='wd-select list-group-item select-item'>East</li>
-			<li id='southeast-wd-select' class='wd-select list-group-item select-item'>Southeast</li>
-			<li id='south-wd-select' class='wd-select list-group-item select-item'>South</li>
-			<li id='southwest-wd-select' class='wd-select list-group-item select-item'>Southwest</li>
-			<li id='west-wd-select' class='wd-select list-group-item select-item'>West</li>
-			<li id='northwest-wd-select' class='wd-select list-group-item select-item'>Northwest</li>
+		<ul class='control-list list-group active' id='wind-direction-select-list'>
+			<li id='north-wd-select active' class='wd-select list-group-item select-item active'>North</li>
+			<li id='northeast-wd-select active' class='wd-select list-group-item select-item active'>Northeast</li>
+			<li id='east-wd-select active' class='wd-select list-group-item select-item active'>East</li>
+			<li id='southeast-wd-select active' class='wd-select list-group-item select-item active'>Southeast</li>
+			<li id='south-wd-select active' class='wd-select list-group-item select-item active'>South</li>
+			<li id='southwest-wd-select active' class='wd-select list-group-item select-item active'>Southwest</li>
+			<li id='west-wd-select active' class='wd-select list-group-item select-item active'>West</li>
+			<li id='northwest-wd-select active' class='wd-select list-group-item select-item active'>Northwest</li>
 		</ul>
 		<div id='wind-speed-select-holder'>
 			<label>Wind speed</label><br />
 			<ul class='list-group control-list' id='wind-speed-select-list'>
-				<li id='none-ws-select' class='ws-select list-group-item select-item'>No Wind</li>
-				<li id='calm-ws-select' class='ws-select list-group-item select-item'>Calm (1-5 m/s.)</li>
-				<li id='moderate-ws-select' class='ws-select list-group-item select-item'>Moderate (5-15 m/s)</li>
-				<li id='high-ws-select' class='ws-select list-group-item select-item'>High (15-25 m/s)</li>
-				<li id='hurricane-ws-select' class='ws-select list-group-item select-item'>Hurricane (25+ m/s)</li>
+				<li id='none-ws-select' class='ws-select list-group-item select-item active'>No Wind</li>
+				<li id='calm-ws-select' class='ws-select list-group-item select-item active'>Calm (1-5 m/s.)</li>
+				<li id='moderate-ws-select' class='ws-select list-group-item select-item active'>Moderate (5-15 m/s)</li>
+				<li id='high-ws-select' class='ws-select list-group-item select-item active'>High (15-25 m/s)</li>
+				<li id='hurricane-ws-select' class='ws-select list-group-item select-item active'>Hurricane (25+ m/s)</li>
 			</ul>
 		</div>
 		

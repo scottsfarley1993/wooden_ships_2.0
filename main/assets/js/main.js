@@ -487,6 +487,7 @@ function displayShipDataHexes(datasetArray){
       //set the stack order
       globals.land.moveToFront();
       d3.selectAll(".port").moveToFront();
+      d3.selectAll(".loading").remove()
 }
 
 function styleHexbins(ships, attr){
@@ -1317,6 +1318,8 @@ function enterIsolationMode(){
 	globals.isolationMode = true
 	$("#feed-window").removeClass('display-none')
 	$("#feed-controls").removeClass('display-none')
+	$(".nav-item").removeClass("active")
+	$("#nav-item-map").addClass('active')
 }
 function exitIsolationMode(){
 	d3.selectAll(".overlay")
@@ -2050,63 +2053,62 @@ function changeCountrySelection(){
 	}
 	$(".nation-select").removeClass('active')
 	$(this).addClass("active")
-		
+	//add a loading screen
+	globals.map.mapContainer.append('rect')
+		.attr('height', globals.map.dimensions.height)
+		.attr('width', globals.map.dimensions.width)
+		.style('fill', 'rgba(255, 255, 255, 0.5)')
+		.attr('class', 'loading')
+	
+	//deal with other nav components
+	
 }
 $(".nation-select").click(changeCountrySelection)
 
-function changeWeatherSelection(weatherSelection){
-	v = $(this)
-	weatherSelection = v.val()
-	globals.weatherSelection = weatherSelection
+function changeWeatherSelection(){
+	$(".weather-select").removeClass("active")
+	$(this).addClass("active")
+	weatherSelection = $(this).text()
 	if (weatherSelection == "Snow"){		
 		globals.data.filteredShips = filterBySnow(globals.data.ships)
-		console.log("Snow")
 		switchAttribute("snow")	
-	}else if (weatherSelection == "Thunder"){
+	}else if (weatherSelection == "Thunder & Lightning"){
 		globals.data.filteredShips = filterByThunder(globals.data.ships)
-		switchAttribute("thunder")
 	}else if (weatherSelection == "Sea Ice"){
 		globals.data.filteredShips = filterBySeaIce(globals.data.ships)
-		console.log(globals.data.filteredShips)
 		switchAttribute("seaIce")
 	}else if (weatherSelection == "Rain"){
 		globals.data.filteredShips = filterByRain(globals.data.ships)
-		console.log(globals.data.filteredShips)
 		switchAttribute("rain")
 	}else if (weatherSelection == "Hail"){
 		globals.data.filteredShips = filterByHail(globals.data.ships)
-		console.log("hail")
-		console.log(globals.data.filteredShips)
 		switchAttribute("hail")
 	}else if (weatherSelection == "Fog"){
 		globals.data.filteredShips = filterByFog(globals.data.ships)
-		console.log("fog")
 		console.log(globals.data.filteredShips)
 		switchAttribute("fog")
-	}else if (weatherSelection == "Gusts"){
+	}else if (weatherSelection == "Gusty winds"){
 		globals.data.filteredShips = filterByGusts(globals.data.ships)
-		console.log("fog")
 		console.log(globals.data.filteredShips)
 		switchAttribute("gusts")
-	}else if (weatherSelection == "All"){
+	}else if (weatherSelection == "All Weather Types"){
 		globals.data.filteredShips = globals.data.ships
-	}else if (weatherSelection == "Air Temp"){
+	}else if (weatherSelection == "Air Temperature Readings"){
 		globals.data.filteredShips = filterAirTemp(globals.data.ships)
 		switchAttribute("airTemp")
-		console.log("Air temp")
-	}else if (weatherSelection == "Sea Surface Temp"){
-		globals.data.filteredShips = filterSST(globals.data.ships)
-		switchAttribute("sst")
-		console.log("sst")
-	}else if (weatherSelection == "Air Pressure"){
-		globals.data.filteredShips = filterPressure(globals.data.ships)
-		switchAttribute("pressure")
-		console.log("pressure")
-	}
+	}//else if (weatherSelection == "Sea Surface Temp"){
+		// globals.data.filteredShips = filterSST(globals.data.ships)
+		// switchAttribute("sst")
+		// console.log("sst")
+	// }else if (weatherSelection == "Air Pressure"){
+		// globals.data.filteredShips = filterPressure(globals.data.ships)
+		// switchAttribute("pressure")
+		// console.log("pressure")
+	// }
 	removeHexes()
 	displayShipDataHexes(globals.data.filteredShips)	
 }
-$(".WeatherSelect").change(changeWeatherSelection)
+$(".weather-select").click(changeWeatherSelection)
 
 function createRect(){
 
@@ -2245,3 +2247,4 @@ $(".select-item").hover(function(){
 }, function(){
 	$(this).toggleClass('nav-hovered')
 })
+
