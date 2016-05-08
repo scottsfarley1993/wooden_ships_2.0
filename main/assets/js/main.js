@@ -904,10 +904,10 @@ function changeCountry(countryName){
 		globals.nationality = "Spanish"
 	}
 	else if (countryName == "French"){
-		// f = "/assets/data/french_points_updated.csv"
-		// d3.csv("/assets/data/french_memos_updated.csv", function(data){
-			// processMemos(data)
-		// })
+		f = "/assets/data/french_points_updated.csv"
+		d3.csv("/assets/data/french_memos_updated.csv", function(data){
+			processMemos(data)
+		})
 		globals.nationality = "French"
 	}
 	else{
@@ -2058,8 +2058,8 @@ function changeCountrySelection(){
 	}else if (CountrySelection == "Dutch"){
 		$("#nat-flag-img").attr('src',"assets/img/dutch_flag.png")
 		changeCountry("Dutch")
-	}else if (CountrySelection == "France"){
-		("#nat-flag-img").attr('src', "assets/img/french_flag.png")
+	}else if (CountrySelection == "French"){
+		$("#nat-flag-img").attr('src', "assets/img/french_flag.png")
 		changeCountry("French")
 	}
 	$(".nation-select").removeClass('active')
