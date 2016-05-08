@@ -2030,8 +2030,8 @@ function createRect(){
 
 function changeCountrySelection(){
 	v = $(this)
-	CountrySelection = v.val()
-	globals.CountrySelection = CountrySelection
+	CountrySelection = v.text()
+	console.log(CountrySelection)
 	if (CountrySelection == "British"){		
 		changeCountry("British")	
 	}else if (CountrySelection == "Spanish"){
@@ -2041,11 +2041,13 @@ function changeCountrySelection(){
 	}else if (CountrySelection == "France"){
 		changeCountry("French")
 	}
+	$(".nation-select").removeClass('active')
+	$(this).addClass("active")
 		
 }
-$(".CountrySelect").change(changeCountrySelection)
+$(".nation-select").click(changeCountrySelection)
 
-function changeWeatherSelection(){
+function changeWeatherSelection(weatherSelection){
 	v = $(this)
 	weatherSelection = v.val()
 	globals.weatherSelection = weatherSelection

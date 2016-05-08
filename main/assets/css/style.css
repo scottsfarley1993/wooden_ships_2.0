@@ -480,3 +480,7 @@ div.tooltip {
     background-repeat: repeat-x; 
     /* border-color: #2b669a; */l
 }
+.list-group-item{
+	margin:0px;
+	
+}
