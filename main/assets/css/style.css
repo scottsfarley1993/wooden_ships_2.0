@@ -32,19 +32,6 @@ p {
 }
 
 
-.dropdownProjections{
-    position: absolute;
-    top: 130px;
-    left: 20px;
-    z-index: 10;
-    font-family: baskerville;
-    font-size: 1em;
-    font-weight: bold;
-    padding: 2px;
-    border: 1px solid #999;
-    box-shadow: 2px 2px 4px #999;
-}
-
 #controls{
 	height: 10%;
 	margin: 1%;
@@ -74,18 +61,9 @@ html, body{
   cursor:hand;
 }
 
-#summary-window{
-	overflow: hidden !important;
-	right: 0px;
-	position: absolute;
-	top: 25px;
-	width: 300px;
-	height: calc(50% - 25px)!important;
-	max-height: 50%!important;
-	background-color:rgba(255, 255, 255, 0.8);
-	z-index: 1000000;
-	padding-top: 5px;
-}
+
+
+
 
 #feed-window{
 	overflow-y: auto !important;
@@ -209,71 +187,9 @@ div.tooltip {
 }
 
 
-#text-summary{
-	height: 40%;
-}
-#wind-summary{
-	height: 40%;
-	padding-right: 25px;
-}
-#wind-rose{
-	height:60%;
-}
-.weather-holder{
-	height: 30%
-	border:#ffffff dashed;
-}
-.weather-header{
-	text-align: left;
-	font-weight: 300;
-	display: inline;
-	padding-left: 5px;
-	width: 120px;
-}
-.wind-holder{
-	height: 50%;
-	padding-right: 15px;
-}
-.weather-data{
-	text-align: right;
-	font-weight: bold;
-	display: inline;
-	width: 150px;
-}
-.weather-num{
-	font-size:larger;
-	margin-top: 25px;
-}
-#airTempReading, #commonReading, #wsReading{
-	padding-top: 7px;
-}
-#wdReading{
-	padding-top: 10px;
-}
-#common{
-	text-align: right;
-}
-#weather-controls{
-	top: 0px;
-	height: 25px;
-	position: absolute;
-	right: 0px;
-	z-index: 100;
-	width:300px;
-	padding-right: 20px;
-	background-color: black;
-	color: white;
-}
+
 .display-none{
 	display: none;
-}
-#minimize-wx-panel{
-	display: inline;
-	float:right;
-	color:white;
-}
-#weather-control-header{
-	display: inline;
 }
 #feed-controls{
 	top: 50%;
@@ -291,13 +207,6 @@ div.tooltip {
 }
 #feed-control-header{
 	display: inline;
-}
-#panel-holder{
-	height: 100%;
-	width: 300px;
-	position: absolute;
-	top: 0;
-	right: 0px;
 }
 #nav{
 	background-color: black;
@@ -322,23 +231,6 @@ div.tooltip {
 	background-color: #ccc;
 	cursor: pointer;
 }
-#masthead{
-	height: 1%;
-	width: 100%;
-	margin: 0px;
-	padding:0px;
-	color: #ccc;
-	font-weight: 800;
-}
-#masthead-group{
-	height: 5%;
-	margin:0px;
-	padding:0px;
-	width: 100px;
-	position: absolute;
-	z-index: 100;
-	background-color: black;
-}
 
 #intro-panel{
 	height: 85%;
@@ -350,20 +242,10 @@ div.tooltip {
 	left: 70px;
 	display: none;
 }
-#help-panel{
-	height: 100%;
-	position: absolute;
-	width: calc(100% - 100px);
-	background-color: white;
-	z-index: 10000000;
-	top: 0px;
-	left: 70px;
-	display: none;
-}
 .control-panel{
 	height: 90%;
 	width: 300px;
-	background-color: black;
+	background-color: white;
 	position: absolute;
 	z-index:1000000002383823;
 	top: 0px;
@@ -371,21 +253,6 @@ div.tooltip {
 	display: none;
 }
 
-#country-panel{
-	background-color: white;
-}
-#weather-panel{
-	background-color: white;
-}
-#wind-panel{
-	background-color: white;
-}
-#time-panel{
-	background-color: white;
-}
-#feed-panel{
-	background-color: white;
-}
 
 #timeline{
 	width: 100%;

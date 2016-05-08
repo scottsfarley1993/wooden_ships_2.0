@@ -16,6 +16,7 @@
 
 	<!--put your external stylesheet links here-->
 	<link rel="stylesheet" href="assets/css/style.css"/>
+	<link rel='stylesheet' href='assets/css/weather_panel.css'/>
 </head>
 
 <body>
@@ -23,12 +24,12 @@
 		<div id='nav'>
 
 			<ul class='list-group' id='nav-list-group'>
-				<li class='list-group-item nav-item' data-panel='intro' data-toggle="tooltip" title="Overview">
+				<li class='list-group-item nav-item active' id='nav-item-intro' data-panel='intro' data-toggle="tooltip" title="Overview">
 					
 					<img src="assets/img/Icon_captain.png" class='img-responsive li-img' alt="ship logo" />
 
 				</li>
-				<li class='list-group-item nav-item active' data-panel='map'>
+				<li class='list-group-item nav-item ' data-panel='map'>
 	
 					<img src="assets/img/Icon_map.png" class='img-responsive li-img' alt="ship logo" />
 
@@ -74,22 +75,23 @@
 					</div>
 					<div id='pressureHolder' class='weather-holder row'>
 						<h5 id='pressure' class='weather-header'>Pressure: </h5>
-						<h5 id='pressureReading' class='weather-data '><span id='pressureText' class='weather-num'>--</span><br /> mmHg</h5>
+						<h5 id='pressureReading' class='weather-data '><span id='pressureText' class='weather-num'>--</span> mmHg</h5>
 					</div>
 					<div id='commonHolder' class='weather-holder row'>
 						<h5 id='common' class='weather-header'>W<sub>X</sub>: </h5>
-						<h6 id='commonReading' class='weather-data '><span id='commonText' class='weather-num'>--</span> <br /><span id='numCommon' class='text-muted'></span></h6>
+						<h6 id='commonReading' class='weather-data '><span id='commonText' class='weather-num'>--</span>
+							<span id='numCommon' class='text-muted'></span></h6>
 					</div>
 					
 				</div>
 				<div id='wind-summary' class='col-xs-6'>
 					<div id='wsHolder' class='wind-holder row'>
-						<h5 id='ws' class='weather-header col-xs-3 col-xs-offset-1'>Mean Wind Speed: </h5>
-						<h5 id='wsReading' class='weather-data col-xs-8'><span id='wsText' class='weather-num'>--</span> <br />m/s</h5>
+						<h5 id='ws' class='weather-header'>Mean Wind Speed: </h5>
+						<h5 id='wsReading' class='weather-data'><span id='wsText' class='weather-num'>--</span> m/s</h5>
 					</div>
 					<div id='wdHolder' class='wind-holder row'>
-						<h5 id='wd' class='weather-header col-xs-3 col-xs-offset-1' >Mean Wind Direction: </h5>
-						<h5 id='wdReading' class='weather-data col-xs-8'><span id='wdText' class='weather-num'>--</span> &deg;</h5>
+						<h5 id='wd' class='weather-header' >Mean Wind Direction: </h5>
+						<h5 id='wdReading' class='weather-data'><span id='wdText' class='weather-num'>--</span> &deg;</h5>
 					</div>
 						
 				</div>

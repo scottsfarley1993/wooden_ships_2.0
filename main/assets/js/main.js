@@ -1,8 +1,7 @@
 ///this is Wooden Ships Main Javascript File
 //All functions are here
 
-//show the panel on start
-$("#intro-panel").show(); //splash screen
+$("#intro-panel").show(); //splash screen on start
 
 var attrArray = ["countries_1715", "countries_1783", "countries_1815"];
 
@@ -72,6 +71,7 @@ var zoom = d3.behavior.zoom()
     .scaleExtent([1, 21])
     .on("zoom", zoomed);
     
+
 String.prototype.toProperCase = function () {
     return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
@@ -312,7 +312,11 @@ function setMap(){
 		         
 		     globals.map.mapContainer.call(zoom).call(zoom.event)
 		         
-		  	changeProjection("Orthographic"); //default       
+		  	changeProjection("Orthographic"); //default     
+		  	
+		  	//show the panel on start
+		enterIsolationMode();//so you can click off the splash screen on start  
+  
 		}; //end of callback
 };//end of set map
 
@@ -1322,6 +1326,8 @@ function exitIsolationMode(){
 	$("#feed").empty();
 	$("#feed-window").addClass('display-none')
 	$("#feed-controls").addClass('display-none')
+	$("#intro-panel").addClass('display-none')
+	$("#intro-panel").hide()
 	$('.control-panel').hide();	
 	
 }
