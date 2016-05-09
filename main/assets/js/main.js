@@ -317,8 +317,8 @@ function setMap(){
 		  	
 		  	//show the panel on start
 		enterIsolationMode();//so you can click off the splash screen on start  
-		$(".nav-item").removeClass("active")
-		$("#nav-item-intro").addClass('active')
+		// $(".nav-item").removeClass("active")
+		// $("#nav-item-intro").addClass('active')
 		
   
 		}; //end of callback
@@ -435,6 +435,7 @@ function getShipData(filename, callback){
 			d.latitude = +d.latitude;
 			d.longitude = +d.longitude;
 			d.date = new Date(d.date)
+			d.windDir = binWindDirection(d.winddirection)
 		})
 		globals.data.ships = data //so we can revert later
 		globals.data.filteredShips = data //keep track of the most recent filtered data
@@ -1123,7 +1124,7 @@ function displayMemos(memoSet){
 	                .duration(200)		
 	                .style("opacity", .9);		
 	            globals.memoTooltip.html(html)	
-	                .style("left", "400px")		
+	                .style("left", "360px")		
 	                .style("top", divPos + "px");	
             })					
         .on("mouseout", function(d) {	
@@ -1323,8 +1324,8 @@ function enterIsolationMode(){
 	globals.isolationMode = true
 	$("#feed-window").removeClass('display-none')
 	$("#feed-controls").removeClass('display-none')
-	$(".nav-item").removeClass("active")
-	$("#nav-item-map").addClass('active')
+	// $(".nav-item").removeClass("active")
+	// $("#nav-item-map").addClass('active')
 }
 function exitIsolationMode(){
 	d3.selectAll(".overlay")
@@ -1887,15 +1888,16 @@ function updateTimeline(min, max){
 
 	$("#timeline").empty();
 
-	var height = $("#timeline").height();
-	var width = $("#timeline").width();
-
 	var margins = {top: 25, left: 25, right: 25, bottom: 25}
+	var height = $("#timeline").height() ;
+	var width = $("#timeline").width()- margins.left - margins.right;
+
+	
 
     //create a second svg element to hold the bar chart
     var timescale = d3.select("#timeline")
         .append("svg")
-        .attr("width", width )
+        .attr("width", width + margins.left + margins.right)
         .attr("height", height)
         .attr("class", "timescale").append('g')
          .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
@@ -1906,7 +1908,7 @@ function updateTimeline(min, max){
             
     var xScale = d3.time.scale()
         .domain([mindate, maxdate])   // date values
-		.range([margins.left, (width-margins.right)]);   // map these the the chart width = total width minus padding at both sides
+		.range([0, width]);   // map these the the chart width = total width minus padding at both sides
         
     // define the y axis
     var xAxis = d3.svg.axis()
@@ -2253,4 +2255,32 @@ $(".select-item").hover(function(){
 }, function(){
 	$(this).toggleClass('nav-hovered')
 })
+
+function filterWindDirection(dataArray, wdArray){
+	o = []
+	for (var i=0; i<wdArray.length; i++){
+		dir = wdArray[i];
+		thisDirArray = _.where(dataArray, {windDir:dir})
+		o.concat(thisDirArray)
+	}
+	console.log(o.length)
+	return o
+}
+
+$(".wd-select").click(function(){
+	wdArray = []
+	els = $(".wd-select")
+	for (var i =0; i< els.length; i++){
+		el = els[i]
+		$el = $(el)
+		if ($el.hasClass("active")){
+			dir = $el.data('dir')
+			wdArray.push(dir)
+		}
+		filterWindDirection(globals.data.filteredShips, wdArray);
+		switchAttribute(globals.attr)
+	}
+	$(this).toggleClass("active")
+})
+
 

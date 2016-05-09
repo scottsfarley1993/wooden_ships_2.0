@@ -83,7 +83,7 @@ html, body{
 	font-family: 'Shadows Into Light', cursive !important;
 }
 .log{
-	width: 250px!important;
+	width: 300px!important;
 	cursor:default;
 }
 .captain-thumb{
@@ -233,7 +233,7 @@ div.tooltip {
 }
 
 #intro-panel{
-	height: 85%;
+	height: 90%;
 	position: absolute;
 	width: 60%;
 	background-color: white;
@@ -241,6 +241,7 @@ div.tooltip {
 	top: 0px;
 	left: 70px;
 	display: none;
+	padding: 50px;
 }
 .control-panel{
 	height: 90%;
@@ -326,10 +327,10 @@ div.tooltip {
 
 #reproject-holder{
 	position: absolute;
-	right: 300px;
-	top: 0px;
+	right: 0px;
+	top: 50%;
 	z-index: 10000;
-	background-color: white;
+	background-color: rgba(255, 255, 255, 0.75);
 	width:100px;
 	padding:10px;
 	margin: 0px;
