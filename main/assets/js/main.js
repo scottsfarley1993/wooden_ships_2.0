@@ -289,7 +289,7 @@ function setMap(){
 		      //create the hexbin layout
 		      globals.map.hexbin = d3.hexbin()
 		    	.size([globals.map.dimensions.width, globals.map.dimensions.height])
-		    	.radius(1.75)
+		    	.radius(1.5)
 		    	.x(function(d){
 		    		return d.projected[0]
 		    	})
