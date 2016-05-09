@@ -36,7 +36,7 @@ globals.mamoType = "All"
 globals.data = {};
 globals.data.filteredShips = []; //keep track of the currently applied filter
 
-globals.map.hexRadius = 5;
+globals.map.hexRadius = 3;
 
 scale0 = (globals.map.dimensions.width - 1) / 2 / Math.PI;
 
@@ -289,7 +289,7 @@ function setMap(){
 		      //create the hexbin layout
 		      globals.map.hexbin = d3.hexbin()
 		    	.size([globals.map.dimensions.width, globals.map.dimensions.height])
-		    	.radius(2.5)
+		    	.radius(1.75)
 		    	.x(function(d){
 		    		return d.projected[0]
 		    	})
@@ -358,7 +358,7 @@ function changeProjection(projection){
     if (projection == "Azimuthal") {
     	//set params
 		var projection = d3.geo.robinson()
-		    .scale(150)
+		    .scale(250)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
 	
@@ -372,7 +372,7 @@ function changeProjection(projection){
     else if (projection == "Cylindrical"){
     	//set params
     	var projection = d3.geo.cylindricalEqualArea()
-		    .scale(200)
+		    .scale(265)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
 		//disable drag
