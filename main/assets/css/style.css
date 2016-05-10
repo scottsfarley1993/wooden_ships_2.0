@@ -381,12 +381,11 @@ div.tooltip {
 
 #arrow1{
 	height:10%;
-	width:10%;
+	width:20%;
 	z-index: 9999999999999;
-	padding-top: 2%;
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 15px;
+	left: 20px;
 	background-color: g;
 }
 
@@ -394,10 +393,9 @@ div.tooltip {
 	height:10%;
 	width:20%;
 	z-index: 9999999999999;
-	padding-top: 14%;
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 50px;
+	left: 20px;
 	background-color: g;
 }
 
@@ -405,10 +403,9 @@ div.tooltip {
 	height:10%;
 	width:20%;
 	z-index: 9999999999999;
-	padding-top: 24%;
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 80px;
+	left: 20px;
 	background-color: g;
 }
 
@@ -416,10 +413,9 @@ div.tooltip {
 	height:10%;
 	width:20%;
 	z-index: 9999999999999;
-	padding-top: 34%;
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 120px;
+	left: 20px;
 	background-color: g;
 }
 
@@ -427,46 +423,40 @@ div.tooltip {
 	height:10%;
 	width:20%;
 	z-index: 9999999999999;
-	padding-top: 44%;
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 150px;
+	left: 20px;
 	background-color: g;
 }
 
 #arrow6{
 	height:10%;
-	width:20%;
+	width:50%;
 	z-index: 9999999999999;
-	padding-top: 4%;
-	padding-left: 85%;
 	position: absolute;
+	align: right;
 	top: 0;
-	left: 0;
+	left: 20px;
 	background-color: g;
 }
 
 #arrow7{
 	height:10%;
-	width:20%;
+	width:50%;
 	z-index: 9999999999999;
-	padding-top: 60%;
-	padding-left: 85%;
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: 20px;
 	background-color: g;
 }
 
 #arrow8{
 	height:10%;
-	width:20%;
+	width:50%;
 	z-index: 9999999999999;
-	padding-top: 80%;
-	padding-left: 40%;
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: 20px;
 	background-color: g;
 }
 
