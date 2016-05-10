@@ -521,7 +521,7 @@ function displayShipDataHexes(datasetArray){
       	}
       })
       
-      styleHexbins(globals.data.filteredShips, globals.attr) //color the bins by attribute
+      styleHexbins(datasetArray, globals.attr) //color the bins by attribute
       enterIsolationMode();
       //set the stack order
       d3.selectAll("graticule")
@@ -963,7 +963,11 @@ function changeCountry(countryName){
 function refreshHexes(){
 	console.log("Loaded ship data.")
 	removeHexes()
-	displayShipDataHexes(globals.data.ships)
+	displayShips = _.filter(globals.data.ships, function(d){
+		yr = d.date.getFullYear();
+		return ((yr >= 1775) && (yr <= 1825))
+	})
+	displayShipDataHexes(displayShips)
 	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
@@ -2057,9 +2061,12 @@ $(".weather-select").click(changeWeatherSelection)
 
 function createRect(){
 
-	startX = globals.timescale(new Date("1775-01-01"));
+	startX = globals.timescale(new Date(1775, 0, 1)) + 25;
 
-	endX = globals.timescale(new Date("1825-01-01"));
+	endX = globals.timescale(new Date(1825, 0, 1)) + 25;
+
+	console.log("RectStart: " + startX)
+	console.log("RectEnd: " + endX)
 
 	var width = endX - startX;
 	var height = 10;
@@ -2111,7 +2118,7 @@ function createRect(){
 
     var drag = d3.behavior.drag()
 	    //.origin(function(d) { return d; })
-	    .on("drag", dragMove).on('dragend', translateTime);
+	    .on("drag", dragMove).on('dragend', translateTime)
 
     rect
     	.call(drag);
@@ -2121,10 +2128,10 @@ function createRect(){
 	 	.append("line") 
 	 	.attr("x1", endX) 
 	 	.attr("x2", endX)	
-	 	.attr("y1", 40)
-	 	.attr("y2", 65)
+	 	.attr("y1", 55)
+	 	.attr("y2", 75)
 	 	.style('stroke', 'white')
-	 	.style('stroke-width', 5)
+	 	.style('stroke-width', 3)
 	 	.style('cursor', "ew-resize");
 
 
@@ -2168,10 +2175,10 @@ function createRect(){
 	 	.append("line") 
 	 	.attr("x1", startX) 
 	 	.attr("x2", startX)	
-	 	.attr("y1", 40)
-	 	.attr("y2", 65)
-	 	.style('stroke', 'red')
-	 	.style('stroke-width', 5)
+	 	.attr("y1", 55)
+	 	.attr("y2", 75)
+	 	.style('stroke', 'white')
+	 	.style('stroke-width', 3)
 	 	.style('cursor', "ew-resize");
 
 
