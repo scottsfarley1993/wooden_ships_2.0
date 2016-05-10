@@ -512,3 +512,12 @@ div.tooltip {
 	height: 400px;
 	overflow-y: auto!important;
 }
+
+#arrow_left{
+	height: 25px;
+	width: 25px;
+	z-index: 999999999999999;
+	position: absolute;
+	top: 20px;
+	left: 0px;
+}
