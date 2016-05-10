@@ -251,7 +251,7 @@ function setMap(){
 	    
 	    //default
 	    var projection = d3.geo.robinson()
-		    .scale(150)
+		    .scale(globals.map.dimensions.width)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
 		   var path = d3.geo.path()
@@ -359,7 +359,7 @@ function changeProjection(projection){
     if (projection == "Azimuthal") {
     	//set params
 		var projection = d3.geo.robinson()
-		    .scale(250)
+		    .scale(globals.map.dimensions.width)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
 		globals.map.mapContainer.call(d3.behavior.drag() //disable dragging/projection rotation
@@ -376,7 +376,7 @@ function changeProjection(projection){
     else if (projection == "Cylindrical"){
     	//set params
     	var projection = d3.geo.cylindricalEqualArea()
-		    .scale(265)
+		    .scale(globals.map.dimensions.width)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
 		//disable drag
@@ -2215,6 +2215,7 @@ function filterWindDirection(dataArray, wdArray){
 }
 
 $(".wd-select").click(function(){
+	$(this).toggleClass("active")
 	wdArray = []
 	els = $(".wd-select")
 	for (var i =0; i< els.length; i++){
@@ -2225,15 +2226,13 @@ $(".wd-select").click(function(){
 			wdArray.push(dir)
 		}		
 	}
+	alert(wdArray.length)
 	displayShips = filterWindDirection(globals.data.filteredShips, wdArray);
-	$(this).toggleClass("active")
 	d3.selectAll(".hexagon").remove()
 	displayShipDataHexes(displayShips)
 })
 
 function filterWindSpd(dataArray, spdArray){
-	s = []
-	
 	s = _.filter(dataArray, function(d){
 		if (spdArray.indexOf(d.windSpd) > -1){
 			return true;
