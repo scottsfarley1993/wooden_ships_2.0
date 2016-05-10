@@ -130,8 +130,7 @@ html, body{
 }
 div.tooltip {	
 	text-align: left;
-    position: absolute;									
-    height: 250px;					
+    position: absolute;														
     padding: 2px;				
     font: 12px sans-serif;		
     background: white;	

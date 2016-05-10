@@ -139,19 +139,16 @@ function onDrag(evt){
 			//eastern hemisphere
 			bnd1 = lonRot - ang
 			bnd2 = lonRot + ang
-			// console.log(bnd2)
 			if (bnd2 > 180){
 				bnd2 = -1 * (bnd2 - 180)
 			}
 		}else{
 			bnd1 = lonRot - ang
 			bnd2 = lonRot + ang
-			// console.log(bnd2)
 			if (bnd1 > 180){
 				bnd1 = -1 * (bnd1 - 180)
 			}
 		}
-		console.log([bnd1, bnd2])
 		lonBounds = [bnd1, bnd2]
 		
 		
@@ -216,7 +213,6 @@ function drawInBounds(latBounds, lonBounds, ships){
 
 function resetGlobe(){
 	//resets the globe to 0,0
-	console.log("Reset globe")
 	globals.map.projection = globals.map.projection.rotate([0, 0, 0]) //reset the projection
 	
 	//redraw the land
@@ -350,8 +346,6 @@ function createColorScheme (maxDomain, colors){
 	    .domain([0, maxDomain])
 	    .range(colors)
 	    .interpolate(d3.interpolateLab);
-	console.log(color.domain())
-	console.log(color.range())
 	return color;
 
 };
@@ -376,7 +370,6 @@ function changeProjection(projection){
 		resetZoom(); //fix any previous zooming
 		
 		var g = d3.select('g.features');
-		console.log(g)
 		var path = d3.geo.path()
 			.projection(projection);
     }
@@ -474,7 +467,6 @@ function getShipData(filename, callback){
 			d.windSpd = binWindSpeed(d.windSpeed)
 			
 		})
-		console.log(data.winddirection);
 		globals.data.ships = data //so we can revert later
 		globals.data.filteredShips = data //keep track of the most recent filtered data
 		if (callback){
@@ -520,7 +512,6 @@ function displayShipDataHexes(datasetArray){
       		enterIsolationMode()
       		_this.classed('isolated', true)
       		these_memos = filterToHexBin(globals.filteredMemos, d)
-      		console.log(these_memos.length)
       		displayMemos(these_memos)
       	}
       })
@@ -791,9 +782,6 @@ function displayPorts(portData){
 		})
 		.style('fill', 'gray')
 		.style('stroke', 'none')
-		.on('click', function(d){
-			console.log(d)
-		})
 		
 	globals.ports
 		.append('g')
@@ -858,7 +846,6 @@ function refreshStackOrder(){
 	d3.selectAll(".hexagon").moveToFront()
 	globals.land.moveToFront()
 	globals.ports.moveToFront()
-	console.log("stack order complete")
 }
 
 function switchAttribute(attr){
@@ -873,7 +860,6 @@ function removeHexes(){
 
 function changeHexSize(radius){
 	//remove all previous hexes
-	console.log("changed hex size")
 	removeHexes();
 	globals.map.hexbin.radius(radius);
 	displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
@@ -965,14 +951,12 @@ function changeCountry(countryName){
 }
 
 function refreshHexes(){
-	console.log("Loaded ship data.")
 	removeHexes()
 	displayShips = _.filter(globals.data.ships, function(d){
 		yr = d.date.getFullYear();
 		return ((yr >= 1775) && (yr <= 1825))
 	})
 	displayShipDataHexes(displayShips)
-	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
 	$("#loading").slideUp();
@@ -989,31 +973,26 @@ function loadShipLookup(){
 ///memo filtering functions
 function filterToEncounters(memoSet){
 	o = _.where(memoSet, {label: "Encounter"})
-	console.log("Found: " + o.length + " encounters.")
 	return o
 }
 
 function filterToLifeOnBoard(memoSet){
 	o = _.where(memoSet, {label: "LifeOnBoard"})
-	console.log("Found: " + o.length + " LOB Entries.")
 	return o
 }
 
 function filterToWeatherReports(memoSet){
 	//returns an array of memos with only those reporting daily weather reports
 	o = _.where(memoSet, {label: "weatherReport"})
-	console.log("Found: " + o.length + " weather memos.")
 	return o
 }
 
 function filterToTravel(memoSet){
 	o = _.where(memoSet, {label: "travelReport"})
-	console.log("Found: " + o.length + " travel memos.")
 	return o
 }
 function filterToConflict(memoSet){
 	o = _.where(memoSet, {label: "Conflict"})
-	console.log("Found: " + o.length + " conflict memos.")
 	return o
 }
 function filterToLocationID(memoSet, locationID){
@@ -1138,11 +1117,8 @@ function displayMemos(memoSet){
 
 				return html;
 			}).on("mouseover", function(d) {
-				console.log(d)
 				//make the html
 				html = "<div class='row'>"
-				// html += "<div class='hover-img-holder col-xs-4'>"
-				// html += "<img class='hover-thumb img-rounded img-responsive hover-img col-xs-12' src='" + d.imgSrc + "'>"
 				html += "</div><div class='col-xs-8 hover-details-holder'>"
 				html += "<h4>" + d.captainRank + " " + d.captainName + "</h4>"
 				html += "<i><b class='large'>" + d.shipName + "</b></i><br />"
@@ -1150,7 +1126,6 @@ function displayMemos(memoSet){
 				html += "<p class='strong'>Voyage Started: " + new Date(d.voyageStart).toLocaleDateString() + "</p>"
 				html += "<p class='strong'>Sailing From: " + d.fromPlace + "</p>"
 				html += "<p class='strong'>Sailing To: " + d.toPlace + "</p>"
-				//html += "<p class='strong'>Days at sea: " + d.voyageDaysSinceStart + "</p>"
 				html += "<p class='strong'>Sailing for: " + d.company + "</p>"
 				if (d.captainName2){
 					html += "<p>Second Observer: " + d.captainRank2 + " " + d.captainName2 + "</p>"
@@ -1162,7 +1137,6 @@ function displayMemos(memoSet){
 				//positioning
 				pos = $(this).position();
 				divPos = pos.top;
-				console.log(divPos)
 				
 				d3.select(this).style('background-color','#cccccc')	 //highlight
 					
@@ -1659,12 +1633,10 @@ function changeMemoSet(){
 		el = d3.select(logs[i])[0][0]
 		d = el.__data__
 		lab = d.label
-		console.log(lab)
 		el = d3.select(el)
 		//set to invisible
 		if (globals.memoType.indexOf(lab) == -1){
 			el.style('display', 'none')
-			console.log("setting to zero")
 		}else{
 			el.style('display', 'block')
 		}
@@ -1844,18 +1816,14 @@ function filterToDate(date){
 }
 
 function filterToYear(year){
-	console.log(year)
 	o = _.filter(globals.data.ships, function(d){
 		return (year == d.date.getFullYear())
 	})
-	console.log(o)
 	return o
 }
 
 function filterToMonthOfYear(month, year){
 	month = month - 1;
-	console.log(month)
-	console.log(year)
 	o  = _.filter(globals.data.ships, function(d){
 		return ((month == +d.date.getMonth()) && (year == +d.date.getFullYear()))
 	})
@@ -1868,20 +1836,17 @@ function sequenceByDay(date){
 	//this function sequences through the map, giving a day by day view of the events as they unfold
 	removeHexes()
 	globals.data.filteredShips = filterToDate(date);
-	console.log(globals.data.filteredShips.length)
 	displayShipDataHexes(globals.data.filteredShips)
 }
 
 function sequenceByYear(year){
 	removeHexes()
 	globals.data.filteredShips = filterToYear(year)
-	console.log(globals.data.filteredShips.length)
 	displayShipDataHexes(globals.data.filteredShips)
 }
 function sequenceByMonthOfYear(month, year){
 	removeHexes()
 	globals.data.filteredShips = filterToMonthOfYear(month, year)
-	console.log(globals.data.filteredShips.length)
 	displayShipDataHexes(globals.data.filteredShips)
 }
 
@@ -1947,74 +1912,11 @@ function updateTimeline(min, max){
 
 };
 
-// $(function() {
-//     $( "#time-range" ).slider({
-//       range: true,
-//       min: 1750,
-//       max: 1850,
-//       values: [ 1750, 1850 ],
-//       stop: function( event, ui ) {
-//       	console.log(ui.values[0])
-//       	console.log(ui.values[1])
-//       	minDate = new Date(ui.values[0], 0, 1)
-//       	maxDate = new Date(ui.values[1], 0, 1)
-//       	console.log(minDate)
-//       	console.log(maxDate)
-//         removeHexes()
-//         globals.data.filteredShips = filterDate(minDate, maxDate, globals.data.ships);
-//         displayShipDataHexes(globals.data.filteredShips);
-//         updateTimeline(minDate, maxDate)
-//       }
-//     });
-// });
-
-// function click(){
-//   // Ignore the click event if it was suppressed
-//   if (d3.event.defaultPrevented) return;
-
-//   // Extract the click location\    
-//   var point = d3.mouse(this)
-//   , p = {x: point[0], y: point[1] };
-
-//   // Append a new point
-//   svg.append("circle")
-//       .attr("transform", "translate(" + p.x + "," + p.y + ")")
-//       .attr("r", "5")
-//       .attr("class", "dot")
-//       .style("cursor", "pointer")
-//       .call(drag);
-// }
-
-// // Create the SVG
-// var svg = d3.select("body").append("svg")
-//   .attr("width", 700)
-//   .attr("height", 400)
-//   .on("click", click);
-
-// // Add a background
-// svg.append("rect")
-//   .attr("width", 700)
-//   .attr("height", 400)
-//   .style("stroke", "#999999")
-//   .style("fill", "#F6F6F6")
-
-// // Define drag beavior
-// var drag = d3.behavior.drag()
-//     .on("drag", dragmove);
-
-// function dragmove(d) {
-//   var x = d3.event.x;
-//   var y = d3.event.y;
-//   d3.select(this).attr("transform", "translate(" + x + "," + y + ")");
-// }
-
-
 
 function changeCountrySelection(){
 	//changes the country based on widget selection.  Delegates to chagne country function and changes the flag icon in the gui.  Also adjusts nav items to give a 'fresh' UI
 	v = $(this)
 	CountrySelection = v.text()
-	console.log(CountrySelection)
 	if (CountrySelection == "British"){	
 		$("#nat-flag-img").attr('src', "assets/img/Icon_BritishFlag.png")	
 		changeCountry("British")	
@@ -2063,11 +1965,9 @@ function changeWeatherSelection(){
 		switchAttribute("hail")
 	}else if (weatherSelection == "Fog"){
 		globals.data.filteredShips = filterByFog(globals.data.ships)
-		console.log(globals.data.filteredShips)
 		switchAttribute("fog")
 	}else if (weatherSelection == "Gusty winds"){
 		globals.data.filteredShips = filterByGusts(globals.data.ships)
-		console.log(globals.data.filteredShips)
 		switchAttribute("gusts")
 	}else if (weatherSelection == "All Weather Types"){
 		globals.data.filteredShips = globals.data.ships
@@ -2090,9 +1990,6 @@ function createRect(){
 	startX = globals.timescale(new Date(1775, 0, 1)) + 25;
 
 	endX = globals.timescale(new Date(1825, 0, 1)) + 25;
-
-	console.log("RectStart: " + startX)
-	console.log("RectEnd: " + endX)
 
 	var width = endX - startX;
 	var height = 10;
@@ -2125,8 +2022,6 @@ function createRect(){
 		}
 
 		if (rectEnd >= globals.timelineEnd){
-
-			console.log("Rect end reached")
 			return
 		}
 		rect.attr("x", secondPos)
@@ -2210,7 +2105,6 @@ function createRect(){
 
 	 function moveLine2(){
 	// move left line
-	console.log("Moving left line")
 		firstPos = +leftLine.attr("x1")
 
 		change = +d3.event.dx
@@ -2220,8 +2114,6 @@ function createRect(){
 		originalWidth = +rect.attr("width")
 
 		newWidth = originalWidth - change
-		console.log(newWidth)
-
 		
 
 		if (newWidth <= 1){
@@ -2355,7 +2247,6 @@ function filterWindSpd(dataArray, spdArray){
 
 $("#help-icon").click(function(){
 	var clicked = $("#help-icon").data('clicked')
-	console.log(clicked)
 	if (clicked){
 	// hide
 
@@ -2393,7 +2284,6 @@ function filterAirTemp(data) {
 $(".ws-select").click(function(){
 	$(this).toggleClass("active")
 	spdArray = []
-	console.log(spdArray)
 	els = $(".ws-select")
 	for (var i =0; i< els.length; i++){
 		el = els[i]
