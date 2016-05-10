@@ -222,12 +222,13 @@
 				<h3 class="title">Captain's Logbook</h3>
 
 
-				<div class='' id='memoSelectControls'>
-					<label>Weather Reports</label><input type='checkbox' value='weatherReport' class='memoSelect' checked> <br />
-					<label>Travel Reports</label><input type='checkbox' value='travelReport' class='memoSelect' checked><br />
-					<label>Conflict</label><input type='checkbox' value='Conflict' class='memoSelect' checked><br />
-					<label>Life on Board</label><input type='checkbox' value='LifeOnBoard' class='memoSelect' checked><br />
-					<label>Encounters</label><input type='checkbox' value='Encounter' class='memoSelect' checked><br />
+				<ul class='control-list list-group' id='weather-select-list'>
+				<li id='weather-reports-select active'  class='memo' checked>Weather Reports</li>
+				<li id='travel-reports-select' class='weather-select list-group-item select-item' checked>Travel Reports</li>
+				<li id='conflict-reports-select' class='weather-select list-group-item select-item' checked>Conflict</li>
+				<li id='life-reports-select' class='weather-select list-group-item select-item' checked>Life on Board</li>
+				<li id='encounter-reports-select' class='weather-select list-group-item select-item' checked>Encounters</li>
+			</ul>
 				</div>
 				<ul class='list-group row' id='feed' >
 					<li class='log list-group-item'>Select a hexagon to see the captain's logs for that place.</li>
