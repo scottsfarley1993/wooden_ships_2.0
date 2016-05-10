@@ -2193,6 +2193,9 @@ function createRect(){
 		displayShipDataHexes(displayShips)
 
 }
+globals.rect = rect;
+globals.leftLine = leftLine;
+globals.rightLine =  rightLine;
 
 } //end create rect or slider
 
@@ -2328,6 +2331,19 @@ function resetFilters(){
 	
 	globals.filterStartYear = 1775
 	globals.filterEndYear = 1825
+	
+	//reset the rect bar
+	
+	globals.leftLine.attr('x1', globals.timescale(new Date(1775, 0, 1)))
+	globals.leftLine.attr('x2', globals.timescale(new Date(1775, 0, 1)))
+	
+	
+	globals.rightLine.attr('x1', globals.timescale(new Date(1825, 0, 1)))
+	globals.rightLine.attr('x2', globals.timescale(new Date(1825, 0, 1)))
+	
+	width = globals.timescale(new Date(1825, 0, 1)) - globals.timescale(new Date(1775, 0, 1)) 
+	globals.rect.attr('x', globals.timescale(new Date(1775, 0, 1)))
+	globals.rect.attr('width', width)
 	
 	d3.selectAll(".hexagon").remove()
 	displayShipDataHexes(globals.data.filteredShips)
