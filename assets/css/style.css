@@ -457,7 +457,7 @@ div.tooltip {
 	width:25px;
 	z-index: 99999999999999999;
 	position: absolute;
-	top: 500px;
+	bottom: 50px;
 	left: 50px;
 	background-color: g;
 
