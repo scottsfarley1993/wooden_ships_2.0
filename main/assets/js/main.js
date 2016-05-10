@@ -5,6 +5,7 @@ $("#intro-panel").show(); //splash screen on start
 $("#help-info").hide(); //splash screen on start
 $("#help-text").hide(); //splash screen on start
 
+
 var attrArray = ["countries_1715", "countries_1783", "countries_1815"];
 
 var expressed = attrArray[0]
@@ -490,6 +491,7 @@ function displayShipDataHexes(datasetArray){
       })
       
       styleHexbins(globals.data.filteredShips, globals.attr) //color the bins by attribute
+      enterIsolationMode();
       //set the stack order
       globals.land.moveToFront();
       d3.selectAll(".port").moveToFront();
