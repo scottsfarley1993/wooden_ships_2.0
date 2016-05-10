@@ -8,7 +8,8 @@ p {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    	font-weight: 300;
    	color: gray;
-    padding-left: 3%;
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
 .land {
@@ -297,7 +298,8 @@ div.tooltip {
 }
 
 #title{
-	padding-left: 25px;
+	padding-left: 20%;
+	padding-top: 0%;
 }
 
 #weather-panel{
@@ -368,4 +370,76 @@ div.tooltip {
 }
 .img-hover-holder{
 	width: 200%;
+}
+
+#arrow1{
+	height:10%;
+	width:20%;
+	z-index: 9999999999999;
+	padding-top: 4%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: g;
+}
+
+#arrow2{
+	height:10%;
+	width:20%;
+	z-index: 9999999999999;
+	padding-top: 14%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: g;
+}
+
+#arrow3{
+	height:10%;
+	width:20%;
+	z-index: 9999999999999;
+	padding-top: 24%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: g;
+}
+
+#arrow4{
+	height:10%;
+	width:20%;
+	z-index: 9999999999999;
+	padding-top: 34%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: g;
+}
+
+#arrow5{
+	height:10%;
+	width:20%;
+	z-index: 9999999999999;
+	padding-top: 44%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: g;
+}
+
+#arrow6{
+	height:10%;
+	width: 40%;
+	z-index: 9999999999999;
+	padding-top: 4%;
+	padding-left: 85%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: g;
+}
+
+#help_overview{
+	padding-left: 20px;
+
 }
