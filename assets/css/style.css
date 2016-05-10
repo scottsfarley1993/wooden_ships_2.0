@@ -232,9 +232,7 @@ div.tooltip {
 	width: 100px;
 	z-index:2932939239293923;
 }
-.nav-item{
-	height: 15%;
-}
+
 .nav-hovered{
 	background-color: #ccc;
 	cursor: pointer;
@@ -396,84 +394,68 @@ div.tooltip {
 }
 
 #arrow1{
-	height:10%;
-	width:20%;
-	z-index: 9999999999999;
-	position: absolute;
-	top: 15px;
-	left: 20px;
+	top: 20px;
+	left: 0px;
 	background-color: g;
+	vertical-align: middle;
 }
 
 #arrow2{
-	height:10%;
-	width:20%;
-	z-index: 9999999999999;
-	position: absolute;
-	top: 50px;
-	left: 20px;
+	top: 95px;
+	left: 0px;
 	background-color: g;
+	vertical-align: middle;
+
 }
 
 #arrow3{
-	height:10%;
-	width:20%;
-	z-index: 9999999999999;
-	position: absolute;
-	top: 80px;
-	left: 20px;
+	top: 170px;
+	left: 0px;
 	background-color: g;
+	vertical-align: middle;
+
 }
 
 #arrow4{
-	height:10%;
-	width:20%;
-	z-index: 9999999999999;
-	position: absolute;
-	top: 120px;
-	left: 20px;
+	top: 245px;
+	left: 0px;
 	background-color: g;
+	vertical-align: middle;
+
 }
 
 #arrow5{
-	height:10%;
-	width:20%;
-	z-index: 9999999999999;
-	position: absolute;
-	top: 150px;
-	left: 20px;
+	top: 320px;
+	left: 0px;
 	background-color: g;
+	vertical-align: middle;
+
 }
 
 #arrow6{
-	height:10%;
-	width:50%;
-	z-index: 9999999999999;
-	position: absolute;
-	align: right;
-	top: 0;
-	left: 20px;
+	top: 100px;
+	left: 80%;
 	background-color: g;
 }
 
 #arrow7{
-	height:10%;
-	width:50%;
-	z-index: 9999999999999;
-	position: absolute;
-	top: 0;
-	left: 20px;
+	top: 350px;
+	left: 80%;
 	background-color: g;
 }
 
 #arrow8{
-	height:10%;
-	width:50%;
+	top: 500px;
+	left: 40%;
+	background-color: g;
+}
+
+.help-div{
+	height:75px;
+	width:150px;
 	z-index: 9999999999999;
 	position: absolute;
-	top: 0;
-	left: 20px;
-	background-color: g;
+	vertical-align: middle;
 }
 
 #help-icon{
@@ -481,7 +463,7 @@ div.tooltip {
 	width:25px;
 	z-index: 99999999999999999;
 	position: absolute;
-	top: 500px;
+	bottom: 50px;
 	left: 50px;
 	background-color: g;
 
@@ -518,4 +500,9 @@ div.tooltip {
 	top: 0px;
 	left: 0px;
 	background-color: #020E1C;
+}
+
+#help-text{
+	height: 400px;
+	overflow-y: auto!important;
 }
