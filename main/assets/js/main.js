@@ -872,7 +872,7 @@ function changeHexSize(radius){
 	console.log("changed hex size")
 	removeHexes();
 	globals.map.hexbin.radius(radius);
-	displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
+	//displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
 }
 
 
@@ -963,7 +963,7 @@ function changeCountry(countryName){
 function refreshHexes(){
 	console.log("Loaded ship data.")
 	removeHexes()
-	displayShipDataHexes(globals.data.ships)
+	//displayShipDataHexes(globals.data.ships)
 	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
