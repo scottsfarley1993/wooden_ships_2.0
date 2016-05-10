@@ -25,34 +25,34 @@
 
 			<ul class='list-group' id='nav-list-group'>
 				<li class='list-group-item nav-item active' id='nav-item-intro' data-panel='intro' data-toggle="tooltip" title="Overview">
-					
 					<img src="assets/img/Icon_captain.png" class='img-responsive li-img' alt="ship logo" />
 
 				</li>
-				<!-- <li class='list-group-item nav-item ' id='nav-item-map' data-panel='map'>
+				<li class='list-group-item nav-item ' id='nav-item-map' data-panel='map' data-toggle="tooltip" title="Map">
+					
 	
 					<img src="assets/img/Icon_map.png" class='img-responsive li-img' alt="ship logo" />
 
-				</li> -->
+				</li>
 
-				<li class='list-group-item nav-item' data-panel='country'>
+				<li class='list-group-item nav-item' id='nav-item-country' data-panel='country' data-toggle="tooltip" title="Country">
 										
 					<img src="assets/img/Icon_BritishFlag.png" class='img-responsive li-img'  id='nat-flag-img' alt="ship logo" />
 
-				<li class='list-group-item nav-item' data-panel='weather'>
+				<li class='list-group-item nav-item' id='nav-item-weather' data-panel='weather' data-toggle="tooltip" title="Weather">
 										
 					<img src="assets/img/Icon_weather.png" class='img-responsive li-img' alt="ship logo" />
 
 				</li>
-				<li class='list-group-item nav-item' data-panel='wind'>
+				<li class='list-group-item nav-item' id='nav-item-wind' data-panel='wind' data-toggle="tooltip" title="Wind">
 
-					<img src="assets/img/Icon_windsails.png" class='img-responsive li-img' alt="ship logo" />
+					<img src="assets/img/Icon_wind.png" class='img-responsive li-img' alt="ship logo" />
 
 				</li>
 
-				<li class='list-group-item nav-item' data-panel='feed'>
+				<li class='list-group-item nav-item' id='nav-item-feed' data-panel='feed' data-toggle="tooltip" title="Feed">
 					
-					<img src="assets/img/Icon_pen.png" class='img-responsive li-img' class="nav-image" alt="ship logo" />
+					<img src="assets/img/Icon_logs.png" class='img-responsive li-img' class="nav-image" alt="ship logo" />
 
 				</li>
 
@@ -109,8 +109,8 @@
 			<option value='robinson'>Robinson</option>
 			<option value='globe'>Globe</option>
 		</select><br />
-		<button id='resetMap' class='btn btn-sm btn-primary reset-btn'>Reset View</button>
-		<button id='resetFilters' class='btn btn-sm btn-primary reset-btn'>Reset Filters</button>
+		<button id='resetMap' class='btn btn-sm btn-primary'>Reset View</button>
+		<button id='resetFilters' class='btn btn-sm btn-primary'>Reset Filters</button>
 	</div>
 	
 	<div id='intro-panel' class='nav-panel'>
@@ -207,11 +207,11 @@
 		<div id='wind-speed-select-holder'>
 			<label>Wind speed</label><br />
 			<ul class='list-group control-list' id='wind-speed-select-list'>
-				<li id='none-ws-select' class='ws-select list-group-item select-item active'>No Wind</li>
-				<li id='calm-ws-select' class='ws-select list-group-item select-item active'>Calm (1-5 m/s.)</li>
-				<li id='moderate-ws-select' class='ws-select list-group-item select-item active'>Moderate (5-15 m/s)</li>
-				<li id='high-ws-select' class='ws-select list-group-item select-item active'>High (15-25 m/s)</li>
-				<li id='hurricane-ws-select' class='ws-select list-group-item select-item active'>Hurricane (25+ m/s)</li>
+				<li id='none-ws-select' class='ws-select list-group-item select-item active' data-speed='No Wind'>No Wind</li>
+				<li id='calm-ws-select' class='ws-select list-group-item select-item active' data-speed='Calm'>Calm (1-5 m/s.)</li>
+				<li id='moderate-ws-select' class='ws-select list-group-item select-item active' data-speed='Moderate'>Moderate (5-15 m/s)</li>
+				<li id='high-ws-select' class='ws-select list-group-item select-item active' data-speed='High'>High (15-25 m/s)</li>
+				<li id='hurricane-ws-select' class='ws-select list-group-item select-item active' data-speed='Hurricane'>Hurricane (25+ m/s)</li>
 			</ul>
 		</div>
 		
@@ -239,9 +239,6 @@
 					<li class='log list-group-item'>Select a hexagon to see the captain's logs for that place.</li>
 				</ul>
 			</div>
-	</div>
-	<div id='loading'>
-		
 	</div>
 
 	<div id='timeline'> </div>

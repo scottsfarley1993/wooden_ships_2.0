@@ -236,6 +236,7 @@ function resetZoom(){
 	d3.selectAll(".port").attr("transform", "translate(0,0)scale(1)");
 	d3.selectAll(".overlay").attr("transform", "translate(0,0)scale(1)");
 	d3.selectAll(".water").attr("transform", "translate(0,0)scale(1)");
+	d3.selectAll(".graticule").attr("transform", "translate(0,0)scale(1)");
 }
 
 
@@ -337,6 +338,8 @@ function zoomed() {
 	d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	d3.selectAll(".water").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	d3.selectAll(".graticule").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+
 };
 	
 	
@@ -364,13 +367,17 @@ function changeProjection(projection){
 		    .scale(250)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
-	
 		globals.map.mapContainer.call(d3.behavior.drag() //disable dragging/projection rotation
 			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
 			  .on('drag', null));
 		zoom.on('zoom', zoomed)  //enable zoom
 		globals.map.mapContainer.call(zoom).call(zoom.event)
 		resetZoom(); //fix any previous zooming
+		
+		var g = d3.select('g.features');
+		console.log(g)
+		var path = d3.geo.path()
+			.projection(projection);
     }
     else if (projection == "Cylindrical"){
     	//set params
@@ -399,14 +406,24 @@ function changeProjection(projection){
 		zoom.on('zoom', null)
 		globals.map.mapContainer.call(zoom).call(zoom.event) //disable zoom
     }
+    
    var path = d3.geo.path()
     	.projection(projection);
    //make global
    globals.map.projection = projection;
    globals.map.path = path;
    //do the update
+   createGraticule(globals.map.path)
+     
    d3.selectAll(".land").transition().attr('d', path)
+  
+   // d3.selectAll(".grat-group").moveToFront();
+   // d3.selectAll(".land").moveToFront()
+   // d3.selectAll(".port").moveToFront()
    d3.selectAll(".water").transition().attr("d", path)
+   globals.land.moveToFront();
+  
+   
    	    d3.selectAll(".port-marker").transition()
 	    	.attr('cx', function(d){
 	    	return globals.map.projection([d.Longitude, d.Latitude])[0];
@@ -426,6 +443,20 @@ function changeProjection(projection){
    //update the hexagons
    changeHexSize(globals.map.hexRadius)
 };
+
+function createGraticule(path){
+	 d3.selectAll(".graticule").remove()  
+	var graticule = d3.geo.graticule();
+		
+		var gratLines = globals.map.features.append("g")
+			.attr('class', 'grat-group')
+			.selectAll(".graticule") //select graticule elements that will be created
+			.data(graticule.lines()) //bind graticule lines to each element to be created
+	  		.enter() //create an element for each datum
+			.append("path") //append each element to the svg as a path element
+				.attr("class", "graticule") //assign class for styling
+				.attr("d", path); //project graticule lines
+}
 
 function getShipData(filename, callback){
 	d3.csv(filename, function(data){
@@ -493,10 +524,10 @@ function displayShipDataHexes(datasetArray){
       styleHexbins(globals.data.filteredShips, globals.attr) //color the bins by attribute
       enterIsolationMode();
       //set the stack order
+      d3.selectAll("graticule")
       globals.land.moveToFront();
       d3.selectAll(".port").moveToFront();
       d3.selectAll(".loading").remove()
-      
       $("#country-panel").hide();
 }
 
@@ -841,7 +872,7 @@ function changeHexSize(radius){
 	console.log("changed hex size")
 	removeHexes();
 	globals.map.hexbin.radius(radius);
-	displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
+	//displayShipDataHexes(globals.data.filteredShips)//with the most recent filter applied
 }
 
 
@@ -932,7 +963,7 @@ function changeCountry(countryName){
 function refreshHexes(){
 	console.log("Loaded ship data.")
 	removeHexes()
-	displayShipDataHexes(globals.data.ships)
+	//displayShipDataHexes(globals.data.ships)
 	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
