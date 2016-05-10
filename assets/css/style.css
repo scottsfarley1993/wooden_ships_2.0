@@ -89,21 +89,20 @@ html, body{
 }
 .log-entry{
 	font-family: 'Shadows Into Light', cursive !important;
+	padding-left: 0px;
 }
 .log{
-	width: 280px!important;
+	width: 300px!important;
 	cursor: default;
 	padding-left: 15px;
-
 }
 .captain-thumb{
 	margin: 0px;
-	padding: 0px;
+	padding: 5px;
 }
 .captain-heading, .log-shipname, .log-date{
 	margin: 0px;
-	padding:0px;
-	
+	padding:0px;	
 }
 .log-header{
 	margin: 0px;
