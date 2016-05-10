@@ -2,6 +2,8 @@
 //All functions are here
 
 $("#intro-panel").show(); //splash screen on start
+$("#help-info").hide(); //splash screen on start
+$("#help-text").hide(); //splash screen on start
 
 var attrArray = ["countries_1715", "countries_1783", "countries_1815"];
 
@@ -932,6 +934,7 @@ function refreshHexes(){
 	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
+	$("#loading").slideUp();
 }
 
 function loadShipLookup(){
@@ -1078,13 +1081,12 @@ function displayMemos(memoSet){
 				}
 				
 
-				//img = lookupCaptainImage(captain);
-				img = ""
+				img = lookupCaptainImage(captain);
 				d.imgSrc = img
 				formatDate = moment.weekdays()[date.weekday()] + ", " + date.date() + nth(date.date()) + " " + moment.months()[date.month() - 1] + ", " + date.year()
 				//this is the feed entry
 				html = "<div class='row log-row basic-hovercard' id='log_" + d.locationID + "'>"
-				html += "<img src='" + img + "' class='captain-thumb col-xs-3'/>"
+				html += "<img src='" + img + "' class='captain-thumb col-xs-3 img-responsive'/>"
 				html += "<div class='col-xs-9 log-header' id='header_" + d.locationID + "'>"
 				html += "<h6 class='captain-heading' class='col-xs-12'>" + captainRank + " " + captain + "</h6>"
 				html += "<small class='log-shipname col-xs-12 text-muted'>" + shipName + "</small>"
@@ -1098,17 +1100,17 @@ function displayMemos(memoSet){
 				console.log(d)
 				//make the html
 				html = "<div class='row'>"
-				html += "<div class='col-xs-4'>"
-				html += "<img class='captain-thumb img-rounded hover-img col-xs-12' src='" + d.imgSrc + "'>"
-				html += "</div><div class='col-xs-8'>"
+				// html += "<div class='hover-img-holder col-xs-4'>"
+				// html += "<img class='hover-thumb img-rounded img-responsive hover-img col-xs-12' src='" + d.imgSrc + "'>"
+				html += "</div><div class='col-xs-8 hover-details-holder'>"
 				html += "<h4>" + d.captainRank + " " + d.captainName + "</h4>"
 				html += "<i><b class='large'>" + d.shipName + "</b></i><br />"
 				html += "<i>" + d.shipType + "</i>"
-				html += "<p>Voyage Started: " + d.voyageStart + "</p>"
-				html += "<p>Sailing From: " + d.fromPlace + "</p>"
-				html += "<p>Sailing To: " + d.toPlace + "</p>"
-				html += "<p>Days at sea: " + d.voyageDaysSinceStart + "</p>"
-				html += "<p>Sailing for: " + d.company + "</p>"
+				html += "<p class='strong'>Voyage Started: " + new Date(d.voyageStart).toLocaleDateString() + "</p>"
+				html += "<p class='strong'>Sailing From: " + d.fromPlace + "</p>"
+				html += "<p class='strong'>Sailing To: " + d.toPlace + "</p>"
+				//html += "<p class='strong'>Days at sea: " + d.voyageDaysSinceStart + "</p>"
+				html += "<p class='strong'>Sailing for: " + d.company + "</p>"
 				if (d.captainName2){
 					html += "<p>Second Observer: " + d.captainRank2 + " " + d.captainName2 + "</p>"
 				}
@@ -1215,7 +1217,13 @@ function lookupCaptainImage(captainName){
 	//lookup the image for this captain from the lookup file
 	o = _.findWhere(globals.data.captain_metadata, {captainName: captainName});
 	if (o){
-		return o.Image;
+		if (o.Image != ""){
+			return o.Image;
+		}else{
+			return "assets/img/default.jpg"
+		}
+		
+		
 	}else{
 		return "assets/img/default.jpg"
 	}
@@ -1342,6 +1350,7 @@ function exitIsolationMode(){
 	$("#intro-panel").addClass('display-none')
 	$("#intro-panel").hide()
 	$('.control-panel').hide();	
+	$(".nav-item").removeClass("active")
 	
 }
 
@@ -1521,7 +1530,7 @@ function displayWindSpeed(hexbin){
 				.attr('y1', (globals.wind_diagram.dimensions.height / 2))
 				.attr('y2', (globals.wind_diagram.dimensions.height / 2) + globals.wind_diagram.scale(speed))
 				.style('stroke', 'steelblue')
-				.style("stroke-opacity", 0.5)
+				.style("stroke-opacity", 0.88)
 				.style('stroke-width', 0.5)
 				.attr('transform', 'rotate(' +  (180 + dir) + ' ' + x1 + "," + y1 + ')')
 		}
@@ -2184,11 +2193,9 @@ function createRect(){
 
 		//if else checks
 		if (secondPos <= 25){
-			alert ("return")
 			return
 		}
 		else if (secondPos >= rightLine.attr("x1" )){
-			alert ("return")
 			return
 		}
 		// else if (leftLine.attr("x1" ) >= +rect.attr("x" )){
@@ -2328,5 +2335,36 @@ $(".wd-select").click(function(){
 	}
 	$(this).toggleClass("active")
 })
+
+$("#help-icon").click(function(){
+	var clicked = $("#help-icon").data('clicked')
+	console.log(clicked)
+	if (clicked){
+	// hide
+
+		$("#help-icon").data('clicked', false);
+		$("#help-info").hide();
+		$("#help-text").slideUp();
+
+		$("#intro-text").show();
+
+	}
+
+	else {
+	// show
+
+		$("#help-icon").data('clicked', true)
+		$("#help-info").show();
+		$("#help-text").slideDown();
+
+		$("#intro-text").hide();
+
+
+
+	}
+
+	}
+); 
+
 
 
