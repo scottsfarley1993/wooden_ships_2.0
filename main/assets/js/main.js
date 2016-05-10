@@ -2379,6 +2379,13 @@ $("#help-icon").click(function(){
 	}
 ); 
 
+function filterAirTemp(data) {
+	f = _.filter(data, function(element){
+			return (element.airTemp > -1);	 	
+		})		
+		return f;
+}
+
 
 
 
