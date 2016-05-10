@@ -12,7 +12,7 @@ p {
 }
 
 .land {
-	fill: black;
+	fill: #000e15;
  	stroke: #a5967e;
  	border-style: double;
     stroke-width: 0px;
@@ -24,7 +24,7 @@ p {
 }
 
 #map{
-	background-color: white;
+	background-color: black;
 	width: calc(100% - 100px);
 	position: absolute;
 	top: 0px;
@@ -354,7 +354,4 @@ div.tooltip {
 }
 .select-item{
 	width: 250px;
-}
-.reset-btn{
-	width: 125%!important;;
 }

@@ -1924,7 +1924,7 @@ function updateTimeline(min, max){
         .attr("transform", "translate(0," + (height/2) + ")")
         .call(xAxis);
 
-    globals.timescale = timescale;
+    globals.timescale = xScale;
 
     createRect() 
 
@@ -2066,6 +2066,8 @@ function changeWeatherSelection(){
 }
 $(".weather-select").click(changeWeatherSelection)
 
+
+
 function createRect(){
 
 	var height = 10;
@@ -2079,7 +2081,9 @@ function createRect(){
         .attr("class", "rectangle")
         .attr("x", 120)
         .attr("y", 65)
-        .style('fill', 'white');
+        .style('fill', 'white')
+       	.style('cursor', "ew-resize");
+
 
     function dragMove(){
     	firstPos = +rect.attr("x" )
@@ -2108,7 +2112,9 @@ function createRect(){
 	 	.attr("y1", 40)
 	 	.attr("y2", 65)
 	 	.style('stroke', 'white')
-	 	.style('stroke-width', 5);
+	 	.style('stroke-width', 5)
+	 	.style('cursor', "ew-resize");
+
 
 	function moveLine(){
 		firstPos = +rightLine.attr("x1")
@@ -2116,6 +2122,15 @@ function createRect(){
 		change = +d3.event.dx
 
 		secondPos = firstPos + change
+
+		if (secondPos <= leftLine.attr("x1" )){
+			alert ("return")
+			return
+		}
+		// else if (secondPos >= (width - 25)){
+		// 	alert ("return")
+		// 	return
+		// }
 
 		finalPos = rightLine.attr("x1", secondPos)
 
@@ -2143,16 +2158,29 @@ function createRect(){
 	 	.attr("x2", 120)	
 	 	.attr("y1", 40)
 	 	.attr("y2", 65)
-	 	.style('stroke', 'white')
-	 	.style('stroke-width', 5);
+	 	.style('stroke', 'red')
+	 	.style('stroke-width', 5)
+	 	.style('cursor', "ew-resize");
 
 
 	 function moveLine2(){
+	// move line left
 		firstPos = +leftLine.attr("x1")
 
 		change = +d3.event.dx
 
 		secondPos = firstPos + change
+
+		//if else checks
+		if (secondPos <= 25){
+			alert ("return")
+			return
+		}
+		else if (secondPos > rightLine.attr("x1" )){
+			alert ("return")
+			return
+
+		}
 
 		finalPos = leftLine.attr("x1", secondPos)
 
@@ -2182,45 +2210,45 @@ function createRect(){
 	    	.call(dragLeftLine);
 
 
-	//connect lines to rectangle
-	leftLine.attr("x1" ) = +rect.attr("x" )
+	// //connect lines to rectangle
+	// leftLine.attr("x1" ) = +rect.attr("x" )
 
-	leftLine.attr("x2" ) = +rect.attr("x" )
+	// leftLine.attr("x2" ) = +rect.attr("x" )
 	
-	rightLine.attr("x1" ) = +rect.attr("x" ) + +rect.attr("width")
+	// rightLine.attr("x1" ) = +rect.attr("x" ) + +rect.attr("width")
 
-	rightLine.attr("x2" ) = +rect.attr("x" ) + +rect.attr("width")
+	// rightLine.attr("x2" ) = +rect.attr("x" ) + +rect.attr("width")
 
 
-	//If else statements to control the slider
-	if (+leftLine.attr("x1" ) < globals.timescale(1750)) {
+	// //If else statements to control the slider
+	// if (+leftLine.attr("x1" ) < globals.timescale(1750)) {
 
-		return
-	}
+	// 	return
+	// }
 
-	else if ((+leftLine.attr("x1" ) + +rect.attr("width")) > globals.timescale(1850)) {
+	// else if ((+leftLine.attr("x1" ) + +rect.attr("width")) > globals.timescale(1850)) {
 
-		return
-	}
+	// 	return
+	// }
 
-	else if (+leftLine.attr("x1" ) > +rightLine.attr("x1" )){
+	// else if (+leftLine.attr("x1" ) > +rightLine.attr("x1" )){
 
-		return
-	}
+	// 	return
+	// }
 
-	else if (+rightLine.attr("x1" ) < +leftLine.attr("x1" )){
+	// else if (+rightLine.attr("x1" ) < +leftLine.attr("x1" )){
 
-		return
-	}
+	// 	return
+	// }
 
-	else if (+rect.attr("width") < 1){
+	// else if (+rect.attr("width") < 1){
 
-		return
-	}
+	// 	return
+	// }
 
-	else {
+	// else {
 
-	}
+	// }
 
 } //end create rect or slider
 
