@@ -506,8 +506,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-
-		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
+		//original color scheme ["#eaf2fd", "#051c39"]
+		//new color scheme ["#051c39", "#eaf2fd"]
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -1932,6 +1933,8 @@ function updateTimeline(min, max){
         .attr("transform", "translate(0," + (height/2) + ")")
         .call(xAxis);
 
+    globals.timescale = xScale;
+
     createRect() 
 
 };
@@ -1956,63 +1959,6 @@ $(function() {
       }
     });
 });
-
-function createRect(){
-
-	var height = $("#rectangle").height();
-	var width = $("#rectangle").width();
-
-    var drag = d3.behavior.drag()
-	    .origin(function(d) { return d; })
-	    .on("drag", dragmove);
-
-	var dragright = d3.behavior.drag()
-	    .origin(Object)
-	    .on("drag", rdragresize);
-
-	var dragleft = d3.behavior.drag()
-	    .origin(Object)
-	    .on("drag", ldragresize);
-
-	//create a second svg element to hold the bar chart
-    var rect = d3.select("#rectangle")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("class", "rectangle")
-    	.attr("cx", function(d) { return d.x; })
-    	.attr("cy", function(d) { return d.y; })
-        .call(drag);
-
-    function dragmove(d) {
-	  	d3.select(this)
-	    .attr("cx", d.x = Math.max(radius, Math.min(width - radius, d3.event.x)))
-	    .attr("cy", d.y = Math.max(radius, Math.min(height - radius, d3.event.y)));
-	}
-
-	var dragbarleft = newg.append("#rectangle")
-		.attr("x", function(d) { return d.x - (dragbarw/2); })
-		.attr("y", function(d) { return d.y + (dragbarw/2); })
-		.attr("height", height - dragbarw)
-		.attr("id", "dragleft")
-		.attr("width", dragbarw)
-		.attr("fill", "lightblue")
-		.attr("fill-opacity", .5)
-		.attr("cursor", "ew-resize")
-		.call(dragleft);
-
-	var dragbarright = newg.append("#rectangle")
-		.attr("x", function(d) { return d.x + width - (dragbarw/2); })
-		.attr("y", function(d) { return d.y + (dragbarw/2); })
-		.attr("id", "dragright")
-		.attr("height", height - dragbarw)
-		.attr("width", dragbarw)
-		.attr("fill", "lightblue")
-		.attr("fill-opacity", .5)
-		.attr("cursor", "ew-resize")
-		.call(dragright);
-
-}
 
 // function click(){
 //   // Ignore the click event if it was suppressed
@@ -2129,6 +2075,8 @@ function changeWeatherSelection(){
 }
 $(".weather-select").click(changeWeatherSelection)
 
+
+
 function createRect(){
 
 	var height = 10;
@@ -2141,8 +2089,9 @@ function createRect(){
         .attr("height", height)
         .attr("class", "rectangle")
         .attr("x", 120)
-        .attr("y", 40)
-        .style('fill', 'white');
+        .attr("y", 65)
+        .style('fill', 'white')
+       	.style('cursor', "ew-resize");
 
     function dragMove(){
     	firstPos = +rect.attr("x" )
@@ -2151,9 +2100,20 @@ function createRect(){
 
     	secondPos = firstPos + change
 
-		console.log(secondPos)    
+		if (secondPos <= 25){
+			alert ("return")
+			return
+		}
+
+		// else if (secondPos >= 1000){
+		// 	alert ("return")
+		// 	return
+		// }
+
+		//console.log(secondPos)    
 
 		finalPos = rect.attr("x", secondPos)
+
 	}
 
     var drag = d3.behavior.drag()
@@ -2163,88 +2123,170 @@ function createRect(){
     rect
     	.call(drag);
 
- 
- var rightLine = d3.selectAll(".timescale") 
- 	.append("line") 
- 	.attr("x1", width) 
- 	.attr("x2", width)	
- 	.attr("y1", 0)
- 	.attr("y2", 40)
- 	.style('stroke', 'green')
- 	.style('stroke-width', 10);
-
-function moveLine(){
-	firstPos = +rightLine.attr("x1")
-
-	change = +d3.event.dx
-
-	secondPos = firstPos + change
-
-	finalPos = rightLine.attr("x1", secondPos)
-
-	finalPos2 = rightLine.attr("x2", secondPos)
-
-	oldWidth = +rect.attr("width")
-
-	newWidth = oldWidth + change
-
-	finalWidth = rect.attr("width", newWidth)
-
-}
-
-var dragRightLine = d3.behavior.drag()
-	    //.origin(function(d) { return d; })
-	    .on("drag", moveLine);
-
-    rightLine
-    	.call(dragRightLine);
+	 
+	var rightLine = d3.selectAll(".timescale") 
+	 	.append("line") 
+	 	.attr("x1", width) 
+	 	.attr("x2", width)	
+	 	.attr("y1", 40)
+	 	.attr("y2", 65)
+	 	.style('stroke', 'white')
+	 	.style('stroke-width', 5)
+	 	.style('cursor', "ew-resize");
 
 
- var leftLine = d3.selectAll(".timescale") 
- 	.append("line") 
- 	.attr("x1", 120) 
- 	.attr("x2", 120)	
- 	.attr("y1", 0)
- 	.attr("y2", 40)
- 	.style('stroke', 'red')
- 	.style('stroke-width', 10);
+	function moveLine(){
+	// move right line
+		firstPos = +rightLine.attr("x1")
+
+		change = +d3.event.dx
+
+		secondPos = firstPos + change
+
+		if (secondPos <= leftLine.attr("x1" )){
+			alert ("return")
+			return
+		}
+		else if (secondPos >= (width)){
+			alert ("return")
+			return
+		}
+
+		finalPos = rightLine.attr("x1", secondPos)
+
+		finalPos2 = rightLine.attr("x2", secondPos)
+
+		oldWidth = +rect.attr("width")
+
+		newWidth = oldWidth + change
+
+		finalWidth = rect.attr("width", newWidth)
+
+	}
+
+	var dragRightLine = d3.behavior.drag()
+		    //.origin(function(d) { return d; })
+		    .on("drag", moveLine);
+
+	    rightLine
+	    	.call(dragRightLine);
 
 
- function moveLine2(){
-	firstPos = +leftLine.attr("x1")
+	 var leftLine = d3.selectAll(".timescale") 
+	 	.append("line") 
+	 	.attr("x1", 120) 
+	 	.attr("x2", 120)	
+	 	.attr("y1", 40)
+	 	.attr("y2", 65)
+	 	.style('stroke', 'red')
+	 	.style('stroke-width', 5)
+	 	.style('cursor', "ew-resize");
 
-	change = +d3.event.dx
 
-	secondPos = firstPos + change
+	 function moveLine2(){
+	// move line left
+		firstPos = +leftLine.attr("x1")
 
-	finalPos = leftLine.attr("x1", secondPos)
+		change = +d3.event.dx
 
-	finalPos2 = leftLine.attr("x2", secondPos)
+		secondPos = firstPos + change
 
-	oldX = +rect.attr("x")
+		//if else checks
+		if (secondPos <= 25){
+			return
+		}
+		else if (secondPos >= rightLine.attr("x1" )){
+			return
+		}
+		// else if (leftLine.attr("x1" ) >= +rect.attr("x" )){
+		// 	alert ("return")
+		// 	return
+		// }
+		// else if (leftLine.attr("x1" ) <= +rect.attr("x" )){
+		// 	alert ("return")
+		// 	return
+		// }
 
-	newX = oldX + change
+		finalPos = leftLine.attr("x1", secondPos)
 
-	finalX = rect.attr("x", newX)
+		finalPos2 = leftLine.attr("x2", secondPos)
 
-	originalWidth = rect.attr("width")
+		oldX = +rect.attr("x")
 
-	newWidth = originalWidth - change
+		newX = oldX + change
 
-	finalWidth = rect.attr("width", newWidth)
+		finalX = rect.attr("x", newX)
 
-	console.log(newWidth)
+		if (finalX <= leftLine.attr("x2", secondPos)) {
+			alert ("return")
+			return
+		}
 
-}
+		else if (finalX >= leftLine.attr("x2", secondPos)) {
+			alert ("return")
+			return
+		}
 
-var dragLeftLine = d3.behavior.drag()
-	    //.origin(function(d) { return d; })
-	    .on("drag", moveLine2);
+		originalWidth = rect.attr("width")
 
-    leftLine
-    	.call(dragLeftLine);
+		newWidth = originalWidth - change
 
-}
+		finalWidth = rect.attr("width", newWidth)
+
+		//console.log(newWidth)
+
+	}
+
+	var dragLeftLine = d3.behavior.drag()
+		    //.origin(function(d) { return d; })
+		    .on("drag", moveLine2);
+
+	    leftLine
+	    	.call(dragLeftLine);
+
+
+	// //connect lines to rectangle
+	// leftLine.attr("x1" ) = +rect.attr("x" )
+
+	// leftLine.attr("x2" ) = +rect.attr("x" )
+	
+	// rightLine.attr("x1" ) = +rect.attr("x" ) + +rect.attr("width")
+
+	// rightLine.attr("x2" ) = +rect.attr("x" ) + +rect.attr("width")
+
+
+	// //If else statements to control the slider
+	// if (+leftLine.attr("x1" ) < globals.timescale(1750)) {
+
+	// 	return
+	// }
+
+	// else if ((+leftLine.attr("x1" ) + +rect.attr("width")) > globals.timescale(1850)) {
+
+	// 	return
+	// }
+
+	// else if (+leftLine.attr("x1" ) > +rightLine.attr("x1" )){
+
+	// 	return
+	// }
+
+	// else if (+rightLine.attr("x1" ) < +leftLine.attr("x1" )){
+
+	// 	return
+	// }
+
+	// else if (+rect.attr("width") < 1){
+
+	// 	return
+	// }
+
+	// else {
+
+	// }
+
+} //end create rect or slider
+
 
 $('#proj-select option[value=robinson]').attr('selected', 'selected'); //default
 $("#proj-select").change(function(){
