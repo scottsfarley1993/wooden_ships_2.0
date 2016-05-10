@@ -2341,14 +2341,14 @@ $(".wd-select").click(function(){
 
 function filterWindSpd(dataArray, spdArray){
 	s = []
-	for (var i=0; i<spdArray.length; i++){
-		spd = spdArray[i];
-		//console.log(spd)
-		thisSpdArray = _.where(dataArray, {windSpd:spd})
-		s = s.concat(thisSpdArray)
-		console.log(thisSpdArray)
-	}
-	console.log(s)
+	
+	s = _.filter(dataArray, function(d){
+		if (spdArray.indexOf(d.windSpd) > -1){
+			return true;
+		}else{
+			return false;
+		}
+	})
 	return s
 }
 
