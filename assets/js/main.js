@@ -359,7 +359,7 @@ function changeProjection(projection){
     if (projection == "Azimuthal") {
     	//set params
 		var projection = d3.geo.robinson()
-		    .scale(200)
+		    .scale($("#map").width() / 5)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
 		globals.map.mapContainer.call(d3.behavior.drag() //disable dragging/projection rotation
@@ -376,8 +376,9 @@ function changeProjection(projection){
     else if (projection == "Cylindrical"){
     	//set params
     	var projection = d3.geo.cylindricalEqualArea()
-		    .scale(200)
+		     .scale($("#map").width() / 3.75)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
+		    .center([30, 0])
 		    .precision(.1);
 		//disable drag
 		globals.map.mapContainer.call(d3.behavior.drag()
