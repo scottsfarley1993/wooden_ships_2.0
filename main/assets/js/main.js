@@ -1937,6 +1937,8 @@ function updateTimeline(min, max){
 	var height = $("#timeline").height() ;
 	var width = $("#timeline").width()- margins.left - margins.right;
 
+	globals.timelineEnd = width + margins.left;
+
 	
 
     //create a second svg element to hold the bar chart
@@ -2112,8 +2114,12 @@ $(".weather-select").click(changeWeatherSelection)
 
 function createRect(){
 
+	startX = globals.timescale(new Date("1775-01-01"));
+
+	endX = globals.timescale(new Date("1825-01-01"));
+
+	var width = endX - startX;
 	var height = 10;
-	var width = $("#timeline").width()/2;
 
 	//create a second svg element to hold the bar chart
     var rect = d3.selectAll(".timescale")
@@ -2121,7 +2127,7 @@ function createRect(){
         .attr("width", width)
         .attr("height", height)
         .attr("class", "rectangle")
-        .attr("x", 120)
+        .attr("x", startX)
         .attr("y", 65)
         .style('fill', 'white')
        	.style('cursor', "ew-resize");
@@ -2133,19 +2139,29 @@ function createRect(){
 
     	secondPos = firstPos + change
 
+    	finalWidth = +rect.attr("width") 
+
+    	rectEnd = secondPos + finalWidth
+
 		if (secondPos <= 25){
 			alert ("return")
 			return
 		}
 
-		// else if (secondPos >= 1000){
-		// 	alert ("return")
-		// 	return
-		// }
+		if (rectEnd >= globals.timelineEnd){
 
-		//console.log(secondPos)    
+			console.log("Rect end reached")
+			return
+		}
+		rect.attr("x", secondPos)
 
-		finalPos = rect.attr("x", secondPos)
+		rightCoordinate = (+rect.attr("width") + +rect.attr("x" ))
+
+		rightLine.attr('x1', rightCoordinate).attr('x2', rightCoordinate)
+
+		leftCoordinate = +rect.attr("x")
+
+		leftLine.attr('x1', leftCoordinate).attr('x2', leftCoordinate)
 
 	}
 
@@ -2159,8 +2175,8 @@ function createRect(){
 	 
 	var rightLine = d3.selectAll(".timescale") 
 	 	.append("line") 
-	 	.attr("x1", width) 
-	 	.attr("x2", width)	
+	 	.attr("x1", endX) 
+	 	.attr("x2", endX)	
 	 	.attr("y1", 40)
 	 	.attr("y2", 65)
 	 	.style('stroke', 'white')
@@ -2177,11 +2193,9 @@ function createRect(){
 		secondPos = firstPos + change
 
 		if (secondPos <= leftLine.attr("x1" )){
-			alert ("return")
 			return
 		}
-		else if (secondPos >= (width)){
-			alert ("return")
+		else if (secondPos >= globals.timelineEnd) {
 			return
 		}
 
@@ -2207,8 +2221,8 @@ function createRect(){
 
 	 var leftLine = d3.selectAll(".timescale") 
 	 	.append("line") 
-	 	.attr("x1", 120) 
-	 	.attr("x2", 120)	
+	 	.attr("x1", startX) 
+	 	.attr("x2", startX)	
 	 	.attr("y1", 40)
 	 	.attr("y2", 65)
 	 	.style('stroke', 'red')
@@ -2217,28 +2231,35 @@ function createRect(){
 
 
 	 function moveLine2(){
-	// move line left
+	// move left line
+	console.log("Moving left line")
 		firstPos = +leftLine.attr("x1")
 
 		change = +d3.event.dx
 
 		secondPos = firstPos + change
 
-		//if else checks
+		originalWidth = +rect.attr("width")
+
+		newWidth = originalWidth - change
+		console.log(newWidth)
+
+		
+
+		if (newWidth <= 1){
+			return
+		}
+
 		if (secondPos <= 25){
 			return
 		}
-		else if (secondPos >= rightLine.attr("x1" )){
+		if (secondPos >= +rightLine.attr("x1" )){
 			return
 		}
-		// else if (leftLine.attr("x1" ) >= +rect.attr("x" )){
-		// 	alert ("return")
-		// 	return
-		// }
-		// else if (leftLine.attr("x1" ) <= +rect.attr("x" )){
-		// 	alert ("return")
-		// 	return
-		// }
+
+		finalWidth = rect.attr("width", newWidth)
+
+		//if else checks
 
 		finalPos = leftLine.attr("x1", secondPos)
 
@@ -2250,23 +2271,18 @@ function createRect(){
 
 		finalX = rect.attr("x", newX)
 
-		if (finalX <= leftLine.attr("x2", secondPos)) {
-			alert ("return")
-			return
-		}
+		// if (finalX <= +leftLine.attr("x2", secondPos)) {
+		// 	return
+		// }
 
-		else if (finalX >= leftLine.attr("x2", secondPos)) {
-			alert ("return")
-			return
-		}
+		// if (finalX >= +leftLine.attr("x2", secondPos)) {
+		// 	return
+		// }
 
-		originalWidth = rect.attr("width")
 
-		newWidth = originalWidth - change
-
-		finalWidth = rect.attr("width", newWidth)
 
 		//console.log(newWidth)
+
 
 	}
 
