@@ -2084,7 +2084,6 @@ function createRect(){
         .style('fill', 'white')
        	.style('cursor', "ew-resize");
 
-
     function dragMove(){
     	firstPos = +rect.attr("x" )
 
@@ -2092,9 +2091,20 @@ function createRect(){
 
     	secondPos = firstPos + change
 
-		console.log(secondPos)    
+		if (secondPos <= 25){
+			alert ("return")
+			return
+		}
+
+		// else if (secondPos >= 1000){
+		// 	alert ("return")
+		// 	return
+		// }
+
+		//console.log(secondPos)    
 
 		finalPos = rect.attr("x", secondPos)
+
 	}
 
     var drag = d3.behavior.drag()
@@ -2117,6 +2127,7 @@ function createRect(){
 
 
 	function moveLine(){
+	// move right line
 		firstPos = +rightLine.attr("x1")
 
 		change = +d3.event.dx
@@ -2127,10 +2138,10 @@ function createRect(){
 			alert ("return")
 			return
 		}
-		// else if (secondPos >= (width - 25)){
-		// 	alert ("return")
-		// 	return
-		// }
+		else if (secondPos >= (width)){
+			alert ("return")
+			return
+		}
 
 		finalPos = rightLine.attr("x1", secondPos)
 
@@ -2176,11 +2187,18 @@ function createRect(){
 			alert ("return")
 			return
 		}
-		else if (secondPos > rightLine.attr("x1" )){
+		else if (secondPos >= rightLine.attr("x1" )){
 			alert ("return")
 			return
-
 		}
+		// else if (leftLine.attr("x1" ) >= +rect.attr("x" )){
+		// 	alert ("return")
+		// 	return
+		// }
+		// else if (leftLine.attr("x1" ) <= +rect.attr("x" )){
+		// 	alert ("return")
+		// 	return
+		// }
 
 		finalPos = leftLine.attr("x1", secondPos)
 
@@ -2192,13 +2210,23 @@ function createRect(){
 
 		finalX = rect.attr("x", newX)
 
+		if (finalX <= leftLine.attr("x2", secondPos)) {
+			alert ("return")
+			return
+		}
+
+		else if (finalX >= leftLine.attr("x2", secondPos)) {
+			alert ("return")
+			return
+		}
+
 		originalWidth = rect.attr("width")
 
 		newWidth = originalWidth - change
 
 		finalWidth = rect.attr("width", newWidth)
 
-		console.log(newWidth)
+		//console.log(newWidth)
 
 	}
 
