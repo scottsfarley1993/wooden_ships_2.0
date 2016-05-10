@@ -265,6 +265,7 @@ function setMap(){
 		   globals.map.path = path
 	    
 	    
+	    
 	    d3_queue.queue()
 	        .defer(d3.json, "assets/data/ne_50m_land.topojson") //load base map data
 	        .await(callback);
@@ -469,8 +470,11 @@ function getShipData(filename, callback){
 			d.latitude = +d.latitude;
 			d.longitude = +d.longitude;
 			d.date = new Date(d.date)
-			d.windDir = binWindDirection(d.winddirection)
+			d.windDir = binWindDirection(d.winddirection)			
+			d.windSpd = binWindSpeed(d.windSpeed)
+			
 		})
+		console.log(data.winddirection);
 		globals.data.ships = data //so we can revert later
 		globals.data.filteredShips = data //keep track of the most recent filtered data
 		if (callback){
@@ -1764,6 +1768,28 @@ function binWindDirection(num){
 }
 //control hex bin size
 
+function binWindSpeed(num){
+	if (num <= 0) {
+		windSpd = "No Speed"
+	} else if (num >= 1 && num <= 5) {
+		windSpd = "Calm"		
+	} else if (num > 5 && num <= 15){
+		windSpd = "Moderate"
+	} else if (num > 15 && num <= 25){
+		windSpd = "High"
+	} else if (num >= 25 && num < 202.5){
+		windSpd = "Hurricane"
+	} 
+	return windSpd
+}
+
+function filterWindSpeed(minSpeed, maxSpeed, data) {
+	f = _.filter(data, function(element){
+		if (element.windSpeed >= minSpeed && element.windSpeed <= maxSpeed) 	
+			return true;	 	
+})		
+		return f;
+}
 
 function filterDate(minYear, maxYear, data) {
 	f = _.filter(data, function(element){
@@ -2305,12 +2331,27 @@ $(".wd-select").click(function(){
 		if ($el.hasClass("active")){
 			dir = $el.data('dir')
 			wdArray.push(dir)
-		}
-		filterWindDirection(globals.data.filteredShips, wdArray);
-		switchAttribute(globals.attr)
+		}		
 	}
+	filterWindDirection(globals.data.filteredShips, wdArray);
+	switchAttribute(globals.attr)
 	$(this).toggleClass("active")
+	console.log(wdArray)
 })
+
+function filterWindSpd(dataArray, spdArray){
+	s = []
+	for (var i=0; i<spdArray.length; i++){
+		spd = spdArray[i];
+		//console.log(spd)
+		thisSpdArray = _.where(dataArray, {windSpd:spd})
+		s = s.concat(thisSpdArray)
+		console.log(thisSpdArray)
+	}
+	console.log(s)
+	return s
+}
+
 
 $("#help-icon").click(function(){
 	var clicked = $("#help-icon").data('clicked')
@@ -2342,5 +2383,26 @@ $("#help-icon").click(function(){
 
 
 
-
-
+$(".ws-select").click(function(){
+	$(this).toggleClass("active")
+	spdArray = []
+	console.log(spdArray)
+	els = $(".ws-select")
+	console.log(els)
+	for (var i =0; i< els.length; i++){
+		el = els[i]
+		$el = $(el)
+		if ($el.hasClass("active")){
+			console.log("Active")
+			spd = $el.data('speed')
+			spdArray.push(spd)
+			console.log(spdArray)
+		}
+	}
+	console.log(spdArray)
+	displayShips = filterWindSpd(globals.data.filteredShips, spdArray);
+	d3.selectAll(".hexagon").remove()
+	displayShipDataHexes(displayShips)
+	
+	
+})
