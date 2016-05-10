@@ -351,6 +351,7 @@ div.tooltip {
 	padding:10px;
 	margin: 0px;
 	text-align: center;
+	border-radius: 5px;
 }
 #home{
 	text-align: center;

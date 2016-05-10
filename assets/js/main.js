@@ -382,7 +382,7 @@ function changeProjection(projection){
     else if (projection == "Cylindrical"){
     	//set params
     	var projection = d3.geo.cylindricalEqualArea()
-		     .scale($("#map").width() / 3.75)
+		     .scale($("#map").width() / 4.25)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .center([30, 0])
 		    .precision(.1);
