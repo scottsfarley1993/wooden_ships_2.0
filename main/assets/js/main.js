@@ -2290,7 +2290,7 @@ function filterWindDirection(dataArray, wdArray){
 	for (var i=0; i<wdArray.length; i++){
 		dir = wdArray[i];
 		thisDirArray = _.where(dataArray, {windDir:dir})
-		o.concat(thisDirArray)
+		o = o.concat(thisDirArray)
 	}
 	console.log(o.length)
 	return o
@@ -2305,11 +2305,12 @@ $(".wd-select").click(function(){
 		if ($el.hasClass("active")){
 			dir = $el.data('dir')
 			wdArray.push(dir)
-		}
-		filterWindDirection(globals.data.filteredShips, wdArray);
-		switchAttribute(globals.attr)
+		}				
 	}
 	$(this).toggleClass("active")
+	displayShips = filterWindDirection(globals.data.filteredShips, wdArray);
+	d3.selectAll(".hexagon").remove()
+	displayShipDataHexes(displayShips)
 })
 
 $("#help-icon").click(function(){
