@@ -2312,14 +2312,14 @@ $(".select-item").hover(function(){
 })
 
 function filterWindDirection(dataArray, wdArray){
-	o = []
-	for (var i=0; i<wdArray.length; i++){
-		dir = wdArray[i];
-		thisDirArray = _.where(dataArray, {windDir:dir})
-		o.concat(thisDirArray)
-	}
-	console.log(o.length)
-	return o
+	s = _.filter(dataArray, function(d){
+		if (wdArray.indexOf(d.windDir) > -1){
+			return true;
+		}else{
+			return false;
+		}
+	})
+	return s
 }
 
 $(".wd-select").click(function(){
@@ -2333,10 +2333,10 @@ $(".wd-select").click(function(){
 			wdArray.push(dir)
 		}		
 	}
-	filterWindDirection(globals.data.filteredShips, wdArray);
-	switchAttribute(globals.attr)
+	displayShips = filterWindDirection(globals.data.filteredShips, wdArray);
 	$(this).toggleClass("active")
-	console.log(wdArray)
+	d3.selectAll(".hexagon").remove()
+	displayShipDataHexes(displayShips)
 })
 
 function filterWindSpd(dataArray, spdArray){
@@ -2388,18 +2388,14 @@ $(".ws-select").click(function(){
 	spdArray = []
 	console.log(spdArray)
 	els = $(".ws-select")
-	console.log(els)
 	for (var i =0; i< els.length; i++){
 		el = els[i]
 		$el = $(el)
 		if ($el.hasClass("active")){
-			console.log("Active")
 			spd = $el.data('speed')
 			spdArray.push(spd)
-			console.log(spdArray)
 		}
 	}
-	console.log(spdArray)
 	displayShips = filterWindSpd(globals.data.filteredShips, spdArray);
 	d3.selectAll(".hexagon").remove()
 	displayShipDataHexes(displayShips)
