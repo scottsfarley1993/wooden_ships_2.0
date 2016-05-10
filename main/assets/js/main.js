@@ -1083,7 +1083,7 @@ function displayMemos(memoSet){
 				formatDate = moment.weekdays()[date.weekday()] + ", " + date.date() + nth(date.date()) + " " + moment.months()[date.month() - 1] + ", " + date.year()
 				//this is the feed entry
 				html = "<div class='row log-row basic-hovercard' id='log_" + d.locationID + "'>"
-				html += "<img src='" + img + "' class='captain-thumb col-xs-3'/>"
+				html += "<img src='" + img + "' class='captain-thumb col-xs-3 img-responsive'/>"
 				html += "<div class='col-xs-9 log-header' id='header_" + d.locationID + "'>"
 				html += "<h6 class='captain-heading' class='col-xs-12'>" + captainRank + " " + captain + "</h6>"
 				html += "<small class='log-shipname col-xs-12 text-muted'>" + shipName + "</small>"
@@ -1097,17 +1097,17 @@ function displayMemos(memoSet){
 				console.log(d)
 				//make the html
 				html = "<div class='row'>"
-				html += "<div class='col-xs-4'>"
-				html += "<img class='captain-thumb img-rounded hover-img col-xs-12' src='" + d.imgSrc + "'>"
-				html += "</div><div class='col-xs-8'>"
+				// html += "<div class='hover-img-holder col-xs-4'>"
+				// html += "<img class='hover-thumb img-rounded img-responsive hover-img col-xs-12' src='" + d.imgSrc + "'>"
+				html += "</div><div class='col-xs-8 hover-details-holder'>"
 				html += "<h4>" + d.captainRank + " " + d.captainName + "</h4>"
 				html += "<i><b class='large'>" + d.shipName + "</b></i><br />"
 				html += "<i>" + d.shipType + "</i>"
-				html += "<p>Voyage Started: " + d.voyageStart + "</p>"
-				html += "<p>Sailing From: " + d.fromPlace + "</p>"
-				html += "<p>Sailing To: " + d.toPlace + "</p>"
-				html += "<p>Days at sea: " + d.voyageDaysSinceStart + "</p>"
-				html += "<p>Sailing for: " + d.company + "</p>"
+				html += "<p class='strong'>Voyage Started: " + new Date(d.voyageStart).toLocaleDateString() + "</p>"
+				html += "<p class='strong'>Sailing From: " + d.fromPlace + "</p>"
+				html += "<p class='strong'>Sailing To: " + d.toPlace + "</p>"
+				//html += "<p class='strong'>Days at sea: " + d.voyageDaysSinceStart + "</p>"
+				html += "<p class='strong'>Sailing for: " + d.company + "</p>"
 				if (d.captainName2){
 					html += "<p>Second Observer: " + d.captainRank2 + " " + d.captainName2 + "</p>"
 				}
