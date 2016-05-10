@@ -33,10 +33,10 @@ p {
 
 #map{
 	background-color: black;
-	width: calc(100% - 100px);
+	width: 100%;
 	position: absolute;
 	top: 0px;
-	left: 100px;
+	left: 0px;
 }
 
 
