@@ -20,14 +20,14 @@ p {
 }
 
 .land {
-	fill: #000e15;
+	fill: black;
  	stroke: #a5967e;
  	border-style: double;
     stroke-width: 0px;
 }
 
 .mapContainer{
-	fill: #4971A6;
+	fill: black;
 	width:100%;
 }
 
@@ -481,6 +481,11 @@ div.tooltip {
 
 }
 
+.water{
+	fill: #020E1C;
+	background-color: #020E1C;
+}
+
 .gratBackground {
 	fill: #D5E3FF;
 }
@@ -494,7 +499,8 @@ div.tooltip {
 .graticule {
 	fill: none;
 	stroke: #999;
-	stroke-width: 1px;
+	stroke-width: 0.25px;
+	stroke-opacity:0.5;
 }
 #wind-panel{
 	overflow-y: auto;

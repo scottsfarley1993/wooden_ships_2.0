@@ -24,6 +24,10 @@ globals.map.dimensions.width = $("#map").width() * 0.9 //100% of the window widt
 globals.map.projection;
 globals.map.path;
 
+
+globals.filterStartYear = 1775;
+globals.filterEndYear = 1825;
+
 sens = 0.25;
 
 globals.memoType = ["Weather", "Travel", "Encounter", "Conflict", "LifeOnBoard"]
@@ -481,8 +485,12 @@ function displayShipDataHexes(datasetArray){
 	datasetArray.forEach(function(d){
 		var p = globals.map.projection([d['longitude'], d['latitude']])
 		d['projected'] = p
-		//d.date = parseDate(d.date);
 	})
+	
+	datasetArray = _.filter(datasetArray, function(d){
+		return( (d.date.getFullYear() >= globals.filterStartYear) && (d.date.getFullYear() <= globals.filterEndYear))
+	})
+	
 	 globals.map.hexagons = globals.map.features.append("g")
 	      .attr("class", "hexagons")
 	    .selectAll(".hexagons")
@@ -2174,6 +2182,9 @@ function createRect(){
 
 		d3.selectAll(".hexagon")
 			.remove()
+			
+		globals.filterStartYear = startYear;
+		globals.filterEndYEar = endYear;
 
 		displayShipDataHexes(displayShips)
 
