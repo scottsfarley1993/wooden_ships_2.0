@@ -2,6 +2,8 @@
 //All functions are here
 
 $("#intro-panel").show(); //splash screen on start
+$("#help-info").hide(); //splash screen on start
+$("#help-text").hide(); //splash screen on start
 
 var attrArray = ["countries_1715", "countries_1783", "countries_1815"];
 
@@ -2291,5 +2293,36 @@ $(".wd-select").click(function(){
 	}
 	$(this).toggleClass("active")
 })
+
+$("#help-icon").click(function(){
+	var clicked = $("#help-icon").data('clicked')
+	console.log(clicked)
+	if (clicked){
+	// hide
+
+		$("#help-icon").data('clicked', false);
+		$("#help-info").hide();
+		$("#help-text").slideUp();
+
+		$("#intro-text").show();
+
+	}
+
+	else {
+	// show
+
+		$("#help-icon").data('clicked', true)
+		$("#help-info").show();
+		$("#help-text").slideDown();
+
+		$("#intro-text").hide();
+
+
+
+	}
+
+	}
+); 
+
 
 
