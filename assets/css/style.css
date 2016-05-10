@@ -515,10 +515,28 @@ div.tooltip {
 }
 
 #arrow_left{
-	height: 25px;
-	width: 25px;
+	height: 20px;
+	width: 20px;
 	z-index: 999999999999999;
 	position: absolute;
-	top: 20px;
-	left: 0px;
+	top: 6px;
+	left: 5px;
+}
+
+#arrow_right{
+	height: 20px;
+	width: 20px;
+	z-index: 999999999999999;
+	position: absolute;
+	top: 4px;
+	right: 5px;
+}
+
+#arrow_bottom{
+	height: 20px;
+	width: 20px;
+	z-index: 999999999999999;
+	position: absolute;
+	bottom: 35px;
+	left: 53%;
 }
