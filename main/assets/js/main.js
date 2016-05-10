@@ -521,7 +521,7 @@ function displayShipDataHexes(datasetArray){
       	}
       })
       
-      styleHexbins(globals.data.filteredShips, globals.attr) //color the bins by attribute
+      styleHexbins(datasetArray, globals.attr) //color the bins by attribute
       enterIsolationMode();
       //set the stack order
       d3.selectAll("graticule")
@@ -963,7 +963,11 @@ function changeCountry(countryName){
 function refreshHexes(){
 	console.log("Loaded ship data.")
 	removeHexes()
-	displayShipDataHexes(globals.data.ships)
+	displayShips = _.filter(globals.data.ships, function(d){
+		yr = d.date.getFullYear();
+		return ((yr >= 1775) && (yr <= 1825))
+	})
+	displayShipDataHexes(displayShips)
 	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
@@ -1760,73 +1764,16 @@ function binWindDirection(num){
 }
 //control hex bin size
 
-function filterWindSpeed(minSpeed, maxSpeed, data) {
-	f = _.filter(data, function(element){
-		if (element.windSpeed >= minSpeed && element.windSpeed <= maxSpeed) 	
-			return true;	 	
-})		
-		return f;
-}
 
-function filterDate(minDate, maxDate, data) {
+function filterDate(minYear, maxYear, data) {
 	f = _.filter(data, function(element){
-		return ((element.date >= minDate) && (element.date <= maxDate));
+		d = element.date
+		yr = d.getFullYear();
+		return ((yr >= minYear) && (yr <= maxYear));
 	}); 	
-		return f;
+	return f;
 }
 
-function filterMonth(minMonth, maxMonth, data) {
-	f = _.filter(data, function(element){
-		if (element.month >= minMonth && element.month <= maxMonth) 	
-			return true;	 	
-})		
-		return f;
-}
-
-function filterSST(data) {
-	f = _.filter(data, function(element){
-		if (element.sst > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function just returns whether AirTemp recorded
-function filterAirTemp(data) {
-	f = _.filter(data, function(element){
-		if (element.airTemp > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function takes AirTemp min and max
-function filterByAirTemp(minTemp, maxTemp, data) {
-	f = _.filter(data, function(element){
-		if (element.airTemp >= minTemp && element.airTemp <= maxTemp) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function just returns whether Pressure recorded
-function filterPressure(data) {
-	f = _.filter(data, function(element){
-		if (element.pressure > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function takes Pressure min and max
-function filterByPressure(minPressure, maxPressure, data) {
-	f = _.filter(data, function(element){
-		if (element.pressure >= minPressure && element.pressure <= maxPressure) 	
-			return true;	 	
-})	
-		console.log(f)	
-		return f;
-}
 
 // nav tabs
 $(".nav-item").hover(function(){
@@ -1937,6 +1884,8 @@ function updateTimeline(min, max){
 	var height = $("#timeline").height() ;
 	var width = $("#timeline").width()- margins.left - margins.right;
 
+	globals.timelineEnd = width + margins.left;
+
 	
 
     //create a second svg element to hold the bar chart
@@ -1972,26 +1921,26 @@ function updateTimeline(min, max){
 
 };
 
-$(function() {
-    $( "#time-range" ).slider({
-      range: true,
-      min: 1750,
-      max: 1850,
-      values: [ 1750, 1850 ],
-      stop: function( event, ui ) {
-      	console.log(ui.values[0])
-      	console.log(ui.values[1])
-      	minDate = new Date(ui.values[0], 0, 1)
-      	maxDate = new Date(ui.values[1], 0, 1)
-      	console.log(minDate)
-      	console.log(maxDate)
-        removeHexes()
-        globals.data.filteredShips = filterDate(minDate, maxDate, globals.data.ships);
-        displayShipDataHexes(globals.data.filteredShips);
-        updateTimeline(minDate, maxDate)
-      }
-    });
-});
+// $(function() {
+//     $( "#time-range" ).slider({
+//       range: true,
+//       min: 1750,
+//       max: 1850,
+//       values: [ 1750, 1850 ],
+//       stop: function( event, ui ) {
+//       	console.log(ui.values[0])
+//       	console.log(ui.values[1])
+//       	minDate = new Date(ui.values[0], 0, 1)
+//       	maxDate = new Date(ui.values[1], 0, 1)
+//       	console.log(minDate)
+//       	console.log(maxDate)
+//         removeHexes()
+//         globals.data.filteredShips = filterDate(minDate, maxDate, globals.data.ships);
+//         displayShipDataHexes(globals.data.filteredShips);
+//         updateTimeline(minDate, maxDate)
+//       }
+//     });
+// });
 
 // function click(){
 //   // Ignore the click event if it was suppressed
@@ -2112,8 +2061,15 @@ $(".weather-select").click(changeWeatherSelection)
 
 function createRect(){
 
+	startX = globals.timescale(new Date(1775, 0, 1)) + 25;
+
+	endX = globals.timescale(new Date(1825, 0, 1)) + 25;
+
+	console.log("RectStart: " + startX)
+	console.log("RectEnd: " + endX)
+
+	var width = endX - startX;
 	var height = 10;
-	var width = $("#timeline").width()/2;
 
 	//create a second svg element to hold the bar chart
     var rect = d3.selectAll(".timescale")
@@ -2121,7 +2077,7 @@ function createRect(){
         .attr("width", width)
         .attr("height", height)
         .attr("class", "rectangle")
-        .attr("x", 120)
+        .attr("x", startX)
         .attr("y", 65)
         .style('fill', 'white')
        	.style('cursor', "ew-resize");
@@ -2133,25 +2089,36 @@ function createRect(){
 
     	secondPos = firstPos + change
 
+    	finalWidth = +rect.attr("width") 
+
+    	rectEnd = secondPos + finalWidth
+
 		if (secondPos <= 25){
 			alert ("return")
 			return
 		}
 
-		// else if (secondPos >= 1000){
-		// 	alert ("return")
-		// 	return
-		// }
+		if (rectEnd >= globals.timelineEnd){
 
-		//console.log(secondPos)    
+			console.log("Rect end reached")
+			return
+		}
+		rect.attr("x", secondPos)
 
-		finalPos = rect.attr("x", secondPos)
+		rightCoordinate = (+rect.attr("width") + +rect.attr("x" ))
+
+		rightLine.attr('x1', rightCoordinate).attr('x2', rightCoordinate)
+
+		leftCoordinate = +rect.attr("x")
+
+		leftLine.attr('x1', leftCoordinate).attr('x2', leftCoordinate)
+
 
 	}
 
     var drag = d3.behavior.drag()
 	    //.origin(function(d) { return d; })
-	    .on("drag", dragMove);
+	    .on("drag", dragMove).on('dragend', translateTime)
 
     rect
     	.call(drag);
@@ -2159,12 +2126,12 @@ function createRect(){
 	 
 	var rightLine = d3.selectAll(".timescale") 
 	 	.append("line") 
-	 	.attr("x1", width) 
-	 	.attr("x2", width)	
-	 	.attr("y1", 40)
-	 	.attr("y2", 65)
+	 	.attr("x1", endX) 
+	 	.attr("x2", endX)	
+	 	.attr("y1", 55)
+	 	.attr("y2", 75)
 	 	.style('stroke', 'white')
-	 	.style('stroke-width', 5)
+	 	.style('stroke-width', 3)
 	 	.style('cursor', "ew-resize");
 
 
@@ -2177,11 +2144,9 @@ function createRect(){
 		secondPos = firstPos + change
 
 		if (secondPos <= leftLine.attr("x1" )){
-			alert ("return")
 			return
 		}
-		else if (secondPos >= (width)){
-			alert ("return")
+		else if (secondPos >= globals.timelineEnd) {
 			return
 		}
 
@@ -2195,11 +2160,12 @@ function createRect(){
 
 		finalWidth = rect.attr("width", newWidth)
 
+
 	}
 
 	var dragRightLine = d3.behavior.drag()
 		    //.origin(function(d) { return d; })
-		    .on("drag", moveLine);
+		    .on("drag", moveLine).on('dragend', translateTime);
 
 	    rightLine
 	    	.call(dragRightLine);
@@ -2207,38 +2173,45 @@ function createRect(){
 
 	 var leftLine = d3.selectAll(".timescale") 
 	 	.append("line") 
-	 	.attr("x1", 120) 
-	 	.attr("x2", 120)	
-	 	.attr("y1", 40)
-	 	.attr("y2", 65)
-	 	.style('stroke', 'red')
-	 	.style('stroke-width', 5)
+	 	.attr("x1", startX) 
+	 	.attr("x2", startX)	
+	 	.attr("y1", 55)
+	 	.attr("y2", 75)
+	 	.style('stroke', 'white')
+	 	.style('stroke-width', 3)
 	 	.style('cursor', "ew-resize");
 
 
 	 function moveLine2(){
-	// move line left
+	// move left line
+	console.log("Moving left line")
 		firstPos = +leftLine.attr("x1")
 
 		change = +d3.event.dx
 
 		secondPos = firstPos + change
 
-		//if else checks
+		originalWidth = +rect.attr("width")
+
+		newWidth = originalWidth - change
+		console.log(newWidth)
+
+		
+
+		if (newWidth <= 1){
+			return
+		}
+
 		if (secondPos <= 25){
 			return
 		}
-		else if (secondPos >= rightLine.attr("x1" )){
+		if (secondPos >= +rightLine.attr("x1" )){
 			return
 		}
-		// else if (leftLine.attr("x1" ) >= +rect.attr("x" )){
-		// 	alert ("return")
-		// 	return
-		// }
-		// else if (leftLine.attr("x1" ) <= +rect.attr("x" )){
-		// 	alert ("return")
-		// 	return
-		// }
+
+		finalWidth = rect.attr("width", newWidth)
+
+		//if else checks
 
 		finalPos = leftLine.attr("x1", secondPos)
 
@@ -2250,73 +2223,43 @@ function createRect(){
 
 		finalX = rect.attr("x", newX)
 
-		if (finalX <= leftLine.attr("x2", secondPos)) {
-			alert ("return")
-			return
-		}
-
-		else if (finalX >= leftLine.attr("x2", secondPos)) {
-			alert ("return")
-			return
-		}
-
-		originalWidth = rect.attr("width")
-
-		newWidth = originalWidth - change
-
-		finalWidth = rect.attr("width", newWidth)
-
-		//console.log(newWidth)
 
 	}
 
 	var dragLeftLine = d3.behavior.drag()
 		    //.origin(function(d) { return d; })
-		    .on("drag", moveLine2);
+		    .on("drag", moveLine2)
+		    .on('dragend', translateTime)
 
 	    leftLine
 	    	.call(dragLeftLine);
 
 
-	// //connect lines to rectangle
-	// leftLine.attr("x1" ) = +rect.attr("x" )
+	function translateTime(){
 
-	// leftLine.attr("x2" ) = +rect.attr("x" )
-	
-	// rightLine.attr("x1" ) = +rect.attr("x" ) + +rect.attr("width")
+		startX = +rect.attr("x" )
 
-	// rightLine.attr("x2" ) = +rect.attr("x" ) + +rect.attr("width")
+		width = +rect.attr("width" )
+
+		endX = startX + width
+
+		startDate = globals.timescale.invert(startX)
+
+		endDate = globals.timescale.invert(endX)
 
 
-	// //If else statements to control the slider
-	// if (+leftLine.attr("x1" ) < globals.timescale(1750)) {
+		startYear = startDate.getFullYear()
 
-	// 	return
-	// }
+		endYear = endDate.getFullYear()
 
-	// else if ((+leftLine.attr("x1" ) + +rect.attr("width")) > globals.timescale(1850)) {
+		var displayShips = filterDate(startYear, endYear, globals.data.filteredShips)
 
-	// 	return
-	// }
+		d3.selectAll(".hexagon")
+			.remove()
 
-	// else if (+leftLine.attr("x1" ) > +rightLine.attr("x1" )){
+		displayShipDataHexes(displayShips)
 
-	// 	return
-	// }
-
-	// else if (+rightLine.attr("x1" ) < +leftLine.attr("x1" )){
-
-	// 	return
-	// }
-
-	// else if (+rect.attr("width") < 1){
-
-	// 	return
-	// }
-
-	// else {
-
-	// }
+}
 
 } //end create rect or slider
 
@@ -2385,19 +2328,19 @@ $("#help-icon").click(function(){
 
 	else {
 	// show
-
 		$("#help-icon").data('clicked', true)
 		$("#help-info").show();
 		$("#help-text").slideDown();
 
 		$("#intro-text").hide();
-
-
-
 	}
 
 	}
 ); 
+
+
+
+
 
 
 
