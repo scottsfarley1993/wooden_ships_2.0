@@ -351,7 +351,13 @@ div.tooltip {
 	width:100px;
 	padding:10px;
 	margin: 0px;
+	text-align: center;
 }
+#home{
+	text-align: center;
+	margin-bottom: 10px;
+}
+
 
 
 
@@ -504,4 +510,12 @@ div.tooltip {
 }
 #wind-panel{
 	overflow-y: auto;
+}
+#loading{
+	height:100%;
+	width:100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #020E1C;
 }

@@ -237,6 +237,8 @@ function resetZoom(){
 	d3.selectAll(".overlay").attr("transform", "translate(0,0)scale(1)");
 	d3.selectAll(".water").attr("transform", "translate(0,0)scale(1)");
 	d3.selectAll(".graticule").attr("transform", "translate(0,0)scale(1)");
+	zoom.scale(1);
+	zoom.translate([0, 0]);
 }
 
 
@@ -474,6 +476,7 @@ function getShipData(filename, callback){
 		})
 		globals.data.ships = data //so we can revert later
 		globals.data.filteredShips = data //keep track of the most recent filtered data
+		$("#loading").show();
 		if (callback){
 			callback(data)
 		}
@@ -558,7 +561,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -570,7 +573,7 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -583,7 +586,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -596,7 +599,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -609,7 +612,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -622,7 +625,7 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -726,13 +729,14 @@ function styleHexbins(ships, attr){
 			return d.__data__.length});
 
 
-		var hexColor = createColorScheme(maxDomain, ["white", "steelblue"]);
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
 	}
 	d3.selectAll(".hexagon").attr('stroke', function(d){return hexColor(d.length)})
 	d3.selectAll(".loading").remove()
+	 
 } //end of styleHexbin
 
 function getPorts(){        
@@ -2305,6 +2309,37 @@ $(".ws-select").click(function(){
 	displayShips = filterWindSpd(globals.data.filteredShips, spdArray);
 	d3.selectAll(".hexagon").remove()
 	displayShipDataHexes(displayShips)
+})
+
+function resetFilters(){
+	//reset all of the gui components and then just set the filtered ships back to data.ships
+	//reset the wind filters
+	$(".ws-select").addClass("active")
+	$(".wd-select").addClass('active')
 	
+	//put all weather
+	$("#all-weather-select").addClass("active")
 	
+	//don't reset the country
+	globals.data.filteredShips = globals.data.ships
+	
+	//reset attribute
+	globals.attr = "fog";
+	
+	globals.filterStartYear = 1775
+	globals.filterEndYear = 1825
+	
+	d3.selectAll(".hexagon").remove()
+	displayShipDataHexes(globals.data.filteredShips)
+}
+
+$("#home").on('click', function(){
+	globals.map.mapContainer.append('rect')
+		.attr('height', globals.map.dimensions.height)
+		.attr('width', globals.map.dimensions.width)
+		.style('fill', 'rgba(255, 255, 255, 0.5)')
+		.attr('class', 'loading')
+		.style('z-index', 99999999999);
+	resetFilters();
+	resetZoom();
 })

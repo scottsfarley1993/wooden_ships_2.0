@@ -97,14 +97,13 @@
 			</div> <!--end main row-->
 			
 		<div id='reproject-holder'>
-		<label>Change Map projection</label>
+		<button id='home' class='btn btn-primary btn-sm'><span class='glyphicon glyphicon-home'></span></button><br />
+		<h6>Projection:</h6>
 		<select id='proj-select'>
 			<option value='cylindrical'>Cylindrical</option>
 			<option value='robinson'>Robinson</option>
 			<option value='globe'>Globe</option>
 		</select><br />
-		<button id='resetMap' class='btn btn-sm btn-primary'>Reset View</button>
-		<button id='resetFilters' class='btn btn-sm btn-primary'>Reset Filters</button>
 	</div>
 	
 	<div id='intro-panel' class='nav-panel'>
@@ -238,6 +237,10 @@
 	<div id='timeline'> </div>
 
 	<div id="slider-range"></div>
+	
+	<div id='loading'>
+		
+	</div>
 
 
 	<!--My Libraries-->
