@@ -91,7 +91,7 @@ html, body{
 	font-family: 'Shadows Into Light', cursive !important;
 }
 .log{
-	width: 300px!important;
+	width: 270px!important;
 	cursor:default;
 }
 .captain-thumb{
@@ -317,8 +317,16 @@ div.tooltip {
 	padding-left: 25px;
 }
 
-#memoSelectControls{
+#wind-panel{
 	padding-left: 25px;
+}
+
+#feed-panel{
+	padding-left: 25px;
+}
+
+#memoSelectControls{
+	padding-left: 0px;
 }
 
 
@@ -486,4 +494,10 @@ div.tooltip {
 	fill: none;
 	stroke: #999;
 	stroke-width: 1px;
+}
+
+.woodenship-icon{
+	height: 20px;
+	width: 20px;
+
 }
