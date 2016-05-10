@@ -496,3 +496,6 @@ div.tooltip {
 	stroke: #999;
 	stroke-width: 1px;
 }
+#wind-panel{
+	overflow-y: auto;
+}
