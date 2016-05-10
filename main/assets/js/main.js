@@ -1078,8 +1078,7 @@ function displayMemos(memoSet){
 				}
 				
 
-				//img = lookupCaptainImage(captain);
-				img = ""
+				img = lookupCaptainImage(captain);
 				d.imgSrc = img
 				formatDate = moment.weekdays()[date.weekday()] + ", " + date.date() + nth(date.date()) + " " + moment.months()[date.month() - 1] + ", " + date.year()
 				//this is the feed entry
@@ -1215,7 +1214,13 @@ function lookupCaptainImage(captainName){
 	//lookup the image for this captain from the lookup file
 	o = _.findWhere(globals.data.captain_metadata, {captainName: captainName});
 	if (o){
-		return o.Image;
+		if (o.Image != ""){
+			return o.Image;
+		}else{
+			return "assets/img/default.jpg"
+		}
+		
+		
 	}else{
 		return "assets/img/default.jpg"
 	}
