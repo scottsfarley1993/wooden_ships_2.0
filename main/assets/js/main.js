@@ -313,7 +313,7 @@ function setMap(){
 		         
 		     globals.map.mapContainer.call(zoom).call(zoom.event)
 		         
-		  	changeProjection("Orthographic"); //default     
+		  	changeProjection("Azimuthal"); //default     
 		  	
 		  	//show the panel on start
 		enterIsolationMode();//so you can click off the splash screen on start  
@@ -492,6 +492,8 @@ function displayShipDataHexes(datasetArray){
       globals.land.moveToFront();
       d3.selectAll(".port").moveToFront();
       d3.selectAll(".loading").remove()
+      
+      $("#country-panel").hide();
 }
 
 function styleHexbins(ships, attr){
@@ -803,7 +805,7 @@ function displayPorts(portData){
 			})
 			.style('fill', 'gray')
 			.on('mouseover', function(){
-				d3.select(this).style("fill", 'white').style("cursor", "crosshair")
+				//d3.select(this).style("fill", 'white').style("cursor", "crosshair")
 				d3.select(this).moveToFront();
 			})
 			.on('mouseout', function(){
@@ -2235,7 +2237,7 @@ var dragLeftLine = d3.behavior.drag()
 
 }
 
-$('#proj-select option[value=globe]').attr('selected', 'selected'); //default
+$('#proj-select option[value=robinson]').attr('selected', 'selected'); //default
 $("#proj-select").change(function(){
 	var val = $("#proj-select option:selected").val()
 	if (val == 'robinson'){

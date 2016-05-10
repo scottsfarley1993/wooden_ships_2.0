@@ -355,3 +355,6 @@ div.tooltip {
 .select-item{
 	width: 250px;
 }
+.reset-btn{
+	width: 125%!important;;
+}
