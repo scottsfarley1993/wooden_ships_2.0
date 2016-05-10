@@ -230,6 +230,8 @@ div.tooltip {
 	min-width: 100px !important;
 	width: 100px;
 	z-index:2932939239293923;
+	margin:0px;
+	padding:0px;
 }
 
 .nav-hovered{
@@ -242,7 +244,7 @@ div.tooltip {
 	position: absolute;
 	width: 68%;
 	background-color: white;
-	z-index: 10000000;
+	z-index: 9999999999999999999999;
 	top: 0px;
 	left: 70px;
 	display: none;
@@ -300,7 +302,7 @@ div.tooltip {
 .nav-item{
 	height: 75px;
 	width: 75px;
-
+	margin:0px;
 }
 
 #title{
