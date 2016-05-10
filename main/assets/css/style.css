@@ -369,3 +369,19 @@ div.tooltip {
 .img-hover-holder{
 	width: 200%;
 }
+
+.gratBackground {
+	fill: #D5E3FF;
+}
+
+.gratLines {
+	fill: none;
+	stroke: #999;
+	stroke-width: 1px;
+}
+
+.graticule {
+	fill: none;
+	stroke: #999;
+	stroke-width: 1px;
+}
