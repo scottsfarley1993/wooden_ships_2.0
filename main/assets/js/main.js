@@ -2,6 +2,9 @@
 //All functions are here
 
 $("#intro-panel").show(); //splash screen on start
+$("#help-info").hide(); //splash screen on start
+$("#help-text").hide(); //splash screen on start
+
 
 var attrArray = ["countries_1715", "countries_1783", "countries_1815"];
 
@@ -233,6 +236,7 @@ function resetZoom(){
 	d3.selectAll(".port").attr("transform", "translate(0,0)scale(1)");
 	d3.selectAll(".overlay").attr("transform", "translate(0,0)scale(1)");
 	d3.selectAll(".water").attr("transform", "translate(0,0)scale(1)");
+	d3.selectAll(".graticule").attr("transform", "translate(0,0)scale(1)");
 }
 
 
@@ -314,7 +318,7 @@ function setMap(){
 		         
 		     globals.map.mapContainer.call(zoom).call(zoom.event)
 		         
-		  	changeProjection("Orthographic"); //default     
+		  	changeProjection("Azimuthal"); //default     
 		  	
 		  	//show the panel on start
 		enterIsolationMode();//so you can click off the splash screen on start  
@@ -335,6 +339,8 @@ function zoomed() {
 	d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	d3.selectAll(".water").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	d3.selectAll(".graticule").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+
 };
 	
 	
@@ -362,13 +368,17 @@ function changeProjection(projection){
 		    .scale(250)
 		    .translate([globals.map.dimensions.width / 2, globals.map.dimensions.height / 2])
 		    .precision(.1);
-	
 		globals.map.mapContainer.call(d3.behavior.drag() //disable dragging/projection rotation
 			  .origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
 			  .on('drag', null));
 		zoom.on('zoom', zoomed)  //enable zoom
 		globals.map.mapContainer.call(zoom).call(zoom.event)
 		resetZoom(); //fix any previous zooming
+		
+		var g = d3.select('g.features');
+		console.log(g)
+		var path = d3.geo.path()
+			.projection(projection);
     }
     else if (projection == "Cylindrical"){
     	//set params
@@ -397,14 +407,24 @@ function changeProjection(projection){
 		zoom.on('zoom', null)
 		globals.map.mapContainer.call(zoom).call(zoom.event) //disable zoom
     }
+    
    var path = d3.geo.path()
     	.projection(projection);
    //make global
    globals.map.projection = projection;
    globals.map.path = path;
    //do the update
+   createGraticule(globals.map.path)
+     
    d3.selectAll(".land").transition().attr('d', path)
+  
+   // d3.selectAll(".grat-group").moveToFront();
+   // d3.selectAll(".land").moveToFront()
+   // d3.selectAll(".port").moveToFront()
    d3.selectAll(".water").transition().attr("d", path)
+   globals.land.moveToFront();
+  
+   
    	    d3.selectAll(".port-marker").transition()
 	    	.attr('cx', function(d){
 	    	return globals.map.projection([d.Longitude, d.Latitude])[0];
@@ -424,6 +444,20 @@ function changeProjection(projection){
    //update the hexagons
    changeHexSize(globals.map.hexRadius)
 };
+
+function createGraticule(path){
+	 d3.selectAll(".graticule").remove()  
+	var graticule = d3.geo.graticule();
+		
+		var gratLines = globals.map.features.append("g")
+			.attr('class', 'grat-group')
+			.selectAll(".graticule") //select graticule elements that will be created
+			.data(graticule.lines()) //bind graticule lines to each element to be created
+	  		.enter() //create an element for each datum
+			.append("path") //append each element to the svg as a path element
+				.attr("class", "graticule") //assign class for styling
+				.attr("d", path); //project graticule lines
+}
 
 function getShipData(filename, callback){
 	d3.csv(filename, function(data){
@@ -491,11 +525,14 @@ function displayShipDataHexes(datasetArray){
       	}
       })
       
-      styleHexbins(globals.data.filteredShips, globals.attr) //color the bins by attribute
+      styleHexbins(datasetArray, globals.attr) //color the bins by attribute
+      enterIsolationMode();
       //set the stack order
+      d3.selectAll("graticule")
       globals.land.moveToFront();
       d3.selectAll(".port").moveToFront();
       d3.selectAll(".loading").remove()
+      $("#country-panel").hide();
 }
 
 function styleHexbins(ships, attr){
@@ -506,8 +543,9 @@ function styleHexbins(ships, attr){
 		var maxDomain = d3.max(globals.map.hexagons[0], function(d){
 			return d.__data__.length});
 
-
-		var hexColor = createColorScheme(maxDomain, ["#eaf2fd", "#051c39"]);
+		//original color scheme ["#eaf2fd", "#051c39"]
+		//new color scheme ["#051c39", "#eaf2fd"]
+		var hexColor = createColorScheme(maxDomain, ["#051c39", "#eaf2fd"]);
 
 		d3.selectAll(".hexagon")
 			.attr("fill",function(d){return hexColor(d.length)});
@@ -807,7 +845,7 @@ function displayPorts(portData){
 			})
 			.style('fill', 'gray')
 			.on('mouseover', function(){
-				d3.select(this).style("fill", 'white').style("cursor", "crosshair")
+				//d3.select(this).style("fill", 'white').style("cursor", "crosshair")
 				d3.select(this).moveToFront();
 			})
 			.on('mouseout', function(){
@@ -929,10 +967,15 @@ function changeCountry(countryName){
 function refreshHexes(){
 	console.log("Loaded ship data.")
 	removeHexes()
-	displayShipDataHexes(globals.data.ships)
+	displayShips = _.filter(globals.data.ships, function(d){
+		yr = d.date.getFullYear();
+		return ((yr >= 1775) && (yr <= 1825))
+	})
+	displayShipDataHexes(displayShips)
 	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
+	$("#loading").slideUp();
 }
 
 function loadShipLookup(){
@@ -1079,13 +1122,12 @@ function displayMemos(memoSet){
 				}
 				
 
-				//img = lookupCaptainImage(captain);
-				img = ""
+				img = lookupCaptainImage(captain);
 				d.imgSrc = img
 				formatDate = moment.weekdays()[date.weekday()] + ", " + date.date() + nth(date.date()) + " " + moment.months()[date.month() - 1] + ", " + date.year()
 				//this is the feed entry
 				html = "<div class='row log-row basic-hovercard' id='log_" + d.locationID + "'>"
-				html += "<img src='" + img + "' class='captain-thumb col-xs-3'/>"
+				html += "<img src='" + img + "' class='captain-thumb col-xs-3 img-responsive'/>"
 				html += "<div class='col-xs-9 log-header' id='header_" + d.locationID + "'>"
 				html += "<h6 class='captain-heading' class='col-xs-12'>" + captainRank + " " + captain + "</h6>"
 				html += "<small class='log-shipname col-xs-12 text-muted'>" + shipName + "</small>"
@@ -1099,17 +1141,17 @@ function displayMemos(memoSet){
 				console.log(d)
 				//make the html
 				html = "<div class='row'>"
-				html += "<div class='col-xs-4'>"
-				html += "<img class='captain-thumb img-rounded hover-img col-xs-12' src='" + d.imgSrc + "'>"
-				html += "</div><div class='col-xs-8'>"
+				// html += "<div class='hover-img-holder col-xs-4'>"
+				// html += "<img class='hover-thumb img-rounded img-responsive hover-img col-xs-12' src='" + d.imgSrc + "'>"
+				html += "</div><div class='col-xs-8 hover-details-holder'>"
 				html += "<h4>" + d.captainRank + " " + d.captainName + "</h4>"
 				html += "<i><b class='large'>" + d.shipName + "</b></i><br />"
 				html += "<i>" + d.shipType + "</i>"
-				html += "<p>Voyage Started: " + d.voyageStart + "</p>"
-				html += "<p>Sailing From: " + d.fromPlace + "</p>"
-				html += "<p>Sailing To: " + d.toPlace + "</p>"
-				html += "<p>Days at sea: " + d.voyageDaysSinceStart + "</p>"
-				html += "<p>Sailing for: " + d.company + "</p>"
+				html += "<p class='strong'>Voyage Started: " + new Date(d.voyageStart).toLocaleDateString() + "</p>"
+				html += "<p class='strong'>Sailing From: " + d.fromPlace + "</p>"
+				html += "<p class='strong'>Sailing To: " + d.toPlace + "</p>"
+				//html += "<p class='strong'>Days at sea: " + d.voyageDaysSinceStart + "</p>"
+				html += "<p class='strong'>Sailing for: " + d.company + "</p>"
 				if (d.captainName2){
 					html += "<p>Second Observer: " + d.captainRank2 + " " + d.captainName2 + "</p>"
 				}
@@ -1216,7 +1258,13 @@ function lookupCaptainImage(captainName){
 	//lookup the image for this captain from the lookup file
 	o = _.findWhere(globals.data.captain_metadata, {captainName: captainName});
 	if (o){
-		return o.Image;
+		if (o.Image != ""){
+			return o.Image;
+		}else{
+			return "assets/img/default.jpg"
+		}
+		
+		
 	}else{
 		return "assets/img/default.jpg"
 	}
@@ -1343,6 +1391,7 @@ function exitIsolationMode(){
 	$("#intro-panel").addClass('display-none')
 	$("#intro-panel").hide()
 	$('.control-panel').hide();	
+	$(".nav-item").removeClass("active")
 	
 }
 
@@ -1522,7 +1571,7 @@ function displayWindSpeed(hexbin){
 				.attr('y1', (globals.wind_diagram.dimensions.height / 2))
 				.attr('y2', (globals.wind_diagram.dimensions.height / 2) + globals.wind_diagram.scale(speed))
 				.style('stroke', 'steelblue')
-				.style("stroke-opacity", 0.5)
+				.style("stroke-opacity", 0.88)
 				.style('stroke-width', 0.5)
 				.attr('transform', 'rotate(' +  (180 + dir) + ' ' + x1 + "," + y1 + ')')
 		}
@@ -1742,65 +1791,15 @@ function filterWindSpeed(minSpeed, maxSpeed, data) {
 		return f;
 }
 
-function filterDate(minDate, maxDate, data) {
+function filterDate(minYear, maxYear, data) {
 	f = _.filter(data, function(element){
-		return ((element.date >= minDate) && (element.date <= maxDate));
+		d = element.date
+		yr = d.getFullYear();
+		return ((yr >= minYear) && (yr <= maxYear));
 	}); 	
-		return f;
+	return f;
 }
 
-function filterMonth(minMonth, maxMonth, data) {
-	f = _.filter(data, function(element){
-		if (element.month >= minMonth && element.month <= maxMonth) 	
-			return true;	 	
-})		
-		return f;
-}
-
-function filterSST(data) {
-	f = _.filter(data, function(element){
-		if (element.sst > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function just returns whether AirTemp recorded
-function filterAirTemp(data) {
-	f = _.filter(data, function(element){
-		if (element.airTemp > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function takes AirTemp min and max
-function filterByAirTemp(minTemp, maxTemp, data) {
-	f = _.filter(data, function(element){
-		if (element.airTemp >= minTemp && element.airTemp <= maxTemp) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function just returns whether Pressure recorded
-function filterPressure(data) {
-	f = _.filter(data, function(element){
-		if (element.pressure > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function takes Pressure min and max
-function filterByPressure(minPressure, maxPressure, data) {
-	f = _.filter(data, function(element){
-		if (element.pressure >= minPressure && element.pressure <= maxPressure) 	
-			return true;	 	
-})	
-		console.log(f)	
-		return f;
-}
 
 // nav tabs
 $(".nav-item").hover(function(){
@@ -1911,6 +1910,8 @@ function updateTimeline(min, max){
 	var height = $("#timeline").height() ;
 	var width = $("#timeline").width()- margins.left - margins.right;
 
+	globals.timelineEnd = width + margins.left;
+
 	
 
     //create a second svg element to hold the bar chart
@@ -1940,87 +1941,32 @@ function updateTimeline(min, max){
         .attr("transform", "translate(0," + (height/2) + ")")
         .call(xAxis);
 
+    globals.timescale = xScale;
+
     createRect() 
 
 };
 
-$(function() {
-    $( "#time-range" ).slider({
-      range: true,
-      min: 1750,
-      max: 1850,
-      values: [ 1750, 1850 ],
-      stop: function( event, ui ) {
-      	console.log(ui.values[0])
-      	console.log(ui.values[1])
-      	minDate = new Date(ui.values[0], 0, 1)
-      	maxDate = new Date(ui.values[1], 0, 1)
-      	console.log(minDate)
-      	console.log(maxDate)
-        removeHexes()
-        globals.data.filteredShips = filterDate(minDate, maxDate, globals.data.ships);
-        displayShipDataHexes(globals.data.filteredShips);
-        updateTimeline(minDate, maxDate)
-      }
-    });
-});
-
-function createRect(){
-
-	var height = $("#rectangle").height();
-	var width = $("#rectangle").width();
-
-    var drag = d3.behavior.drag()
-	    .origin(function(d) { return d; })
-	    .on("drag", dragmove);
-
-	var dragright = d3.behavior.drag()
-	    .origin(Object)
-	    .on("drag", rdragresize);
-
-	var dragleft = d3.behavior.drag()
-	    .origin(Object)
-	    .on("drag", ldragresize);
-
-	//create a second svg element to hold the bar chart
-    var rect = d3.select("#rectangle")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("class", "rectangle")
-    	.attr("cx", function(d) { return d.x; })
-    	.attr("cy", function(d) { return d.y; })
-        .call(drag);
-
-    function dragmove(d) {
-	  	d3.select(this)
-	    .attr("cx", d.x = Math.max(radius, Math.min(width - radius, d3.event.x)))
-	    .attr("cy", d.y = Math.max(radius, Math.min(height - radius, d3.event.y)));
-	}
-
-	var dragbarleft = newg.append("#rectangle")
-		.attr("x", function(d) { return d.x - (dragbarw/2); })
-		.attr("y", function(d) { return d.y + (dragbarw/2); })
-		.attr("height", height - dragbarw)
-		.attr("id", "dragleft")
-		.attr("width", dragbarw)
-		.attr("fill", "lightblue")
-		.attr("fill-opacity", .5)
-		.attr("cursor", "ew-resize")
-		.call(dragleft);
-
-	var dragbarright = newg.append("#rectangle")
-		.attr("x", function(d) { return d.x + width - (dragbarw/2); })
-		.attr("y", function(d) { return d.y + (dragbarw/2); })
-		.attr("id", "dragright")
-		.attr("height", height - dragbarw)
-		.attr("width", dragbarw)
-		.attr("fill", "lightblue")
-		.attr("fill-opacity", .5)
-		.attr("cursor", "ew-resize")
-		.call(dragright);
-
-}
+// $(function() {
+//     $( "#time-range" ).slider({
+//       range: true,
+//       min: 1750,
+//       max: 1850,
+//       values: [ 1750, 1850 ],
+//       stop: function( event, ui ) {
+//       	console.log(ui.values[0])
+//       	console.log(ui.values[1])
+//       	minDate = new Date(ui.values[0], 0, 1)
+//       	maxDate = new Date(ui.values[1], 0, 1)
+//       	console.log(minDate)
+//       	console.log(maxDate)
+//         removeHexes()
+//         globals.data.filteredShips = filterDate(minDate, maxDate, globals.data.ships);
+//         displayShipDataHexes(globals.data.filteredShips);
+//         updateTimeline(minDate, maxDate)
+//       }
+//     });
+// });
 
 // function click(){
 //   // Ignore the click event if it was suppressed
@@ -2137,10 +2083,19 @@ function changeWeatherSelection(){
 }
 $(".weather-select").click(changeWeatherSelection)
 
+
+
 function createRect(){
 
+	startX = globals.timescale(new Date(1775, 0, 1)) + 25;
+
+	endX = globals.timescale(new Date(1825, 0, 1)) + 25;
+
+	console.log("RectStart: " + startX)
+	console.log("RectEnd: " + endX)
+
+	var width = endX - startX;
 	var height = 10;
-	var width = $("#timeline").width()/2;
 
 	//create a second svg element to hold the bar chart
     var rect = d3.selectAll(".timescale")
@@ -2148,9 +2103,10 @@ function createRect(){
         .attr("width", width)
         .attr("height", height)
         .attr("class", "rectangle")
-        .attr("x", 120)
-        .attr("y", 40)
-        .style('fill', 'white');
+        .attr("x", startX)
+        .attr("y", 65)
+        .style('fill', 'white')
+       	.style('cursor', "ew-resize");
 
     function dragMove(){
     	firstPos = +rect.attr("x" )
@@ -2159,102 +2115,182 @@ function createRect(){
 
     	secondPos = firstPos + change
 
-		console.log(secondPos)    
+    	finalWidth = +rect.attr("width") 
 
-		finalPos = rect.attr("x", secondPos)
+    	rectEnd = secondPos + finalWidth
+
+		if (secondPos <= 25){
+			alert ("return")
+			return
+		}
+
+		if (rectEnd >= globals.timelineEnd){
+
+			console.log("Rect end reached")
+			return
+		}
+		rect.attr("x", secondPos)
+
+		rightCoordinate = (+rect.attr("width") + +rect.attr("x" ))
+
+		rightLine.attr('x1', rightCoordinate).attr('x2', rightCoordinate)
+
+		leftCoordinate = +rect.attr("x")
+
+		leftLine.attr('x1', leftCoordinate).attr('x2', leftCoordinate)
+
+
 	}
 
     var drag = d3.behavior.drag()
 	    //.origin(function(d) { return d; })
-	    .on("drag", dragMove);
+	    .on("drag", dragMove).on('dragend', translateTime)
 
     rect
     	.call(drag);
 
- 
- var rightLine = d3.selectAll(".timescale") 
- 	.append("line") 
- 	.attr("x1", width) 
- 	.attr("x2", width)	
- 	.attr("y1", 0)
- 	.attr("y2", 40)
- 	.style('stroke', 'green')
- 	.style('stroke-width', 10);
+	 
+	var rightLine = d3.selectAll(".timescale") 
+	 	.append("line") 
+	 	.attr("x1", endX) 
+	 	.attr("x2", endX)	
+	 	.attr("y1", 55)
+	 	.attr("y2", 75)
+	 	.style('stroke', 'white')
+	 	.style('stroke-width', 3)
+	 	.style('cursor', "ew-resize");
 
-function moveLine(){
-	firstPos = +rightLine.attr("x1")
 
-	change = +d3.event.dx
+	function moveLine(){
+	// move right line
+		firstPos = +rightLine.attr("x1")
 
-	secondPos = firstPos + change
+		change = +d3.event.dx
 
-	finalPos = rightLine.attr("x1", secondPos)
+		secondPos = firstPos + change
 
-	finalPos2 = rightLine.attr("x2", secondPos)
+		if (secondPos <= leftLine.attr("x1" )){
+			return
+		}
+		else if (secondPos >= globals.timelineEnd) {
+			return
+		}
 
-	oldWidth = +rect.attr("width")
+		finalPos = rightLine.attr("x1", secondPos)
 
-	newWidth = oldWidth + change
+		finalPos2 = rightLine.attr("x2", secondPos)
 
-	finalWidth = rect.attr("width", newWidth)
+		oldWidth = +rect.attr("width")
+
+		newWidth = oldWidth + change
+
+		finalWidth = rect.attr("width", newWidth)
+
+
+	}
+
+	var dragRightLine = d3.behavior.drag()
+		    //.origin(function(d) { return d; })
+		    .on("drag", moveLine).on('dragend', translateTime);
+
+	    rightLine
+	    	.call(dragRightLine);
+
+
+	 var leftLine = d3.selectAll(".timescale") 
+	 	.append("line") 
+	 	.attr("x1", startX) 
+	 	.attr("x2", startX)	
+	 	.attr("y1", 55)
+	 	.attr("y2", 75)
+	 	.style('stroke', 'white')
+	 	.style('stroke-width', 3)
+	 	.style('cursor', "ew-resize");
+
+
+	 function moveLine2(){
+	// move left line
+	console.log("Moving left line")
+		firstPos = +leftLine.attr("x1")
+
+		change = +d3.event.dx
+
+		secondPos = firstPos + change
+
+		originalWidth = +rect.attr("width")
+
+		newWidth = originalWidth - change
+		console.log(newWidth)
+
+		
+
+		if (newWidth <= 1){
+			return
+		}
+
+		if (secondPos <= 25){
+			return
+		}
+		if (secondPos >= +rightLine.attr("x1" )){
+			return
+		}
+
+		finalWidth = rect.attr("width", newWidth)
+
+		//if else checks
+
+		finalPos = leftLine.attr("x1", secondPos)
+
+		finalPos2 = leftLine.attr("x2", secondPos)
+
+		oldX = +rect.attr("x")
+
+		newX = oldX + change
+
+		finalX = rect.attr("x", newX)
+
+
+	}
+
+	var dragLeftLine = d3.behavior.drag()
+		    //.origin(function(d) { return d; })
+		    .on("drag", moveLine2)
+		    .on('dragend', translateTime)
+
+	    leftLine
+	    	.call(dragLeftLine);
+
+
+	function translateTime(){
+
+		startX = +rect.attr("x" )
+
+		width = +rect.attr("width" )
+
+		endX = startX + width
+
+		startDate = globals.timescale.invert(startX)
+
+		endDate = globals.timescale.invert(endX)
+
+
+		startYear = startDate.getFullYear()
+
+		endYear = endDate.getFullYear()
+
+		var displayShips = filterDate(startYear, endYear, globals.data.filteredShips)
+
+		d3.selectAll(".hexagon")
+			.remove()
+
+		displayShipDataHexes(displayShips)
 
 }
 
-var dragRightLine = d3.behavior.drag()
-	    //.origin(function(d) { return d; })
-	    .on("drag", moveLine);
-
-    rightLine
-    	.call(dragRightLine);
+} //end create rect or slider
 
 
- var leftLine = d3.selectAll(".timescale") 
- 	.append("line") 
- 	.attr("x1", 120) 
- 	.attr("x2", 120)	
- 	.attr("y1", 0)
- 	.attr("y2", 40)
- 	.style('stroke', 'red')
- 	.style('stroke-width', 10);
-
-
- function moveLine2(){
-	firstPos = +leftLine.attr("x1")
-
-	change = +d3.event.dx
-
-	secondPos = firstPos + change
-
-	finalPos = leftLine.attr("x1", secondPos)
-
-	finalPos2 = leftLine.attr("x2", secondPos)
-
-	oldX = +rect.attr("x")
-
-	newX = oldX + change
-
-	finalX = rect.attr("x", newX)
-
-	originalWidth = rect.attr("width")
-
-	newWidth = originalWidth - change
-
-	finalWidth = rect.attr("width", newWidth)
-
-	console.log(newWidth)
-
-}
-
-var dragLeftLine = d3.behavior.drag()
-	    //.origin(function(d) { return d; })
-	    .on("drag", moveLine2);
-
-    leftLine
-    	.call(dragLeftLine);
-
-}
-
-$('#proj-select option[value=globe]').attr('selected', 'selected'); //default
+$('#proj-select option[value=robinson]').attr('selected', 'selected'); //default
 $("#proj-select").change(function(){
 	var val = $("#proj-select option:selected").val()
 	if (val == 'robinson'){
@@ -2315,6 +2351,37 @@ function filterWindSpd(dataArray, spdArray){
 	console.log(s)
 	return s
 }
+
+
+$("#help-icon").click(function(){
+	var clicked = $("#help-icon").data('clicked')
+	console.log(clicked)
+	if (clicked){
+	// hide
+
+		$("#help-icon").data('clicked', false);
+		$("#help-info").hide();
+		$("#help-text").slideUp();
+
+		$("#intro-text").show();
+
+	}
+
+	else {
+	// show
+		$("#help-icon").data('clicked', true)
+		$("#help-info").show();
+		$("#help-text").slideDown();
+
+		$("#intro-text").hide();
+	}
+
+	}
+); 
+
+
+
+
 
 $(".ws-select").click(function(){
 	$(this).toggleClass("active")
