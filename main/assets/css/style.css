@@ -358,3 +358,12 @@ div.tooltip {
 .reset-btn{
 	width: 125%!important;;
 }
+#loading{
+	height:100%;
+	width:100%;
+	z-index: 25;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: gray;
+}

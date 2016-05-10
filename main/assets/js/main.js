@@ -931,6 +931,7 @@ function refreshHexes(){
 	console.log("Refreshed hexes.")
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
+	$("#loading").slideUp();
 }
 
 function loadShipLookup(){
@@ -1341,6 +1342,7 @@ function exitIsolationMode(){
 	$("#intro-panel").addClass('display-none')
 	$("#intro-panel").hide()
 	$('.control-panel').hide();	
+	$(".nav-item").removeClass("active")
 	
 }
 
@@ -1520,7 +1522,7 @@ function displayWindSpeed(hexbin){
 				.attr('y1', (globals.wind_diagram.dimensions.height / 2))
 				.attr('y2', (globals.wind_diagram.dimensions.height / 2) + globals.wind_diagram.scale(speed))
 				.style('stroke', 'steelblue')
-				.style("stroke-opacity", 0.5)
+				.style("stroke-opacity", 0.88)
 				.style('stroke-width', 0.5)
 				.attr('transform', 'rotate(' +  (180 + dir) + ' ' + x1 + "," + y1 + ')')
 		}
