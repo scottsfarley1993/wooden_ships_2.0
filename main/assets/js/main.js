@@ -1760,73 +1760,16 @@ function binWindDirection(num){
 }
 //control hex bin size
 
-function filterWindSpeed(minSpeed, maxSpeed, data) {
-	f = _.filter(data, function(element){
-		if (element.windSpeed >= minSpeed && element.windSpeed <= maxSpeed) 	
-			return true;	 	
-})		
-		return f;
-}
 
-function filterDate(minDate, maxDate, data) {
+function filterDate(minYear, maxYear, data) {
 	f = _.filter(data, function(element){
-		return ((element.date >= minDate) && (element.date <= maxDate));
+		d = element.date
+		yr = d.getFullYear();
+		return ((yr >= minYear) && (yr <= maxYear));
 	}); 	
-		return f;
+	return f;
 }
 
-function filterMonth(minMonth, maxMonth, data) {
-	f = _.filter(data, function(element){
-		if (element.month >= minMonth && element.month <= maxMonth) 	
-			return true;	 	
-})		
-		return f;
-}
-
-function filterSST(data) {
-	f = _.filter(data, function(element){
-		if (element.sst > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function just returns whether AirTemp recorded
-function filterAirTemp(data) {
-	f = _.filter(data, function(element){
-		if (element.airTemp > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function takes AirTemp min and max
-function filterByAirTemp(minTemp, maxTemp, data) {
-	f = _.filter(data, function(element){
-		if (element.airTemp >= minTemp && element.airTemp <= maxTemp) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function just returns whether Pressure recorded
-function filterPressure(data) {
-	f = _.filter(data, function(element){
-		if (element.pressure > -1) 	
-			return true;	 	
-})		
-		return f;
-}
-
-//this function takes Pressure min and max
-function filterByPressure(minPressure, maxPressure, data) {
-	f = _.filter(data, function(element){
-		if (element.pressure >= minPressure && element.pressure <= maxPressure) 	
-			return true;	 	
-})	
-		console.log(f)	
-		return f;
-}
 
 // nav tabs
 $(".nav-item").hover(function(){
@@ -1974,26 +1917,26 @@ function updateTimeline(min, max){
 
 };
 
-$(function() {
-    $( "#time-range" ).slider({
-      range: true,
-      min: 1750,
-      max: 1850,
-      values: [ 1750, 1850 ],
-      stop: function( event, ui ) {
-      	console.log(ui.values[0])
-      	console.log(ui.values[1])
-      	minDate = new Date(ui.values[0], 0, 1)
-      	maxDate = new Date(ui.values[1], 0, 1)
-      	console.log(minDate)
-      	console.log(maxDate)
-        removeHexes()
-        globals.data.filteredShips = filterDate(minDate, maxDate, globals.data.ships);
-        displayShipDataHexes(globals.data.filteredShips);
-        updateTimeline(minDate, maxDate)
-      }
-    });
-});
+// $(function() {
+//     $( "#time-range" ).slider({
+//       range: true,
+//       min: 1750,
+//       max: 1850,
+//       values: [ 1750, 1850 ],
+//       stop: function( event, ui ) {
+//       	console.log(ui.values[0])
+//       	console.log(ui.values[1])
+//       	minDate = new Date(ui.values[0], 0, 1)
+//       	maxDate = new Date(ui.values[1], 0, 1)
+//       	console.log(minDate)
+//       	console.log(maxDate)
+//         removeHexes()
+//         globals.data.filteredShips = filterDate(minDate, maxDate, globals.data.ships);
+//         displayShipDataHexes(globals.data.filteredShips);
+//         updateTimeline(minDate, maxDate)
+//       }
+//     });
+// });
 
 // function click(){
 //   // Ignore the click event if it was suppressed
@@ -2163,11 +2106,12 @@ function createRect(){
 
 		leftLine.attr('x1', leftCoordinate).attr('x2', leftCoordinate)
 
+
 	}
 
     var drag = d3.behavior.drag()
 	    //.origin(function(d) { return d; })
-	    .on("drag", dragMove);
+	    .on("drag", dragMove).on('dragend', translateTime);
 
     rect
     	.call(drag);
@@ -2209,11 +2153,12 @@ function createRect(){
 
 		finalWidth = rect.attr("width", newWidth)
 
+
 	}
 
 	var dragRightLine = d3.behavior.drag()
 		    //.origin(function(d) { return d; })
-		    .on("drag", moveLine);
+		    .on("drag", moveLine).on('dragend', translateTime);
 
 	    rightLine
 	    	.call(dragRightLine);
@@ -2271,68 +2216,43 @@ function createRect(){
 
 		finalX = rect.attr("x", newX)
 
-		// if (finalX <= +leftLine.attr("x2", secondPos)) {
-		// 	return
-		// }
-
-		// if (finalX >= +leftLine.attr("x2", secondPos)) {
-		// 	return
-		// }
-
-
-
-		//console.log(newWidth)
-
 
 	}
 
 	var dragLeftLine = d3.behavior.drag()
 		    //.origin(function(d) { return d; })
-		    .on("drag", moveLine2);
+		    .on("drag", moveLine2)
+		    .on('dragend', translateTime)
 
 	    leftLine
 	    	.call(dragLeftLine);
 
 
-	// //connect lines to rectangle
-	// leftLine.attr("x1" ) = +rect.attr("x" )
+	function translateTime(){
 
-	// leftLine.attr("x2" ) = +rect.attr("x" )
-	
-	// rightLine.attr("x1" ) = +rect.attr("x" ) + +rect.attr("width")
+		startX = +rect.attr("x" )
 
-	// rightLine.attr("x2" ) = +rect.attr("x" ) + +rect.attr("width")
+		width = +rect.attr("width" )
+
+		endX = startX + width
+
+		startDate = globals.timescale.invert(startX)
+
+		endDate = globals.timescale.invert(endX)
 
 
-	// //If else statements to control the slider
-	// if (+leftLine.attr("x1" ) < globals.timescale(1750)) {
+		startYear = startDate.getFullYear()
 
-	// 	return
-	// }
+		endYear = endDate.getFullYear()
 
-	// else if ((+leftLine.attr("x1" ) + +rect.attr("width")) > globals.timescale(1850)) {
+		var displayShips = filterDate(startYear, endYear, globals.data.filteredShips)
 
-	// 	return
-	// }
+		d3.selectAll(".hexagon")
+			.remove()
 
-	// else if (+leftLine.attr("x1" ) > +rightLine.attr("x1" )){
+		displayShipDataHexes(displayShips)
 
-	// 	return
-	// }
-
-	// else if (+rightLine.attr("x1" ) < +leftLine.attr("x1" )){
-
-	// 	return
-	// }
-
-	// else if (+rect.attr("width") < 1){
-
-	// 	return
-	// }
-
-	// else {
-
-	// }
+}
 
 } //end create rect or slider
 
@@ -2401,19 +2321,19 @@ $("#help-icon").click(function(){
 
 	else {
 	// show
-
 		$("#help-icon").data('clicked', true)
 		$("#help-info").show();
 		$("#help-text").slideDown();
 
 		$("#intro-text").hide();
-
-
-
 	}
 
 	}
 ); 
+
+
+
+
 
 
 
