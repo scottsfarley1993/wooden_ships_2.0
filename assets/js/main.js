@@ -316,7 +316,7 @@ function setMap(){
 		            .enter()
 		            .append("path")
 		            .attr("class", "land")
-		            //.style("stroke", "black").style("fill", "blue"); 
+		            .style("stroke", "white").style('stroke-width', 0.5).style('stroke-opacity', 0.33)//.style("fill", "blue"); 
 		         
 		     globals.map.mapContainer.call(zoom).call(zoom.event)
 		         
