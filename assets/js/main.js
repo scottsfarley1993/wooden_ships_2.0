@@ -964,6 +964,9 @@ function changeCountry(countryName){
 		console.log("Invalid country name.")
 		return
 	}
+	globals.attr = "fog";
+	$(".weather-select").removeClass("active");
+	$("#all-weather-select").addClass("active")
 	console.log("Nationality: " + globals.nationality)
 	d3_queue.queue()
 		.defer(getShipData, f)
