@@ -338,6 +338,7 @@ function zoomed() {
 	///called on zoom events
 	d3.selectAll(".land").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	d3.selectAll(".hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	
 	d3.selectAll(".port").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	d3.selectAll(".overlay").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	d3.selectAll(".water").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
@@ -485,6 +486,7 @@ function getShipData(filename, callback){
 
 function displayShipDataHexes(datasetArray){
 	//format a data array of ship data and display it on the map as hexbins
+	
 	datasetArray.forEach(function(d){
 		var p = globals.map.projection([d['longitude'], d['latitude']])
 		d['projected'] = p
@@ -537,6 +539,11 @@ function displayShipDataHexes(datasetArray){
       d3.selectAll(".port").moveToFront();
       d3.selectAll(".loading").remove()
       $("#country-panel").hide();
+      		d3.selectAll(".land").attr("transform", "translate(" + zoom.translate()[0] + "," + zoom.translate()[1] + ")scale(" + zoom.scale() + ")");
+	d3.selectAll(".hexagons").attr("transform", "translate(" + zoom.translate()[0] + "," + zoom.translate()[1] + ")scale(" + zoom.scale() + ")");
+	d3.selectAll(".water").attr("transform", "translate(" + zoom.translate()[0] + "," + zoom.translate()[1] + ")scale(" + zoom.scale() + ")");
+	d3.selectAll(".graticule").attr("transform", "translate(" + zoom.translate()[0] + "," + zoom.translate()[1] + ")scale(" + zoom.scale() + ")");
+	d3.selectAll(".port").attr("transform", "translate(" + zoom.translate()[0] + "," + zoom.translate()[1] + ")scale(" + zoom.scale() + ")");
 }
 
 function styleHexbins(ships, attr){
@@ -966,10 +973,12 @@ function changeCountry(countryName){
 
 function refreshHexes(){
 	removeHexes()
+	zoom.translate([0, 0])
 	displayShips = _.filter(globals.data.ships, function(d){
 		yr = d.date.getFullYear();
 		return ((yr >= 1775) && (yr <= 1825))
 	})
+	
 	displayShipDataHexes(displayShips)
 	displayPorts(globals.data.ports);
 	d3.selectAll(".loading").remove()
@@ -2189,7 +2198,7 @@ function createRect(){
 			.remove()
 			
 		globals.filterStartYear = startYear;
-		globals.filterEndYEar = endYear;
+		globals.filterEndYear = endYear;
 
 		displayShipDataHexes(displayShips)
 
