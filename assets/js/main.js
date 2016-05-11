@@ -525,6 +525,7 @@ function displayShipDataHexes(datasetArray){
       		_this.classed('isolated', true)
       		these_memos = filterToHexBin(globals.filteredMemos, d)
       		displayMemos(these_memos)
+      		$("#nav-item-feed").addClass("active")
       	}
       })
       
